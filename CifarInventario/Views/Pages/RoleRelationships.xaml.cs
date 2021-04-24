@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views
+namespace CifarInventario.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for UserControl.xaml
+    /// Interaction logic for RoleRelationships.xaml
     /// </summary>
-    public partial class UserControl : Window
+    public partial class RoleRelationships : Page
     {
-        public UserControl()
+        public RoleRelationships()
         {
             InitializeComponent();
         }

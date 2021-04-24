@@ -13,16 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views
+namespace CifarInventario.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for UserPage.xaml
+    /// Interaction logic for ProveedoresPage.xaml
     /// </summary>
-    public partial class UserPage : Page
+    public partial class ProveedoresPage : Page
     {
-        public UserPage()
+        public ProveedoresPage()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

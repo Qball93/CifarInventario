@@ -9,8 +9,7 @@ namespace CifarInventario.ViewModels.Classes
 {
     public class Hasher
     {
-        int minSaltLength = 10;
-        int maxSaltLength = 16;
+        
 
 
         public static string Encrypt(string password, string salt)
@@ -36,15 +35,20 @@ namespace CifarInventario.ViewModels.Classes
             return Convert.ToBase64String(hashValue);
         }
 
-        public byte[] generateSalt()
+        public static string generateSalt()
         {
+
+            int minSaltLength = 10;
+            int maxSaltLength = 16;
+
+
             Random r = new Random();
             int SaltLength = r.Next(minSaltLength, maxSaltLength);
             byte[] SaltBytes = new byte[SaltLength];
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             rng.GetNonZeroBytes(SaltBytes);
             rng.Dispose();
-            return SaltBytes;
+            return Convert.ToBase64String(SaltBytes);
 
 
         }

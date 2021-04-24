@@ -1,22 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Platforms>AnyCPU;x86</Platforms>
+    <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\LogoWhite.png" />
     <None Remove="Views\Resources\ResourceImages\LogoWhite.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FontAwesome.Sharp" Version="5.15.3" />
+    <PackageReference Include="itext7" Version="7.1.14" />
     <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Views\LogoWhite.png" />
     <Resource Include="Views\Resources\ResourceImages\LogoWhite.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

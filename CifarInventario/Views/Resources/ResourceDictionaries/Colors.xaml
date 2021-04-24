@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:CifarInventario">
-    <SolidColorBrush x:Key="MainThemeBrush"  Color="#6f81f2"/>
+    <SolidColorBrush x:Key="MainThemeBrush"  Color="#003295"/>
     <SolidColorBrush x:Key="BlueButtonBrush" Color="#007bff"/>
     <SolidColorBrush x:Key="GridBackgroundBrush" Color="#c8d2e3"/>
     <SolidColorBrush x:Key="AlternatingRowBrush" Color="#C0E5F7"/>

@@ -6,7 +6,7 @@ using System.Data.OleDb;
 using CifarInventario.Models;
 using System.Threading.Tasks;
 
-namespace CifarInventario.ViewModels.Classes
+namespace CifarInventario.ViewModels.Classes.Queries
 {
     class UserQueries
     {
@@ -66,12 +66,9 @@ namespace CifarInventario.ViewModels.Classes
         public static List<Role> GetRoles()
         {
             var roles = new List<Role>();
-
-            cmd = new OleDbCommand("SELECT * FROM usuarios inner join roles ON usuarios.id_rol = roles.id", cn);
-            dr = cmd.ExecuteReader();
-
-
             cn = DBConnection.MainConnection();
+
+
             try
             {
                 cmd = new OleDbCommand("SELECT * FROM roles", cn);
@@ -101,7 +98,7 @@ namespace CifarInventario.ViewModels.Classes
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al obtener usuarios  " + ex);
+                System.Windows.MessageBox.Show("Error al obtener usuarios " + ex);
             }
 
 
@@ -109,7 +106,7 @@ namespace CifarInventario.ViewModels.Classes
         }
 
 
-        public static void SetNewUserInfo(string newRole, bool newStatus, string newUsername, int id)
+        public static void SetNewUserInfo(int newRole, bool newStatus, string newUsername, int id)
         {
             cn = DBConnection.MainConnection();
             try
@@ -131,6 +128,50 @@ namespace CifarInventario.ViewModels.Classes
             {
                 System.Windows.MessageBox.Show("Error al actualizar Usuario  " + ex);
             }
+        }
+
+        public static void CreateNewUser(int newRole, bool newStatus, string newUsername, string password, string salt)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                //cmd = new OleDbCommand("INSERT INTO usuarios (id_rol,status,usuario,password,salt) VALUES("+newRole+","+newStatus+",'"+newUsername+"','"+password+"','"+salt+"');", cn);
+
+                //System.Windows.MessageBox.Show("INSERT INTO usuarios (id_rol,status,usuario,password,salt) VALUES(" + newRole + "," + newStatus + ",'" + newUsername + "','" + password + "','" + salt + "');");
+                //cmd.ExecuteNonQuery();
+
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO usuarios ([id_rol],[status],[usuario],[password],[salt])" +
+                        "VALUES (@id_rol,@status,@usuario,@password,@salt)";
+
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@id_rol",newRole),
+                        new OleDbParameter("@status",newStatus),
+                        new OleDbParameter("@usuario",newUsername),
+                        new OleDbParameter("@password",password),
+                        new OleDbParameter("@salt",salt)
+                    });
+
+
+                    cmd.ExecuteNonQuery();
+                }
+
+
+
+
+                    cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al crear Usuario  " + ex);
+            }
+
+
+            System.Windows.MessageBox.Show("Usuario creado con exito.");
         }
 
         public static void SetNewUserPassword(string password, string salt, int id)
@@ -155,6 +196,9 @@ namespace CifarInventario.ViewModels.Classes
             {
                 System.Windows.MessageBox.Show("Error al actualizar Usuario  " + ex);
             }
+
+
+            System.Windows.MessageBox.Show("Contraseña Actualizada con exito");
         }
     }
 }

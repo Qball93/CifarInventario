@@ -61,7 +61,6 @@ namespace CifarInventario.Models
         public int id { get; set; }
         public string salt { get; set; }
         public Role UserRole { get; set; }
-        public bool Status { get; set; }
 
 
         private string _userName;
@@ -99,6 +98,18 @@ namespace CifarInventario.Models
             }
         }
 
+        
+        private bool _status;
+
+        public bool Status
+        {
+            get { return _status; }
+            set
+            {
+                _status = value;
+                OnPropertyChanged("Status");
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

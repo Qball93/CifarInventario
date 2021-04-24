@@ -6,7 +6,7 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:local="clr-namespace:CifarInventario.Views"
         xmlns:components="clr-namespace:CifarInventario.ViewModels.Classes"
-        xmlns:vm="clr-namespace:CifarInventario.ViewModels" d:DataContext="{d:DesignInstance Type=vm:LoginVM}"
+        xmlns:vm="clr-namespace:CifarInventario.ViewModels"
         mc:Ignorable="d"
         Title="Login" Height="422.7" Width="725.982"
         MouseDown="Window_MouseDown"
@@ -21,20 +21,20 @@
             <ColumnDefinition Width="310*"/>
             <ColumnDefinition Width="483*"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="tbUser" Height="25" Margin="135.6,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" 
+        <TextBox x:Name="tbUser" Height="25" Margin="135.6,170,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="210" 
                  Grid.Column="1" BorderBrush="{StaticResource MainThemeBrush}" BorderThickness="0,0,0,4" HorizontalAlignment="Left" 
                  FontSize="14"  Text="{Binding LoginUser.UserName , Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                  ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
 
-        <PasswordBox components:PasswordBoxAttach.BoundPassword="{Binding LoginUser.Password, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="24.9" Margin="135.6,218,0,0"  VerticalAlignment="Top" Width="210" 
-                     Grid.Column="1" BorderBrush="{StaticResource MainThemeBrush}"   BorderThickness="0,0,0,4" FontSize="14" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" />
+        <!--PasswordBox components:PasswordBoxAttach.BoundPassword="{Binding LoginUser.Password, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="24.9" Margin="135.6,225,0,0"  VerticalAlignment="Top" Width="210" 
+                     Grid.Column="1" BorderBrush="{StaticResource MainThemeBrush}"   BorderThickness="0,0,0,4" FontSize="14" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" /-->
 
         <TextBlock HorizontalAlignment="Left" Margin="85,261,0,0" TextWrapping="Wrap" VerticalAlignment="Top" 
                    RenderTransformOrigin="-1.462,-1.231" Height="39" Width="171" FontSize="18" FontFamily="Century Gothic" 
                    Panel.ZIndex="2" Foreground="White" FontWeight="Bold" Text="Sistema de "/>
 
-        <Image HorizontalAlignment="Center" Height="100" Margin="0,35,0,0" VerticalAlignment="Top" Width="100" 
-               Source="/Views/LogoWhite.png" Stretch="Fill" RenderTransformOrigin="0.908,0.484" Panel.ZIndex="6"/>
+        <Image HorizontalAlignment="Left" Height="109" Margin="85,38,0,0" VerticalAlignment="Top" Width="119" 
+               Source="/Views/Resources/ResourceImages/LogoWhite.png" Stretch="Fill" RenderTransformOrigin="0.908,0.484" Panel.ZIndex="14"/>
         <TextBlock HorizontalAlignment="Center" Margin="0,164,0,0" TextWrapping="Wrap" Text="Laboratorios Cifar" 
                    VerticalAlignment="Top" FontSize="24" FontFamily="Century Gothic" Height="63" Width="214" Foreground="White" FontWeight="Bold" Panel.ZIndex="2"/>
         <Button Content="Ingreso" Grid.Column="1" HorizontalAlignment="Left" Margin="135.6,293,0,0" VerticalAlignment="Top" 

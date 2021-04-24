@@ -4,14 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CifarInventario.Views"
+        xmlns:customcontrol="clr-namespace:CifarInventario.Views.CustomControl"
         mc:Ignorable="d"
-        Title="NavigationMenu" Height="800" Width="1200">
+        Title="NavigationMenu" Height="700" Width="1200">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="1000"/>
         </Grid.ColumnDefinitions>
 
-        <Frame Grid.Column="1" NavigationUIVisibility="Hidden"/>
+        <customcontrol:MenuControl/>
+
+        <Frame x:Name="MainWindowFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

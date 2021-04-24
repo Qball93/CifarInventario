@@ -1,31 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CifarInventario.Models;
 using System.Text;
+using CifarInventario.ViewModels.Classes.Queries;
 using System.Threading.Tasks;
 
 namespace CifarInventario.ViewModels
 {
-  /*  class NavigationMenuVM
+    class NavigationMenuVM
     {
 
+        
+        /*public List<Menu> MenuList
+        {
+            get
+            {
+                return new List<Menu>
+                {
+                    new Menu() {MenuText = "Usuarios",
+                        SubMenuList = new List<SubMenu>{
+                        new SubMenu(){ SubMenuText = "Control de Usuarios" }
+                        }
+                    },
+                    new Menu() { MenuText = "Facturacion",
+                        SubMenuList = new List<SubMenu>{
+                            new SubMenu(){ SubMenuText = "Proveedores" },
+                            new SubMenu(){ SubMenuText = "Clientes" }
+                        } 
+                    }
+                };
+   
+            }
+        }
 
-        public List<MenuItemsData> MenuList
+        /*public List<MenuItemsData> MenuList
         {
             get
             {
                 return new List<MenuItemsData>
                 {
-                    new MenuItemsData() {PathData = (PathGeometry)};
-                }
+                    new MenuItemsData() {MenuText = "Usuarios",
+                        SubMenuList = new List<SubMenuItemsData>{
+                        new SubMenuItemsData(){ SubMenuText = "Control de Usuarios" }
+                        }
+                    },
+                    new MenuItemsData() { MenuText = "Facturacion",
+                        SubMenuList = new List<SubMenuItemsData>{
+                            new SubMenuItemsData(){ SubMenuText = "Proveedores" },
+                            new SubMenuItemsData(){ SubMenuText = "Clientes" }
+                        }
+                    }
+                };
+
+            }
+        }*/
+
+        public List<Menu> MenuList
+        {
+            get
+            {
+                return MenuQueries.getMenus(1);
             }
         }
 
+
+
+
+
+
     }
 
-    public class MenuItemsData
+    /*public class MenuItemsData
     {
-        public PathGeometry PathData { get; set; }
+        //public PathGeometry PathData { get; set; }
+        public string MenuText { get; set; }
         public List<SubMenuItemsData> SubMenuList { get; set; }
     }
 
