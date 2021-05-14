@@ -161,4 +161,43 @@ namespace CifarInventario.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+    public class formulaProduct:Validators, INotifyPropertyChanged
+    {
+        public string codigo { get; set; }
+        public string nombre { get; set; }
+
+        private string _quantity;
+        public string unidad { get; set; }
+
+        public bool QuantityCheck = false;
+
+        public string Quantity
+        {
+            get { return _quantity; }
+            set
+            {
+                QuantityCheck = true;
+                _quantity = value;
+                ClearErrors("Quantity");
+                IsEmptyString(value, "Quantity");
+                isDecimal(value, "Quantity");
+                OnPropertyChanged("Quantity");
+            }
+        }
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+    }
+
+
+    
 }

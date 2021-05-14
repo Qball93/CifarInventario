@@ -58,13 +58,13 @@ namespace CifarInventario.Views.Lists
             PdfFont italized = PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLDITALIC);
             PdfFont normal = PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN);
 
-            string date = "8/2/2021";
+            /*string date = "8/2/2021";
             string name = "Farmacia Satos";
             string adress = "Blvd los Poeta Juticalpa Olancho";
-            string RTN = "1601-1979-025635";
+            string RTN = "1601-1979-025635";*/
             string testA = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             string testB = "ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss";
-            int length = 110;
+            //int length = 110;
 
 
             Paragraph p = new Paragraph(char.MinValue + "\n\n\n\n\n\n\n\n\n\n\n");

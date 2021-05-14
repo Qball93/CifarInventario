@@ -135,10 +135,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             cn = DBConnection.MainConnection();
             try
             {
-                //cmd = new OleDbCommand("INSERT INTO usuarios (id_rol,status,usuario,password,salt) VALUES("+newRole+","+newStatus+",'"+newUsername+"','"+password+"','"+salt+"');", cn);
-
-                //System.Windows.MessageBox.Show("INSERT INTO usuarios (id_rol,status,usuario,password,salt) VALUES(" + newRole + "," + newStatus + ",'" + newUsername + "','" + password + "','" + salt + "');");
-                //cmd.ExecuteNonQuery();
 
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {

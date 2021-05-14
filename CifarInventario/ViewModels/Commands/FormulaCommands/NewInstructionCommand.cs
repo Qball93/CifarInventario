@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace CifarInventario.ViewModels.Commands.UserCommands
+namespace CifarInventario.ViewModels.Commands.FormulaCommands
 {
-    public class NewUserCommand: ICommand
+    public class NewInstructionCommand: ICommand
     {
-        public UserPageVM VM { get; set; }
+        public FormulasVM VM { get; set; }
 
 
         public event EventHandler CanExecuteChanged
@@ -18,20 +18,21 @@ namespace CifarInventario.ViewModels.Commands.UserCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public NewUserCommand(UserPageVM vm)
+        public NewInstructionCommand(FormulasVM vm)
         {
             VM = vm;
         }
 
+
         public bool CanExecute(object parameter)
         {
             //return true;
-            return !VM.NewUser.HasErrors && VM.NewUser.UserCheck && VM.NewUser.PasswordCheck && (VM.SelectedRole != null);
+            return !VM.NewFormulaNewInstruction.HasErrors && VM.NewFormulaNewInstruction.InstructionCheck;
         }
 
         public void Execute(object parameter)
         {
-            VM.CreateUser();
+            VM.AgregarProcediminetoDetalle();
         }
     }
 }

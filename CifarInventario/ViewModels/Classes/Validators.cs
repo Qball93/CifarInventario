@@ -12,28 +12,40 @@ namespace CifarInventario.ViewModels.Classes
     public  class Validators : INotifyDataErrorInfo
     {
 
-
-
+        public readonly string OnetoNine = @"^[0-9]*$";
+        public readonly string PreciseNumber = @"/\d+\.?\d*/";
         public readonly string moneyRegEx = @"^(0|0?[1-9]\d*)\.\d\d$";
         public readonly string alphanumeric = @"[a-zA-Z0-9_]*$";
 
 
+        public void isStepNumber(string property, string propertyName)
+        {
+            if (!(Regex.IsMatch(property, OnetoNine)))
+                AddError(propertyName, "Este campo solo acepta numeros.");
+        }
+
         public void IsEmptyString(string value, string propertyName)
         {
             if (String.IsNullOrEmpty(value))
-                AddError(propertyName, "Campo no puede estar vacio");
+                AddError(propertyName, "Campo no puede estar vacio.");
         }
 
         public void isEmptyInt(int? property, string propertyName)
         {
             if (!property.HasValue)
-                AddError(propertyName, "Campo no puede estar vacio");
+                AddError(propertyName, "Campo no puede estar vacio.");
         }
 
         public void isAlphaNumeric(string property, string propertyName)
         {
             if (!(Regex.IsMatch(property, alphanumeric)))
-                AddError(propertyName, "Este campo tiene que ser alpha numerico");
+                AddError(propertyName, "Este campo tiene que ser alpha numerico.");
+        }
+
+        public void isDecimal(string property, string propertyName)
+        {
+            if ((Regex.IsMatch(property, PreciseNumber)))
+                AddError(propertyName, "Este campo solo acepta numeros y decimales.");
         }
 
         #region INotifyDataErrorInfo members

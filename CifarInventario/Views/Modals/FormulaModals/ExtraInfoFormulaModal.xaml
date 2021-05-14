@@ -1,0 +1,100 @@
+﻿<Window x:Class="CifarInventario.Views.Modals.FormulaModals.ExtraInfoModal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CifarInventario.Views.Modals.FormulaModals"
+        xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        mc:Ignorable="d"
+        BorderThickness="0"
+        MouseDown="Window_MouseDown"
+        WindowStyle="None"
+        Title="EditDetalleModal" Height="270" Width="700">
+
+    <Window.DataContext>
+        <vm:FormulasVM x:Name="vm"/>
+    </Window.DataContext>
+
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <DockPanel Grid.Row="0" Background="{StaticResource MainThemeBrush}" >
+            <Label Content="Informacion de Formula" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
+            <Button Height="30" Width="30" Background="{StaticResource MainThemeBrush}" FontSize="24"
+                    HorizontalAlignment="Right" BorderThickness="0,0,0,0" Click="Button_Click">
+                <fa:IconBlock Icon="Times" Foreground="White"/>
+            </Button>
+        </DockPanel>
+
+
+        <DockPanel Grid.Row="1" Margin="25,0,25,0">
+            <Grid x:Name="layoutRoot">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="400"/>
+                </Grid.ColumnDefinitions>
+
+
+                <DockPanel Grid.Column="0">
+                    <DockPanel  DockPanel.Dock="Top" Height="50">
+                        <Label Content="Codigo Formula" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"/>
+                        <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" 
+                     Text="{Binding SelectedFormula.CodFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,8,0" VerticalAlignment="Center" Width="100" HorizontalAlignment="Right" />
+                    </DockPanel>
+                    <DockPanel >
+                        <Label Content="Forma Farmaceutica"    VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"/>
+                        <ComboBox   VerticalAlignment="Center" ItemsSource="{Binding FormasFarmaceuticas}"   SelectedItem="{Binding SelectedFormula.FormaFarm}" Width="100" SelectedIndex="1"
+                             Margin="0,0,0,0" FontSize="14"  ToolTip="Forma Farmaceutica de formula">
+
+                        </ComboBox>
+                    </DockPanel>
+
+                </DockPanel>
+
+                <DockPanel Grid.Column="1">
+                    <DockPanel DockPanel.Dock="Top" Height="50">
+                        <Label Content="Nombre Formula" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
+                        <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                     Text="{Binding SelectedFormula.NombreFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,0,50,0" VerticalAlignment="Center" Width="150" HorizontalAlignment="Right" />
+                    </DockPanel>
+                    <DockPanel>
+                        <Label Content="Unidad Base" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
+                        <ComboBox VerticalAlignment="Center" ItemsSource="{Binding UnidadCreada}"  SelectedValue="{Binding SelectedFormula.Cantidad}" Width="100" SelectedIndex="0"
+                            Margin="60,0,0,0" FontSize="14"  ToolTip="Unidad base de la formula">
+
+                        </ComboBox>
+                    </DockPanel>
+
+                </DockPanel>
+
+            </Grid>
+        </DockPanel>
+
+        <DockPanel Grid.Row="2" Margin="25,0,25,0">
+            <Label FontSize="18" DockPanel.Dock="Left" Height="40" Width="150"  Content="Precauciones"></Label>
+            <TextBox Margin="20,10,50,10" TextWrapping="Wrap" AcceptsReturn="True"
+                       ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                       Text="{Binding SelectedFormula.Precauciones, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                       Background="LightBlue" TextChanged="TextBox_TextChanged"
+                       ></TextBox>
+        </DockPanel>
+
+        <DockPanel Grid.Row="3" Margin="45,0,25,0">
+            <Button  Command="{Binding editFormulacommand}"  Content="Crear" FontSize="16" Margin="0,0,0,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+        </DockPanel>
+
+
+    </Grid>
+
+</Window>

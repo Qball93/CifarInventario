@@ -21,6 +21,7 @@ namespace CifarInventario.Models
     public class SubMenu
     {
         public string SubMenuText { get; set; }
+        public string SubMenuPage { get; set; }
 
         public ICommand SubMenuCommand { get; }
 
@@ -32,7 +33,7 @@ namespace CifarInventario.Models
         private void Execute()
         {
 
-            string SMT = SubMenuText.Replace(" ", string.Empty);
+            string SMT = SubMenuPage.Replace(" ", string.Empty);
             if (!string.IsNullOrEmpty(SMT))
                 navigateToPage(SMT);
         }

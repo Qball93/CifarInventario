@@ -55,7 +55,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     
 
 
-                    cmd = new OleDbCommand("SELECT menus.nombre_menu, menus.icon_string, submenu.nombre_submenu, menus.id " +
+                    cmd = new OleDbCommand("SELECT menus.nombre_menu, submenu.nombre_pagina, menus.icon_string, submenu.nombre_submenu, menus.id " +
                         "FROM menus INNER JOIN(submenu INNER JOIN subMenuPermissions ON submenu.id = subMenuPermissions.id_submenu) ON menus.id = submenu.id_menu_padre " +
                         "WHERE subMenuPermissions.id_role = "+ roleId + " and subMenuPermissions.activo = true and menus.nombre_menu = '" + element.MenuText +"';",cn);
 
@@ -68,6 +68,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
 
                         subTemp.SubMenuText = dr["nombre_submenu"].ToString();
+                        subTemp.SubMenuPage = dr["nombre_pagina"].ToString();
 
 
                         element.SubMenuList.Add(subTemp);
