@@ -185,6 +185,91 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return instructions;
         }
 
+        public static List<Formula> GetFormulasTransformaciones()
+        {
+            List<Formula> formulas = new List<Formula>();
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+
+                cmd = new OleDbCommand("SELECT * FROM formulas where Activo = true and cod_transformacion IS NOT NULL;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    Formula temp = new Formula();
+
+                    temp.CodFormula = dr["id"].ToString();
+                    temp.FormaFarm = dr["forma_farm"].ToString();
+                    temp.NombreFormula = dr["nombre_formula"].ToString();
+                    temp.Precauciones = dr["precauciones"].ToString();
+                    temp.Cantidad = dr["cantidad_creada"].ToString();
+
+                    formulas.Add(temp);
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener listado de formulas " + ex.ToString());
+            }
+
+
+            return formulas;
+        }
+
+        public static List<Formula> GetNormalFormulas()
+        {
+            List<Formula> formulas = new List<Formula>();
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+
+                cmd = new OleDbCommand("SELECT * FROM formulas where Activo = true and cod_transformacion IS NULL;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    Formula temp = new Formula();
+
+                    temp.CodFormula = dr["id"].ToString();
+                    temp.FormaFarm = dr["forma_farm"].ToString();
+                    temp.NombreFormula = dr["nombre_formula"].ToString();
+                    temp.Precauciones = dr["precauciones"].ToString();
+                    temp.Cantidad = dr["cantidad_creada"].ToString();
+                    temp.Transformacion = dr["cod_transformacion"].ToString();
+
+                    formulas.Add(temp);
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener listado de formulas " + ex.ToString());
+            }
+
+
+            return formulas;
+        }
+
 
 
         public static bool isRepeatedFormula(string codigo)
@@ -307,7 +392,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         public static void agregarFormula(List<DetalleFormula> detalles, Formula newFormula)
         {
-
+            bool temp = true;
 
             cn = DBConnection.MainConnection();
             try
@@ -315,8 +400,19 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO formulas ([id],[nombre_formula],[forma_farm],[precauciones],[cantidad_creada],[Activo])" +
-                        "VALUES (@id,@name,@form,@precaucion,@quantity,@status)";
+
+
+                    if(newFormula.Transformacion == "")
+                    {
+                        cmd.CommandText = @"INSERT INTO formulas ([id],[nombre_formula],[forma_farm],[precauciones],[cantidad_creada])" +
+                        "VALUES (@id,@name,@form,@precaucion,@quantity)";
+                    }
+                    else
+                    {
+                        cmd.CommandText = @"INSERT INTO formulas ([id],[nombre_formula],[forma_farm],[precauciones],[cantidad_creada],[cod_transformacion])" +
+                        "VALUES (@id,@name,@form,@precaucion,@quantity,@cod_transformacion)";
+                    }
+                    
 
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
@@ -326,7 +422,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         new OleDbParameter("@form",newFormula.FormaFarm),
                         new OleDbParameter("@precaucion",newFormula.Precauciones),
                         new OleDbParameter("@quantity",newFormula.Cantidad),
-                        new OleDbParameter("@status","True")
+                        new OleDbParameter("@cod_transformacion",newFormula.Transformacion),
+                        //new OleDbParameter("@status",temp)
                     }) ;
 
 

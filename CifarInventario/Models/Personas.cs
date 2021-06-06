@@ -177,4 +177,49 @@ namespace CifarInventario.Models
         }
     }
 
+
+    public class DisplayProveedor:INotifyPropertyChanged
+    {
+        private int _id;
+        private string _nombreProveedor;
+        private string _nombreContacto;
+
+        public int Id
+        {
+            get { return _id; }
+            set
+            {
+                _id = value;
+                OnPropertyChanged("Id");
+            }
+        }
+
+        public string NombreProveedor
+        {
+            get { return _nombreProveedor; }
+            set
+            {
+                _nombreProveedor = value;
+                OnPropertyChanged("NombreProveedor");
+            }
+        }
+
+        public string NombreContacto
+        {
+            get { return _nombreContacto; }
+            set
+            {
+                _nombreContacto = value;
+                OnPropertyChanged("NombreContacto");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
 }

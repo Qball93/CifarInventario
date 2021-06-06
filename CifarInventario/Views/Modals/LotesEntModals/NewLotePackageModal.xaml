@@ -1,0 +1,299 @@
+﻿<Window x:Class="CifarInventario.Views.Modals.LotesEntModals.NewLotePackageModal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CifarInventario.Views.Modals.LotesEntModals"
+        xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
+        mc:Ignorable="d"
+        BorderThickness="0"
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Title="NewFormulaModal" Height="500" Width="800">
+
+
+    <Window.DataContext>
+        <vm:LoteEntVM x:Name="vm"/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Background="{StaticResource MainThemeBrush}" >
+            <Label Content="Nuevo Lote De Paquete" 
+                   Foreground="White" 
+                   VerticalAlignment="Center" 
+                   FontSize="18"/>
+            <Button Height="30" 
+                    Width="30" 
+                    Background="{StaticResource MainThemeBrush}" 
+                    FontSize="24"
+                    HorizontalAlignment="Right" 
+                    BorderThickness="0,0,0,0" 
+                    Click="Button_Click">
+                <fa:IconBlock Icon="Times" 
+                              Foreground="White"/>
+            </Button>
+        </DockPanel>
+
+        <DockPanel Grid.Row="1" Margin="45,0,45,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <DockPanel Grid.Column="0">
+                    <DockPanel  
+                        DockPanel.Dock="Top" 
+                                Height="50">
+                        <Label 
+                            Content="Codigo Lote" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,0,0" 
+                            FontSize="14"/>
+                        <TextBox FontSize="16" 
+                                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" 
+                                 Text="{Binding NewLote.CodLote, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,0,0,0" 
+                                 VerticalAlignment="Center" 
+                                 Width="200" 
+                                 HorizontalAlignment="Right" />
+                    </DockPanel>
+                    <DockPanel >
+                        <Label Content="Fecha Entrada" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,0,0" 
+                               FontSize="14"/>
+                        <DatePicker FontSize="16" 
+                                Name="entradaDP"
+                                ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                                SelectedDate="{Binding NewLote.FechaEntrada, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,0,0" 
+                                VerticalAlignment="Center" 
+                                DisplayDateEnd="{Binding NewLote.FechaVencimiento}"
+                                Width="200" 
+                                HorizontalAlignment="Right" />
+                    </DockPanel>
+
+                </DockPanel>
+
+                <DockPanel Grid.Column="1">
+                    <DockPanel DockPanel.Dock="Top" 
+                               Height="50">
+                        <Label Content="Fecha Creacion" 
+                               VerticalAlignment="Center" 
+                               Margin="20,0,0,0" 
+                               FontSize="14"/>
+                        <DatePicker FontSize="16" 
+                                Name="createDP"
+                                ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                                SelectedDate="{Binding NewLote.FechaFabricacion, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,0,0" 
+                                VerticalAlignment="Center" 
+                                DisplayDateEnd="{Binding NewLote.FechaVencimiento}"
+                                
+                                Width="200" 
+                                HorizontalAlignment="Right" />
+                    </DockPanel>
+                    <DockPanel>
+                        <Label Content="Fecha Vencimiento" 
+                               VerticalAlignment="Center" 
+                               Margin="20,0,0,0" 
+                               FontSize="14"/>
+                        <DatePicker FontSize="16" 
+                                Name="venciDP"
+                                ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                                SelectedDate="{Binding NewLote.FechaVencimiento, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                DisplayDateStart="{Binding NewLote.FechaFabricacion}"
+                                Margin="0,0,0,0" 
+                                VerticalAlignment="Center" 
+                                Width="200" 
+                                HorizontalAlignment="Right" />
+                    </DockPanel>
+
+                </DockPanel>
+
+            </Grid>
+        </DockPanel>
+
+        <DockPanel Grid.Row="2" Margin="45,0,45,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <DockPanel Grid.Column="0">
+                    <DockPanel  DockPanel.Dock="Top"
+                                Height="50">
+                        <Label Content="Materia Prima" 
+                               VerticalAlignment="Center" 
+                               Margin="0,0,0,0" 
+                               FontSize="14"/>
+                        <ComboBox   
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center" 
+                            ItemsSource="{Binding PaquetesMP}"   
+                            SelectedItem="{Binding SelectedMateriaPrima}" 
+                            Width="180"
+                            SelectedIndex="1"
+                            Margin="19,0,0,0"
+                            FontSize="14"  
+                            ToolTip="Nombre Proveedor">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} : {1}">
+                                                <Binding Path="Nombre"></Binding>
+                                                <Binding Path="UnidadMuestra"></Binding>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel >
+                        <Label Content="Proveedor Producto"
+                               VerticalAlignment="Center" 
+                               Margin="0,0,0,0"  
+                               FontSize="14"/>
+                        <ComboBox   
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center" 
+                            ItemsSource="{Binding Proveedores}"   
+                            SelectedItem="{Binding SelectedProveedor}" 
+                            DisplayMemberPath="NombreProveedor"
+                            Width="180"
+                            SelectedIndex="1"
+                            Margin="19,0,0,0"
+                            FontSize="14"  
+                            ToolTip="Nombre Proveedor">
+                        </ComboBox>
+
+
+                    </DockPanel>
+
+                </DockPanel>
+
+                <DockPanel Grid.Column="1">
+                    <DockPanel DockPanel.Dock="Top"
+                               Height="50">
+
+                        <Label Content="Cantidad Total"
+                               VerticalAlignment="Center"
+                               Margin="20,0,0,0" 
+                               FontSize="14"/>
+                        <TextBox FontSize="16"
+                                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"                    
+                                 Text="{Binding NewLote.CantidadOriginal, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"                   
+                                 Margin="0,0,0,0"
+                                 VerticalAlignment="Center"
+                                 Width="200"
+                                 HorizontalAlignment="Right" />
+
+                    </DockPanel>
+                    <!--DockPanel>
+                        <Label Content="Unidad Base" 
+                               VerticalAlignment="Center"
+                               Margin="20,0,0,0" 
+                               FontSize="14"/>
+                        <ComboBox VerticalAlignment="Center"
+                                  ItemsSource="{Binding UnidadCreada}"
+                                  SelectedValue="{Binding NewFormula.Cantidad}"
+                                  Width="190" SelectedIndex="0"
+                                  Margin="46,0,0,0" 
+                                  FontSize="14"  
+                                  ToolTip="Unidad base de la formula">
+                        </ComboBox>
+                    </-->
+
+                </DockPanel>
+
+            </Grid>
+        </DockPanel>
+
+        <DockPanel Grid.Row="3" Margin="45,0,45,0">
+            <Label FontSize="14"
+                   DockPanel.Dock="Top"
+                   Height="27"
+                   Width="200"  
+                   Content="Certificados de Analysis"></Label>
+            <TextBox Margin="20,2,20,10" TextWrapping="Wrap" AcceptsReturn="True"
+                       ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                       Text="{Binding NewLote.CertificadoAnalysis, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                       Background="LightBlue"
+                       ></TextBox>
+        </DockPanel>
+
+        <DockPanel Grid.Row="4" Margin="45,0,45,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <DockPanel Grid.Column="0">
+                    <DockPanel  
+                        DockPanel.Dock="Top" 
+                                Height="50">
+                        <Label 
+                            Content="Procedencia" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,0,0" 
+                            FontSize="14"/>
+                        <TextBox FontSize="16" 
+                                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" 
+                                 Text="{Binding NewLote.Procedencia, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,0,0,0" 
+                                 VerticalAlignment="Center" 
+                                 Width="200" 
+                                 HorizontalAlignment="Right" />
+                    </DockPanel>
+
+                </DockPanel>
+
+                <DockPanel Grid.Column="1">
+                    <DockPanel DockPanel.Dock="Top" 
+                               Height="50">
+                        <Label Content="Fabricante" 
+                               VerticalAlignment="Center" 
+                               Margin="20,0,0,0" 
+                               FontSize="14"/>
+                        <TextBox FontSize="16" 
+                                ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                                Text="{Binding NewLote.NombreFabricante, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                                Margin="0,0,0,0" 
+                                VerticalAlignment="Center" 
+                                Width="200" 
+                                HorizontalAlignment="Right" />
+                    </DockPanel>
+
+                </DockPanel>
+
+            </Grid>
+        </DockPanel>
+
+        <DockPanel Grid.Row="5" Margin="45,0,45,0">
+            <Button DockPanel.Dock="Left" Content="Limpiar" FontSize="16" Margin="300,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
+            <Button  Command="{Binding newLotePacakgeCommand}"  Content="Crear" FontSize="16" Margin="0,0,0,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+        </DockPanel>
+
+
+
+
+    </Grid>
+</Window>

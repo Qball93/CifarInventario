@@ -11,13 +11,18 @@ namespace CifarTests
     public class UnitTest1
     {
         [TestMethod]
-        public void Test1()
+        public void TestDetalleInfo()
         {
-            List<Formula> testFormulas = FormulaQueries.GetFormulas();
+
+            List<LoteSalidaDetalle> testDetalles = InventoryQueries.getFormulaProductionDetalles("Piperacina jarabe", 2.42, "PPRJRB");
 
 
 
-            Console.WriteLine("this is " + testFormulas[0].CodFormula);
+            Console.WriteLine("this is " + testDetalles[0].NombreMP);
+
+
+
+            Console.WriteLine("THs sad as sa sa dsa da ");
         }
     }
 }

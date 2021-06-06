@@ -13,14 +13,17 @@ namespace CifarInventario.ViewModels.Classes
     {
 
         public readonly string OnetoNine = @"^[0-9]*$";
-        public readonly string PreciseNumber = @"/\d+\.?\d*/";
+        public readonly string PreciseNumber = @"^(?!0*(\.0+)?$)(\d+|\d*\.\d+)$";
         public readonly string moneyRegEx = @"^(0|0?[1-9]\d*)\.\d\d$";
         public readonly string alphanumeric = @"[a-zA-Z0-9_]*$";
+        public readonly string EmptyNumber = @"[0]";
+        public readonly string positiveInt = @"^[1-9]\d*$";
+
 
 
         public void isStepNumber(string property, string propertyName)
         {
-            if (!(Regex.IsMatch(property, OnetoNine)))
+            if (!(Regex.IsMatch(property, positiveInt)))
                 AddError(propertyName, "Este campo solo acepta numeros.");
         }
 
@@ -44,7 +47,7 @@ namespace CifarInventario.ViewModels.Classes
 
         public void isDecimal(string property, string propertyName)
         {
-            if ((Regex.IsMatch(property, PreciseNumber)))
+            if (!(Regex.IsMatch(property, PreciseNumber)))
                 AddError(propertyName, "Este campo solo acepta numeros y decimales.");
         }
 

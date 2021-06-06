@@ -262,5 +262,46 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
+        public static List<DisplayProveedor> GetDisplayProveedores()
+        {
+            var entidades = new List<DisplayProveedor>();
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("SELECT * FROM proveedor;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    DisplayProveedor temp = new DisplayProveedor();
+
+                    temp.Id = int.Parse(dr["id"].ToString());
+                    temp.NombreProveedor = (dr["nombre_commercial"].ToString() == "" ? "N/A" : dr["nombre_commercial"].ToString());
+                    //temp.NombreContacto = (dr["nombre_contacto"].ToString() == "" ? "N/A" : dr["nombre_contacto"].ToString());
+
+
+                    entidades.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener entidades commerciales  " + ex);
+            }
+
+
+            return entidades;
+        }
+
     }
 }

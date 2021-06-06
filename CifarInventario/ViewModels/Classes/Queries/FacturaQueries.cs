@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CifarInventario.ViewModels.Classes.Queries
 {
-    class FacturaQueries
+    public class FacturaQueries
     {
         static private OleDbConnection cn;
         static private OleDbDataReader dr;
@@ -83,6 +83,39 @@ namespace CifarInventario.ViewModels.Classes.Queries
         }
 
 
+        public static void CreateFactura(Factura factura)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO factura ([id_cliente],[id_empleado],[total],[subtotal],[imp],[fechaEmision],[abonado],[pendiente]) " +
+                        "VALUES (@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente) ";
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@idClient",factura.),
+                        new OleDbParameter("@codPT",lote.CodPT),
+                        new OleDbParameter("@cantidad",lote.Cantidad),
+                        new OleDbParameter("@codLoteEnt",lote.CodLoteEntrada)
+                    });
+
+                    cmd.ExecuteNonQuery();
+
+
+                }
+
+                cn.Close();
+
+                updateLoteEntradaAmount(lote.CodLoteEntrada, -lote.Cantidad, codMP);
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al crear Detalle Lote Salida  " + ex);
+            }
+        }
 
     }
 }

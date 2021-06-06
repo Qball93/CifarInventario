@@ -16,7 +16,7 @@ using System.Windows;
 
 namespace CifarInventario.ViewModels
 {
-    public class FormulasVM: INotifyPropertyChanged
+    public class FormulasVM : INotifyPropertyChanged
     {
 
         public FormulasVM()
@@ -33,9 +33,10 @@ namespace CifarInventario.ViewModels
             newDetalleCommand = new NewDetalleCommand(this);
             newInstructionCommand = new NewInstructionCommand(this);
             editFormulacommand = new EditFormulaCommand(this);
-            
+            Transformations = new ObservableCollection<Formula>(FormulaQueries.GetFormulasTransformaciones());
 
-            UnidadCreada = new ObservableCollection<string> { "galones", "kilos"};
+
+            UnidadCreada = new ObservableCollection<string> { "galones", "kilos" };
             FormasFarmaceuticas = new ObservableCollection<string> { "jarabe", "tableta", "pildora" };
 
 
@@ -59,7 +60,22 @@ namespace CifarInventario.ViewModels
 
         public string tempCode { get; set; }
 
-       
+        public bool isTransform { get; set; }
+
+        public Formula TransformFormula {get; set;}
+
+        private ObservableCollection<Formula> _transformations;
+
+        public ObservableCollection<Formula> Transformations
+        {
+            get { return _transformations; }
+            set
+            {
+                _transformations = value;
+                OnPropertyChanged("Transformations");
+            }
+        }
+    
 
 
         #region List Members
@@ -308,8 +324,8 @@ namespace CifarInventario.ViewModels
             };
 
 
-            NewFormulaSelectedProduct.codigo = SelectedDetalle.CodFormula;
-            NewFormulaSelectedProduct.nombre = SelectedDetalle.Name;
+            NewFormulaSelectedProduct.Codigo = SelectedDetalle.CodFormula;
+            NewFormulaSelectedProduct.Nombre = SelectedDetalle.Name;
 
             var TestView = new EditDetalleModal(this);
             TestView.ShowDialog();
@@ -348,10 +364,10 @@ namespace CifarInventario.ViewModels
         {
             var testDetalle = new DetalleFormula
             {
-                Name = NewFormulaSelectedProduct.nombre,
-                IdMp = NewFormulaSelectedProduct.codigo,
+                Name = NewFormulaSelectedProduct.Nombre,
+                IdMp = NewFormulaSelectedProduct.Codigo,
                 Quantity = NewFormulaNewDetalle.Quantity,
-                Unidad = NewFormulaSelectedProduct.unidad
+                Unidad = NewFormulaSelectedProduct.Unidad
             };
 
 
@@ -499,7 +515,7 @@ namespace CifarInventario.ViewModels
         {
             var TestView = new NewFormulaModal(this);
 
-            
+            isTransform = false;
             NewFormulaDetalles = new ObservableCollection<DetalleFormula>();
             NewFormulaSelectedDetalle = new DetalleFormula();
             SelectedFormulaInstruction = new ProcedimientoDetalle();
@@ -518,15 +534,27 @@ namespace CifarInventario.ViewModels
         {
             if (FormulaQueries.isRepeatedFormula(NewFormula.CodFormula))
             {
-                System.Windows.MessageBox.Show("Codigo de Formula ya existe.");
+                MessageBox.Show("Codigo de Formula ya existe.");
             }
             else
             {
 
+                
+
+                if (isTransform)
+                {
+                    NewFormula.Transformacion = TransformFormula.CodFormula;
+                }
+                else
+                {
+                    NewFormula.Transformacion = "";
+                }
+
+                //MessageBox.Show(NewFormula.FormaFarm + NewFormula.Cantidad);
 
                 //System.Windows.MessageBox.Show("This is form" + NewFormula.FormaFarm);
                 FormulaQueries.agregarFormula(NewFormulaDetalles.ToList(), NewFormula);
-                System.Windows.MessageBox.Show("Formula Maestra creada.");
+                //System.Windows.MessageBox.Show("Formula Maestra creada.");
             }
         }
 
@@ -548,15 +576,15 @@ namespace CifarInventario.ViewModels
 
             var testDetalle = new DetalleFormula
             {
-                Name = NewFormulaSelectedProduct.nombre,
-                IdMp = NewFormulaSelectedProduct.codigo,
+                Name = NewFormulaSelectedProduct.Nombre,
+                IdMp = NewFormulaSelectedProduct.Codigo,
                 Quantity = NewFormulaNewDetalle.Quantity,
-                Unidad = NewFormulaSelectedProduct.unidad
+                Unidad = NewFormulaSelectedProduct.Unidad
             };
 
             if (NewFormulaDetalles.Any(p => p.Name == testDetalle.Name))
             {
-                System.Windows.MessageBox.Show("Esta MP ya se encuentra en la formula.");
+                MessageBox.Show("Esta MP ya se encuentra en la formula.");
             }
             else
             {

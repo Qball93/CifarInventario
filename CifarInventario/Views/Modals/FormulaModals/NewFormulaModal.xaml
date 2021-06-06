@@ -10,7 +10,7 @@
         BorderThickness="0"
         MouseDown="Window_MouseDown"
         WindowStyle="None"
-        Title="NewFormulaModal" Height="780" Width="800">
+        Title="NewFormulaModal" Height="810" Width="800">
     
     
     <Window.DataContext>
@@ -29,6 +29,7 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="100"/>
             <RowDefinition Height="5"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -51,13 +52,22 @@
                 <DockPanel Grid.Column="0">
                     <DockPanel  DockPanel.Dock="Top" Height="50">
                         <Label Content="Codigo Formula" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"/>
-                        <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" 
-                     Text="{Binding NewFormula.CodFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox FontSize="16"
+                                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
+                                 RelativeSource={x:Static RelativeSource.Self}}" 
+                     Text="{Binding NewFormula.CodFormula,
+                            Mode=TwoWay,
+                            ValidatesOnDataErrors=True,
+                            UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,0,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right" />
                     </DockPanel>
                     <DockPanel >
                         <Label Content="Forma Farmaceutica"    VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"/>
-                        <ComboBox   VerticalAlignment="Center" ItemsSource="{Binding FormasFarmaceuticas}"   SelectedItem="{Binding NewFormula.FormaFarm}" Width="190" SelectedIndex="1"
+                        <ComboBox   VerticalAlignment="Center"
+                                    ItemsSource="{Binding FormasFarmaceuticas}"
+                                    SelectedItem="{Binding NewFormula.FormaFarm}"
+                                    Width="190"
+                                    SelectedIndex="1"
                              Margin="19,0,0,0" FontSize="14"  ToolTip="Forma Farmaceutica de formula">
 
                         </ComboBox>
@@ -69,13 +79,22 @@
                     <DockPanel DockPanel.Dock="Top" Height="50">
                         <Label Content="Nombre Formula" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
                         <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                     Text="{Binding NewFormula.NombreFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding NewFormula.NombreFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,0,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right" />
                     </DockPanel>
                     <DockPanel>
-                        <Label Content="Unidad Base" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
-                        <ComboBox VerticalAlignment="Center" ItemsSource="{Binding UnidadCreada}"  SelectedValue="{Binding NewFormula.Cantidad}" Width="190" SelectedIndex="0"
-                            Margin="46,0,0,0" FontSize="14"  ToolTip="Unidad base de la formula">
+                        <Label Content="Unidad Base"
+                               VerticalAlignment="Center"
+                               Margin="20,0,0,0"
+                               FontSize="14"/>
+                        <ComboBox VerticalAlignment="Center"
+                                  ItemsSource="{Binding UnidadCreada}"
+                                  SelectedValue="{Binding NewFormula.Cantidad}"
+                                  Width="190"
+                                  SelectedIndex="0"
+                            Margin="46,0,0,0"
+                                  FontSize="14"
+                                  ToolTip="Unidad base de la formula">
 
                         </ComboBox>
                     </DockPanel>
@@ -96,9 +115,27 @@
 
             <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="60" DockPanel.Dock="Bottom">
                 <Label Content="Materia Prima" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"></Label>
-                <ComboBox VerticalAlignment="Center" ItemsSource="{Binding NewFormulaProducts}"  SelectedValue="{Binding NewFormulaSelectedProduct}" Width="200"
-                          SelectedIndex="1" DisplayMemberPath="nombre"  Margin="20,0,0,0" FontSize="14"  ToolTip="Elija MP para formula">
-                    
+                <ComboBox VerticalAlignment="Center"
+                          ItemsSource="{Binding NewFormulaProducts}"
+                          SelectedValue="{Binding NewFormulaSelectedProduct}"
+                          Width="200"
+                          SelectedIndex="1"
+                          Margin="20,0,0,0"
+                          FontSize="14"
+                          ToolTip="Elija MP para formula">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} : {1}">
+                                        <Binding Path="Nombre"></Binding>
+                                        <Binding Path="Unidad"></Binding>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
                 </ComboBox>
 
 
@@ -246,10 +283,58 @@
 
 
         <DockPanel Grid.Row="9" Margin="45,0,45,0">
-            <Button DockPanel.Dock="Left" Content="Limpiar" FontSize="16" Margin="300,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
-            <Button  Command="{Binding NuevaFormulaCommand}"  Content="Crear" FontSize="16" Margin="0,0,0,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
-        </DockPanel>
+            <CheckBox
+                Name="cbForm"
+                FontSize="16"
+                Height="40"
+                Margin="10,0,0,0"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
+                IsChecked="{Binding isTransform, Mode=TwoWay}">
+                <TextBlock Text="Transformacion" VerticalAlignment="Center" />
+            </CheckBox>
 
+            <ComboBox
+                Height="40"
+                FontSize="16"
+                Margin="30,0,0,0"
+                Width="300"
+                ItemsSource="{Binding Formulas}"
+                SelectedValue="{Binding TransformFormula}"
+                IsEnabled="{Binding ElementName=cbForm, Path=IsChecked}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} : {1}">
+                                    <Binding Path="NombreFormula"></Binding>
+                                    <Binding Path="Cantidad"></Binding>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+               
+            </ComboBox>
+
+            <TextBox
+                Height="40"
+                FontSize="16"
+                Margin="100,0,0,0"
+                Width="100"
+                Text="{Binding NewFormula.TransCantidad}"
+                IsEnabled="{Binding ElementName=cbForm, Path=IsChecked}">
+                
+            </TextBox>
+            
+            
+            </DockPanel>
+
+
+        <DockPanel  Grid.Row="10" Margin="45,0,45,0">
+            <Button DockPanel.Dock="Left" Content="Limpiar" FontSize="16" Margin="50,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
+            <Button  Command="{Binding NuevaFormulaCommand}"  Content="Crear" FontSize="16" Margin="0,0,40,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+        </DockPanel>
 
 
         

@@ -16,8 +16,20 @@ namespace CifarInventario.Models
         private string _precauciones;
         private string _formaFarm;
         private string _cantidad;
+        private string _codTrans;
+        private double _transCantidad;
 
         public bool CodCheck, NombreCheck, PrecaucionCheck = false;
+
+        public string Transformacion
+        {
+            get { return _codTrans; }
+            set
+            {
+                _codTrans = value;
+                OnPropertyChanged("Transformacion");
+            }
+        }
 
         public string Cantidad
         {
@@ -29,8 +41,6 @@ namespace CifarInventario.Models
             }
         }
 
-
-
         public string CodFormula
         {
             get { return _codFormula; }
@@ -41,10 +51,9 @@ namespace CifarInventario.Models
                 ClearErrors("CodFormula");
                 IsEmptyString(value, "CodFormula");
                 isAlphaNumeric(value, "CodFormula");
-                OnPropertyChanged("Formula");
+                OnPropertyChanged("CodFormula");
             }
         }
-
 
         public string NombreFormula
         {
@@ -58,7 +67,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged("NombreFormula");
             }
         }
-
 
         public string Precauciones
         {
@@ -80,6 +88,19 @@ namespace CifarInventario.Models
             {
                 _formaFarm = value;
                 OnPropertyChanged("FormaFarm");
+            }
+        }
+
+        public double TransCantidad
+        {
+            get { return _transCantidad; }
+            set
+            {
+                _transCantidad = value;
+                ClearErrors("TransCantidad");
+                IsEmptyString(value.ToString(), "TransCantidad");
+                isDecimal(value.ToString(), "TransCantidad");
+                OnPropertyChanged("TransCantidad");
             }
         }
 
