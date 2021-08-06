@@ -18,8 +18,13 @@ namespace CifarInventario.ViewModels.Classes
         public readonly string alphanumeric = @"[a-zA-Z0-9_]*$";
         public readonly string EmptyNumber = @"[0]";
         public readonly string positiveInt = @"^[1-9]\d*$";
+        public readonly string DecimalIncluding0 = @"^\d+(\.\d+)?$";
 
-
+        public void is0Decimal(string property, string propertyName)
+        {
+            if (!(Regex.IsMatch(property, DecimalIncluding0)))
+                AddError(propertyName, "Este campo solo acepta numeros y decimales.");
+        }
 
         public void isStepNumber(string property, string propertyName)
         {

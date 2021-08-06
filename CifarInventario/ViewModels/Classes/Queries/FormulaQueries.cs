@@ -270,8 +270,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return formulas;
         }
 
-
-
         public static bool isRepeatedFormula(string codigo)
         {
             cn = DBConnection.MainConnection();

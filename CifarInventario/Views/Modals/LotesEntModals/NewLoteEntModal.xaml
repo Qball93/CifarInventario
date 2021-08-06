@@ -14,9 +14,7 @@
         Title="NewFormulaModal" Height="500" Width="800">
 
 
-    <Window.DataContext>
-        <vm:LoteEntVM x:Name="vm"/>
-    </Window.DataContext>
+   
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>

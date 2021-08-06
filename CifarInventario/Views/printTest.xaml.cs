@@ -41,6 +41,9 @@ namespace CifarInventario.Views
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+
+
+            /*
             Factura factura = FacturaQueries.getFactura(1);
 
 
@@ -73,8 +76,8 @@ namespace CifarInventario.Views
 
 
             Paragraph p = new Paragraph("\n\n\n\n\n\n\n\n\n\n\n");
-            p.Add(char.MinValue + "                              " + factura.fecha + " \n\n\n");
-            p.Add(char.MinValue + "                                " + factura.NombreCliente + "\n\n");
+            p.Add(char.MinValue + "                              " + factura.Emission + " \n\n\n");
+            p.Add(char.MinValue + "                                " + factura.Cliente.nombre + "\n\n");
 
             p.SetFontSize(9);
             p.SetFont(normal);
@@ -135,7 +138,7 @@ namespace CifarInventario.Views
             document.Add(x);
 
             document.Close();
-
+            */
 
         }
     }

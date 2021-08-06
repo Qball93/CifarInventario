@@ -12,13 +12,29 @@ namespace CifarInventario.Models
     {
         private string _id;
         private double _existencia;
-        private double _precio;
         private string _nombreProducto;
-        private bool _esRentable;
-        private string _unidad;
+        private string _unidadMetrica;
         private double _entrada;
         private double _salida;
+        private double _conversion;
+        private double _cantidadExacta;
+        private string _unidadMuestra;
 
+
+        public bool nombreCheck, IdCheck, ConversionCheck = false;
+
+        public MpProduct(MpProduct old)
+        {
+            Id = old.Id;
+            NombreProducto = old.NombreProducto;
+            Existencia = old.Existencia;
+            UnidadMetrica = old.UnidadMetrica;
+            Entrada = old.Entrada;
+            Salida = old.Salida;
+            Conversion = old.Conversion;
+            CantidadExacta = old.CantidadExacta;
+            UnidadMuestra = old.UnidadMuestra;
+        }
 
         public MpProduct()
         {
@@ -30,7 +46,7 @@ namespace CifarInventario.Models
             set
             {
                 _entrada = value;
-                OnPropertyChanged("Entrada");
+                OnPropertyChanged(nameof(Entrada));
             }
         }
 
@@ -40,18 +56,17 @@ namespace CifarInventario.Models
             set
             {
                 _salida = value;
-                OnPropertyChanged("Salida");
+                OnPropertyChanged(nameof(Salida));
             }
         }
 
-
-        public string Unidad
+        public string UnidadMetrica
         {
-            get { return _unidad; }
+            get { return _unidadMetrica; }
             set
             {
-                _unidad = value;
-                OnPropertyChanged("Unidad");
+                _unidadMetrica = value;
+                OnPropertyChanged(nameof(UnidadMetrica));
             }
         }
 
@@ -61,7 +76,11 @@ namespace CifarInventario.Models
             set
             {
                 _id = value;
-                OnPropertyChanged("Id");
+                IdCheck = true;
+                ClearErrors(nameof(Id));
+                IsEmptyString(value, nameof(Id));
+                isAlphaNumeric(value, nameof(Id));
+                OnPropertyChanged(nameof(Id));
             }
         }
 
@@ -71,16 +90,7 @@ namespace CifarInventario.Models
             set
             {
                 _existencia = value;
-                OnPropertyChanged("Existencia");
-            }
-        }
-
-        public double Precio
-        {
-            get { return _precio; }
-            set { 
-                _precio = value;
-                OnPropertyChanged("Precio");
+                OnPropertyChanged(nameof(Existencia));
             }
         }
 
@@ -90,27 +100,164 @@ namespace CifarInventario.Models
             set
             {
                 _nombreProducto = value;
-                OnPropertyChanged("NombreProducto");
+                nombreCheck = true;
+                ClearErrors(nameof(NombreProducto));
+                IsEmptyString(value, nameof(NombreProducto));
+                isAlphaNumeric(value, nameof(NombreProducto));
+                OnPropertyChanged(nameof(NombreProducto));
             }
         }
 
-        public bool EsRentable
+        public double Conversion
         {
-            get { return _esRentable; }
+            get { return _conversion; }
             set
             {
-                _esRentable = value;
-                OnPropertyChanged("EsRentable");
+                _conversion = value;
+                ConversionCheck = true;
+                ClearErrors(nameof(Conversion));
+                isDecimal(value.ToString(),nameof(Conversion));
+                OnPropertyChanged(nameof(Conversion));
+            }
+        }
+        
+        public double CantidadExacta
+        {
+            get { return _cantidadExacta; }
+            set
+            {
+                _cantidadExacta = value;
+                OnPropertyChanged(nameof(CantidadExacta));
+            }
+        }
+
+        public string UnidadMuestra
+        {
+            get { return _unidadMuestra; }
+            set
+            {
+                _unidadMuestra = value;
+                OnPropertyChanged(nameof(UnidadMuestra));
             }
         }
 
 
 
 
-        public override string ToString()
+        
+
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
         {
-            return "dsaddsaasd";
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    public class PtProduct : Validators, INotifyPropertyChanged
+    {
+        private string _id;
+        private string _nombre;
+        private int _existencia;
+        private int _entrada;
+        private int _salida;
+        private double _precio;
+
+        public bool idCheck, nombreCheck, precioCheck = false;
+
+        public PtProduct() { }
+
+
+        public PtProduct(PtProduct copy)
+        {
+            Id = copy.Id;
+            Nombre = copy.Nombre;
+            Precio = copy.Precio;
+            Existencia = copy.Existencia;
+            Entrada = copy.Entrada;
+            Salida = copy.Salida;
+
+        }
+
+
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                _id = value;
+                idCheck = true;
+                ClearErrors(nameof(Id));
+                IsEmptyString(value,nameof(Id));
+                isAlphaNumeric(value, nameof(Id));
+                OnPropertyChanged(nameof(Id));
+            }
+
+        }
+
+        public string Nombre
+        {
+            get { return _nombre; }
+            set
+            {
+                _nombre = value;
+                nombreCheck = true;
+                ClearErrors(nameof(Nombre));
+                IsEmptyString(value,nameof(Nombre));
+                isAlphaNumeric(value, nameof(Nombre));
+                OnPropertyChanged(nameof(Nombre));
+
+            }
+        }
+
+        public double Precio
+        {
+            get { return _precio; }
+            set
+            {
+                _precio = value;
+                precioCheck = true;
+                ClearErrors(nameof(Precio));
+                isDecimal(value.ToString(),nameof(Precio));
+                OnPropertyChanged(nameof(Precio));
+
+            }
+        }
+
+        public int Existencia
+        {
+            get { return _existencia;  }
+            set
+            {
+                _existencia = value;
+                OnPropertyChanged(nameof(Existencia));
+            }
+        }
+
+        public int Entrada
+        {
+            get { return _entrada; }
+            set
+            {
+                _entrada = value;
+                OnPropertyChanged(nameof(Entrada));
+            }
+        }
+
+        public int Salida
+        {
+            get { return _salida; }
+            set
+            {
+                _salida = value;
+                OnPropertyChanged(nameof(Salida));
+            }
+        }
+        
 
 
 
@@ -251,21 +398,6 @@ namespace CifarInventario.Models
         }
 
 
-    }
-
-    public class MateriaPrima: Validators, INotifyPropertyChanged
-    {
-
-
-
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 
     /*public class EmpaqueProduct:Validators, INotifyPropertyChanged
@@ -452,8 +584,13 @@ namespace CifarInventario.Models
         }
     }
 
-    public class ProductoTeminadoParaLista: Validators, INotifyPropertyChanged
+    public class ProductoTeminadoParaLista : Validators, INotifyPropertyChanged
     {
+        public bool nameCheck = false;
+
+
+
+
         private string _codPT;
         public string CodPT
         {
@@ -472,6 +609,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombrePT = value;
+                nameCheck = true;
                 OnPropertyChanged("NombrePT");
             }
         }
@@ -484,6 +622,17 @@ namespace CifarInventario.Models
             {
                 _precio = value;
                 OnPropertyChanged("Precio");
+            }
+        }
+
+        private int _cantidad;
+        public int Cantidad
+        {
+            get { return _cantidad; }
+            set
+            {
+                _cantidad = value;
+                OnPropertyChanged("Cantidad");
             }
         }
 

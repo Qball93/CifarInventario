@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using CifarInventario.ViewModels.Classes;
 
 namespace CifarInventario.Models
 {
-    public class EntidadCommercial : INotifyPropertyChanged
+    public class EntidadCommercial : Validators, INotifyPropertyChanged
     {
 
         private int _id;
@@ -19,13 +20,28 @@ namespace CifarInventario.Models
         private string _commentario;
         private string _rtn;
 
+
+        public EntidadCommercial()
+        {
+            NombreContacto = "";
+            CorreoContacto = "";
+            Commentario = "";
+            RTN = "";
+        }
+
+
+
+
+
+        public bool NombreCheck, DireccionCheck, TelefonoCheck = false;
+
         public int Id
         {
             get { return _id; }
             set
             {
                 _id = value;
-                OnPropertyChanged("Id");
+                OnPropertyChanged(nameof(Id));
             }
         }
 
@@ -35,7 +51,11 @@ namespace CifarInventario.Models
             set
             {
                 _nombreCommercial = value;
-                OnPropertyChanged("NombreCommercial");
+                NombreCheck = true;
+                ClearErrors(nameof(NombreCommercial));
+                IsEmptyString(value, nameof(NombreCommercial));
+                isAlphaNumeric(value, nameof(NombreCommercial));
+                OnPropertyChanged(nameof(NombreCommercial));
             }
         }
 
@@ -45,7 +65,8 @@ namespace CifarInventario.Models
             set
             {
                 _nombreContacto = value;
-                OnPropertyChanged("NombreContacto");
+                isAlphaNumeric(value, nameof(NombreContacto));
+                OnPropertyChanged(nameof(NombreContacto));
             }
         }
 
@@ -55,7 +76,11 @@ namespace CifarInventario.Models
             set
             {
                 _direccion = value;
-                OnPropertyChanged("Direccion");
+                DireccionCheck = true;
+                ClearErrors(nameof(Direccion));
+                IsEmptyString(value, nameof(Direccion));
+                isAlphaNumeric(value, nameof(Direccion));
+                OnPropertyChanged(nameof(Direccion));
             }
         }
 
@@ -65,7 +90,11 @@ namespace CifarInventario.Models
             set
             {
                 _telefono = value;
-                OnPropertyChanged("Telefono");
+                TelefonoCheck = true;
+                ClearErrors(nameof(Telefono));
+                IsEmptyString(value, nameof(Telefono));
+                isStepNumber(value, nameof(Telefono));
+                OnPropertyChanged(nameof(Telefono));
             }
         }
 
@@ -75,7 +104,8 @@ namespace CifarInventario.Models
             set
             {
                 _correoContacto = value;
-                OnPropertyChanged("CorreoContacto");
+                isAlphaNumeric(value, nameof(CorreoContacto));
+                OnPropertyChanged(nameof(CorreoContacto));
             }
         }
 
@@ -86,7 +116,8 @@ namespace CifarInventario.Models
             set
             {
                 _commentario = value;
-                OnPropertyChanged("Commentario");
+                isAlphaNumeric(value, nameof(Commentario));
+                OnPropertyChanged(nameof(Commentario));
             }
         }
 
@@ -96,7 +127,8 @@ namespace CifarInventario.Models
             set
             {
                 _rtn = value;
-                OnPropertyChanged("RTN");
+                isAlphaNumeric(value, nameof(RTN));
+                OnPropertyChanged(nameof(RTN));
             }
         }
 

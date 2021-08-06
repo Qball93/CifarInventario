@@ -39,8 +39,8 @@ namespace CifarInventario.ViewModels
 
             LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
             LotesInactive = new ObservableCollection<LoteSalida>(InventoryQueries.GetLotesInactivos());
-            PTList = new ObservableCollection<ProductoTeminadoParaLista>(InventoryQueries.GetPTSimp());
-            ListadoMP = new ObservableCollection<formulaProduct>(InventoryQueries.GetAllContainersMP());
+            PTList = new ObservableCollection<ProductoTeminadoParaLista>(ProductQueries.GetPTSimp());
+            ListadoMP = new ObservableCollection<formulaProduct>(ProductQueries.GetAllContainersMP());
             EmptyProduct = ListadoMP[0];
 
 
@@ -294,7 +294,7 @@ namespace CifarInventario.ViewModels
             }
             else
             {
-                InventoryQueries.CreateProductoTerminado(NewLotePackage, -EmptyAmount.CantidadActual);
+                ProductQueries.CreateProductoTerminado(NewLotePackage, -EmptyAmount.CantidadActual);
                 SelectedLote.CantidadActual -= EmptyAmount.CantidadActual;
 
                 //Lotes
@@ -340,7 +340,7 @@ namespace CifarInventario.ViewModels
                 NewLotePackageDetalle.CodLoteSalida = SelectedLote.CodLote;
                 NewLotePackageDetalle.CodPT = SelectedPackage.CodPT;
                 NewLotePackageDetalle.NombreEmpaque = EmptyProduct.Nombre;
-                InventoryQueries.CreateProductoTerminadoDetalle(NewLotePackageDetalle, EmptyMPLote.CodMP);
+                ProductQueries.CreateProductoTerminadoDetalle(NewLotePackageDetalle, EmptyMPLote.CodMP);
                 LotePackageDetalle test = new LotePackageDetalle();
                 test = NewLotePackageDetalle;
                 DetallePaquete.Add(test);

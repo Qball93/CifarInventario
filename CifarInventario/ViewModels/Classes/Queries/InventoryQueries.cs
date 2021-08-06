@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using CifarInventario.Models;
+using CifarInventario.ViewModels.Classes.Queries;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
@@ -16,55 +17,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
         static private OleDbCommand cmd;
 
         
-        public static List<MpProduct> GetMP()
-        {
-            var mp = new List<MpProduct>();
-
-
-            cn = DBConnection.MainConnection();
-
-            try
-            {
-                cmd = new OleDbCommand("SELECT * FROM materia_prima;", cn);
-                dr = cmd.ExecuteReader();
-
-
-
-
-
-                while (dr.Read())
-                {
-                    MpProduct temp = new MpProduct();
-
-                    temp.Id = dr["materia_prima.id"].ToString();
-                    temp.Existencia = int.Parse(dr["existencia"].ToString());
-                    temp.NombreProducto = dr["nombre_producto"].ToString();
-                    temp.Precio = float.Parse(dr["precio"].ToString());
-                    temp.Unidad = dr["unidad_metrica"].ToString();
-                    temp.Entrada = int.Parse(dr["entrada"].ToString());
-                    temp.Salida = int.Parse(dr["salida"].ToString());
-
-
-                 
-
-                    mp.Add(temp);
-
-
-                }
-
-                dr.Close();
-                cn.Close();
-            }
-            catch(Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al buscar el inventario de materia prima " + ex.ToString());
-            }
-
-
-
-
-            return mp;
-        }
 
         public static List<LoteEntrada> GetLotesEntradaActivos()
         {
@@ -75,10 +27,10 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_actual, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
                     "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
                     "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
-                    "WHERE lote_entrada.cantidad_actual > 0 and lote_entrada.cod_mp NOT LIKE 'ENV%'  AND lote_entrada.cod_mp NOT LIKE 'ETI%' AND lote_entrada.cod_mp NOT LIKE 'TP%';", cn);
+                    "WHERE lote_entrada.cantidad_unidad_lote > 0 and lote_entrada.cod_mp NOT LIKE 'ENV%'  AND lote_entrada.cod_mp NOT LIKE 'ETI%' AND lote_entrada.cod_mp NOT LIKE 'TP%';", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -90,11 +42,12 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     LoteEntrada temp = new LoteEntrada();
 
                     temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.CodInterno = dr["codigo_lote_interno"].ToString();
                     temp.NombreFabricante = dr["fabricante"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
                     temp.NombreProveedor = dr["Nombre_proveedor"].ToString();
                     temp.NombreMP = dr["nombre_producto"].ToString();
-                    temp.CantidadActual = double.Parse(dr["cantidad_actual"].ToString());
+                    temp.CantidadActual = double.Parse(dr["cantidad_unidad_lote"].ToString());
                     temp.CantidadOriginal = double.Parse(dr["cantidad_original"].ToString());
                     temp.FechaVencimiento = DateTime.Parse(dr["fecha_vencimiento"].ToString());
                     temp.FechaFabricacion = DateTime.Parse(dr["fecha_creacion"].ToString());
@@ -125,159 +78,19 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return lotes;
         }
 
-        public static List<formulaProduct> GetFormulaProducts()
-        {
-            var mp = new List<formulaProduct>();
 
-
-            cn = DBConnection.MainConnection();
-
-            try
-            {
-                cmd = new OleDbCommand("SELECT codigo,nombre_producto,unidad_metrica,conversion_unitaria from materia_prima WHERE codigo NOT LIKE 'ENV%'  AND codigo NOT LIKE 'ETI%' AND codigo NOT LIKE 'TP%';", cn);
-                dr = cmd.ExecuteReader();
-
-
-
-
-
-                while (dr.Read())
-                {
-                    formulaProduct temp = new formulaProduct();
-
-                    temp.Codigo = dr["codigo"].ToString();
-                    temp.Nombre = dr["nombre_producto"].ToString();
-                    temp.Unidad = dr["unidad_metrica"].ToString();
-                    temp.ConversionValue = double.Parse(dr["conversion_unitaria"].ToString());
-
-
-
-
-                    mp.Add(temp);
-
-
-                }
-
-                dr.Close();
-                cn.Close();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al buscar materia prima para formulas. " + ex.ToString());
-            }
-
-
-
-
-            return mp;
-        }
-
-        public static List<formulaProduct> GetAllMpSimplified()
-        {
-            var mp = new List<formulaProduct>();
-
-
-            cn = DBConnection.MainConnection();
-
-            try
-            {
-                cmd = new OleDbCommand("SELECT codigo,nombre_producto,unidad_metrica,conversion_unitaria,unidad_muestra from materia_prima" +
-                    " where codigo NOT LIKE 'ENV%' AND codigo NOT LIKE 'ETI%' AND codigo NOT LIKE 'TP%';", cn);
-                dr = cmd.ExecuteReader();
-
-
-
-
-
-                while (dr.Read())
-                {
-                    formulaProduct temp = new formulaProduct();
-
-                    temp.Codigo = dr["codigo"].ToString();
-                    temp.Nombre = dr["nombre_producto"].ToString();
-                    temp.Unidad = dr["unidad_metrica"].ToString();
-                    temp.ConversionValue = double.Parse(dr["conversion_unitaria"].ToString());
-                    temp.UnidadMuestra = dr["unidad_muestra"].ToString();
-
-
-
-                    mp.Add(temp);
-
-
-                }
-
-                dr.Close();
-                cn.Close();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al buscar materia prima para formulas. " + ex.ToString());
-            }
-
-            return mp;
-        }
-
-        public static List<formulaProduct> GetAllContainersMP()
-        {
-            var mp = new List<formulaProduct>();
-
-
-            cn = DBConnection.MainConnection();
-
-            try
-            {
-                cmd = new OleDbCommand("SELECT codigo,nombre_producto,unidad_metrica,conversion_unitaria,unidad_muestra from materia_prima" +
-                    " WHERE (codigo LIKE 'ENV%' OR codigo LIKE 'ETI%' OR codigo LIKE 'TP%');", cn);
-                dr = cmd.ExecuteReader();
-
-
-
-
-
-                while (dr.Read())
-                {
-                    formulaProduct temp = new formulaProduct();
-
-                    temp.Codigo = dr["codigo"].ToString();
-                    temp.Nombre = dr["nombre_producto"].ToString();
-                    temp.Unidad = "u";
-                    temp.ConversionValue = 1;
-                    temp.UnidadMuestra = "u";
-
-
-
-                    mp.Add(temp);
-
-
-                }
-
-                dr.Close();
-                cn.Close();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al buscar materia prima para formulas. " + ex.ToString());
-            }
-
-
-
-
-            return mp;
-        }
-
-        public static List<LoteEntrada> GetAllContainerLotes()
+        public static List<LoteEntrada> GetAllLotes()
         {
             var lotes = new List<LoteEntrada>();
 
 
             cn = DBConnection.MainConnection();
-
+             
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_actual, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
-                    "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
-                    "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
-                    "WHERE lote_entrada.cantidad_actual > 0 AND (cod_mp LIKE 'ENV%' OR cod_mp LIKE 'ETI%' OR cod_mp LIKE 'TP%');", cn);
+                cmd = new OleDbCommand("SELECT lote_entrada.conversion_unitaria, lote_entrada.codigo_lote_interno, lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                    "lote_entrada.fecha_vencimiento,materia_prima.codigo, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
+                    "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor;", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -291,9 +104,69 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     temp.CodLote = dr["codigo_lote"].ToString();
                     temp.NombreFabricante = dr["fabricante"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
+                    temp.CodMP = dr["codigo"].ToString();
+                    temp.CodInterno = dr["codigo_lote_interno"].ToString();
                     temp.NombreProveedor = dr["Nombre_proveedor"].ToString();
                     temp.NombreMP = dr["nombre_producto"].ToString();
-                    temp.CantidadActual = double.Parse(dr["cantidad_actual"].ToString());
+                    temp.CantidadActual = double.Parse(dr["cantidad_unidad_lote"].ToString());
+                    temp.CantidadOriginal = double.Parse(dr["cantidad_original"].ToString());
+                    temp.FechaVencimiento = DateTime.Parse(dr["fecha_vencimiento"].ToString());
+                    temp.FechaFabricacion = DateTime.Parse(dr["fecha_creacion"].ToString());
+                    temp.FechaEntrada = DateTime.Parse(dr["fecha_entrada"].ToString());
+                    temp.CertificadoAnalysis = dr["certificado_analysis"].ToString();
+                    temp.Procedencia = dr["procedencia"].ToString();
+                    temp.Unidad = dr["unidad_muestra"].ToString();
+                    temp.ConversionUnitaria = double.Parse( dr["conversion_unitaria"].ToString());
+
+
+
+
+                    lotes.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar los lotes. " + ex.ToString());
+            }
+
+            return lotes;
+        }
+
+        public static List<LoteEntrada> GetAllContainerLotes()
+        {
+            var lotes = new List<LoteEntrada>();
+
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno,lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                    "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
+                    "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
+                    "WHERE lote_entrada.cantidad_unidad_lote > 0 AND (cod_mp LIKE 'ENV%' OR cod_mp LIKE 'ETI%' OR cod_mp LIKE 'TP%');", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    LoteEntrada temp = new LoteEntrada();
+
+                    temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.NombreFabricante = dr["fabricante"].ToString();
+                    temp.CodInterno = dr["codigo_lote_interno"].ToString();
+                    temp.CodProveedor = dr["cod_proveedor"].ToString();
+                    temp.NombreProveedor = dr["Nombre_proveedor"].ToString();
+                    temp.NombreMP = dr["nombre_producto"].ToString();
+                    temp.CantidadActual = double.Parse(dr["cantidad_unidad_lote"].ToString());
                     temp.CantidadOriginal = double.Parse(dr["cantidad_original"].ToString());
                     temp.FechaVencimiento = DateTime.Parse(dr["fecha_vencimiento"].ToString());
                     temp.FechaFabricacion = DateTime.Parse(dr["fecha_creacion"].ToString());
@@ -591,7 +464,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT codigo_lote_interno FROM lote_entrada where cod_mp = '" + MpCod + "' and cantidad_exacta >= " + Cantidad + ";", cn);
+                cmd = new OleDbCommand("SELECT codigo_lote_interno FROM lote_entrada where cod_mp = '" + MpCod + "' and cantidad_unidad_formula >= " + Cantidad + ";", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -633,92 +506,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return lotes;
         }
-
-        public static List<ProductoTeminadoParaLista> GetPTSimp()
-        {
-            var pt = new List<ProductoTeminadoParaLista>();
-
-            cn = DBConnection.MainConnection();
-
-            try
-            {
-                cmd = new OleDbCommand("SELECT id_producto_terminado,nombre_producto_terminado,precio from inventario_producto_terminado;", cn);
-                dr = cmd.ExecuteReader();
-
-
-
-
-
-                while (dr.Read())
-                {
-                    ProductoTeminadoParaLista temp = new ProductoTeminadoParaLista();
-
-                    temp.CodPT = dr["id_producto_terminado"].ToString();
-                    temp.NombrePT = dr["nombre_producto_terminado"].ToString();
-                    temp.Precio = double.Parse(dr["precio"].ToString());
-
-
-
-                    pt.Add(temp);
-
-
-                }
-
-                dr.Close();
-                cn.Close();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al buscar productos terminados para lista. " + ex.ToString());
-            }
-
-            return pt;
-        }
-
-        public static List<ProductoTerminado> getPTInventario()
-        {
-            var pt = new List<ProductoTerminado>();
-
-            cn = DBConnection.MainConnection();
-
-            try
-            {
-                cmd = new OleDbCommand("SELECT * from inventario_producto_terminado;", cn);
-                dr = cmd.ExecuteReader();
-
-
-
-
-
-                while (dr.Read())
-                {
-                    ProductoTerminado temp = new ProductoTerminado();
-
-                    temp.CodPT = dr["id_producto"].ToString();
-                    temp.NombrePT = dr["nombre_producto_terminado"].ToString();
-                    temp.Existencia = int.Parse(dr["existencia"].ToString());
-                    temp.Entrada = int.Parse(dr["entrada"].ToString());
-                    temp.Salida = int.Parse(dr["salida"].ToString());
-                    temp.Precio = double.Parse(dr["precio"].ToString());
-
-
-
-                    pt.Add(temp);
-
-
-                }
-
-                dr.Close();
-                cn.Close();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al buscar invntario de producto terminado. " + ex.ToString());
-            }
-
-            return pt;
-        }
-
+        
         public static List<LotePackage> getPTForSale()
         {
             var pt = new List<LotePackage>();
@@ -860,8 +648,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT  codigo_lote_interno,codigo_lote,cantidad_actual" +
-                    " FROM lote_entrada where cantidad_actual >= "+cantidad+" and cod_mp = '"+CodLote+"';", cn);
+                cmd = new OleDbCommand("SELECT  codigo_lote_interno,codigo_lote,cantidad_unidad_lote" +
+                    " FROM lote_entrada where cantidad_unidad_lote >= " + cantidad+" and cod_mp = '"+CodLote+"';", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -876,7 +664,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         LoteEntrada temp = new LoteEntrada();
 
                         temp.CodLote = dr["codigo_lote"].ToString();
-                        temp.CodMP = dr["cantidad_actual"].ToString();
+                        temp.CodMP = dr["cantidad_unidad_lote"].ToString();
                         temp.CodInterno = dr["codigo_lote_interno"].ToString();
 
 
@@ -915,8 +703,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO lote_entrada ([codigo_lote],[fecha_entrada],[cantidad_actual],[fecha_vencimiento],[cantidad_original],[cod_mp],[conversion_unitaria]," +
-                        "[cantidad_exacta],[fecha_creacion],[certificado_analysis],[cod_proveedor],[fabricante],[codigo_lote_interno],[procedencia]) " +
+                    cmd.CommandText = @"INSERT INTO lote_entrada ([codigo_lote],[fecha_entrada],[cantidad_unidad_lote],[fecha_vencimiento],[cantidad_original],[cod_mp],[conversion_unitaria]," +
+                        "[cantidad_unidad_formula],[fecha_creacion],[certificado_analysis],[cod_proveedor],[fabricante],[codigo_lote_interno],[procedencia]) " +
                         "VALUES (@codigo,@fechaEnt,@cantidadActual,@fechaVencimiento,@cantidadOriginal,@codMP,@conversion,@cantidadExacta, " +
                         "@fechaCreacion,@certificados,@codProveedor,@fabricante,@codeLoteIntern,@procedencia)";
 
@@ -954,60 +742,12 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 cn.Close();
 
-                updateProductAmount(lote.CodMP, lote.CantidadOriginal);
+                ProductQueries.updateProductAmountAdd(lote.CodMP, lote.CantidadOriginal);
 
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("Error al crear Lote Entrada  " + ex);
-            }
-        }
-
-        public static void updateProductAmount(string codMP, double amountChange)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET entrada = (entrada + "+amountChange+ "), existencia = (existencia + " + amountChange + "), cantidad_exacta = (cantidad_exacta + (" + amountChange + " * conversion_unitaria) ) " +
-                    "where codigo = '"+codMP+"'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
-            }
-        }
-
-        public static void updateProductAmountFromExact(string codMp, double amountChangeExact)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET salida = (salida - (" + amountChangeExact + " / conversion_unitaria )), existencia = (existencia + (" + amountChangeExact + " / conversion_unitaria )), cantidad_exacta = (cantidad_exacta + "+ amountChangeExact+" ) " +
-                    "where codigo = '" + codMp + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
             }
         }
 
@@ -1035,7 +775,22 @@ namespace CifarInventario.ViewModels.Classes.Queries
         {
             bool canBeDeleted = true;
 
+            cn = DBConnection.MainConnection();
 
+
+            try
+            {
+
+                cmd = new OleDbCommand("Select * from lote_salida_detalla where if_lote_entrada = '" + codInterno + "' ;", cn);
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al eliminar Lote  " + ex);
+            }
 
 
 
@@ -1049,7 +804,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE lote_entrada " +
-                    "SET cantidad_actual = (cantidad_actual + (" + exactAmount + " / conversion_unitaria )), cantidad_exacta = (cantidad_exacta + " + exactAmount + " ) " +
+                    "SET cantidad_unidad_lote = (cantidad_unidad_lote + (" + exactAmount + " / conversion_unitaria )), cantidad_unidad_formula = (cantidad_unidad_formula + " + exactAmount + " ) " +
                     "where codigo_lote_interno = '" + CodLote + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
@@ -1060,8 +815,15 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 cn.Close();
 
-
-                updateProductAmountFromExact(CodMP, exactAmount);
+                if(exactAmount > 0)
+                {
+                    ProductQueries.updateProductAmountFromtExactAdd(CodMP, exactAmount);
+                }
+                else
+                {
+                    ProductQueries.updateProductAmountFromExactRemove(CodMP, exactAmount);
+                }
+                
 
             }
             catch (Exception ex)
@@ -1126,7 +888,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE lote_salida " +
-                    "SET cantidad_actual =  cantidad_actual + (" + cantidad + ") ) " +
+                    "SET cantidad_actual =  (cantidad_actual + " + cantidad + " ) " +
                     "where codigo_lote = '" + codigo + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
@@ -1178,107 +940,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
-        public static void CreateProductoTerminado(LotePackage lote, double cantidad)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                using (OleDbCommand cmd = cn.CreateCommand())
-                {
-                    cmd.CommandText = @"INSERT INTO producto_terminado ([cod_pt],[id_lote],[existencia],[fecha_vencimiento]) " +
-                        "VALUES (@codPt,@idPt,@existencia,@fecha) ";
-
-                    cmd.Parameters.AddRange(new OleDbParameter[]
-                    {
-                        new OleDbParameter("@codPt",lote.CodPT),
-                        new OleDbParameter("@idPT",lote.IdLote),
-                        new OleDbParameter("@existencia",lote.Existencia),
-                        new OleDbParameter("@fecha",lote.FechaVencimiento),
-                    });
-
-                    cmd.ExecuteNonQuery();
-
-
-
-                }
-
-                cn.Close();
-
-                updateLoteSalidaAmount(cantidad, lote.IdLote);
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al empacar producto  " + ex);
-            }
-        }
-
-        public static void CreateProductoTerminadoDetalle(LotePackageDetalle lote, string codMP) 
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                using (OleDbCommand cmd = cn.CreateCommand())
-                {
-                    cmd.CommandText = @"INSERT INTO detalle_pt_lote ([cod_lote_salida],[cod_prod_terminado],[cantidad],[cod_lote_mp_empaque]) " +
-                        "VALUES (@codSalida,@codPT,@cantidad,@codLoteEnt) ";
-
-                    cmd.Parameters.AddRange(new OleDbParameter[]
-                    {
-                        new OleDbParameter("@codSalida",lote.CodLoteSalida),
-                        new OleDbParameter("@codPT",lote.CodPT),
-                        new OleDbParameter("@cantidad",lote.Cantidad),
-                        new OleDbParameter("@codLoteEnt",lote.CodLoteEntrada)
-                    });
-
-                    cmd.ExecuteNonQuery();
-
-
-                }
-
-                cn.Close();
-
-                updateLoteEntradaAmount(lote.CodLoteEntrada,-lote.Cantidad,codMP);
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al crear Detalle Lote Salida  " + ex);
-            }
-        }
-
-        public static void CreateInventarioProductoTerminado(ProductoTerminado newProduct)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                using (OleDbCommand cmd = cn.CreateCommand())
-                {
-                    cmd.CommandText = @"INSERT INTO inventario_producto_terminado ([id_producto],[nombre_producto],[precio]) " +
-                        "VALUES (@idProducto,@nombreProduct,@precio) ";
-
-                    cmd.Parameters.AddRange(new OleDbParameter[]
-                    {
-                        new OleDbParameter("@idProducto",newProduct.CodPT),
-                        new OleDbParameter("@nombreProduct",newProduct.NombrePT),
-                        new OleDbParameter("@precio",newProduct.Precio),
-                    });
-
-                    cmd.ExecuteNonQuery();
-
-                }
-
-                cn.Close();
-
-
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al crear Entrada de Producto Terminado en el Inventario " + ex);
-            }
-        }
-
         public static void SetLoteSalidaInactive(string codLote)
         {
             cn = DBConnection.MainConnection();
@@ -1317,6 +978,81 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
+        public static void emptyLote(string codLote)
+        {
+            double FormUnitAmountCurrent = 0;
+            double DisplayUnitOriginalAmount = 0;
+            double CurrentDisplayAmount = 0;
+            string codMP = "";
+
+            cn = DBConnection.MainConnection();
+
+
+            try
+            {
+
+                cmd = new OleDbCommand("Select * from lote_entrada where codigo_lote_interno = '" + codLote + "' ;", cn);
+                dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    codMP = dr["cod_mp"].ToString();
+                    FormUnitAmountCurrent = double.Parse(dr["cantidad_unidad_formula"].ToString());
+                    DisplayUnitOriginalAmount = double.Parse(dr["cantidad_original"].ToString());
+                    CurrentDisplayAmount = double.Parse(dr["cantidad_unidad_lote"].ToString());
+                }
+
+
+                cmd = new OleDbCommand("UPDATE lote_entrada " +
+                    "set cantidad_unidad_lote = 0.00, cantidad_original = 0.00 , cantidad_unidad_formula = 0.00 " +
+                    "where codigo_lote_interno = '" + codLote + "' ;", cn);
+                cmd.ExecuteNonQuery();
+
+                dr.Close();
+                cn.Close();
+
+                ProductQueries.removeFlatAmounts(codMP, FormUnitAmountCurrent, CurrentDisplayAmount, DisplayUnitOriginalAmount);
+
+                
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al vaciar Lote  " + ex);
+            }
+
+        }
+
+
+        public static void reEntryLote(string codLote, double CurrentDisplayAmount, double OriginalDisplayAmount, double formAmount)
+        {
+
+            //string codMP = "";
+
+            cn = DBConnection.MainConnection();
+            
+
+            try
+            {
+
+                cmd = new OleDbCommand("UPDATE lote_entrada " +
+                    "set cantidad_unidad_lote = "+ CurrentDisplayAmount+", cantidad_original = " +OriginalDisplayAmount+", cantidad_unidad_formula = " + formAmount + ""  +
+                    " where codigo_lote_interno = '" + codLote + "' ;", cn);
+                cmd.ExecuteNonQuery();
+
+                
+
+
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al ReIngersar Lote "+ ex);
+            }
+        }
 
     }
 }

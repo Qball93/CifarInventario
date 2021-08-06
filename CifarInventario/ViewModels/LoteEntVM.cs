@@ -19,10 +19,10 @@ namespace CifarInventario.ViewModels
         public LoteEntVM()
         {
             LotesActivos = new ObservableCollection<LoteEntrada>(InventoryQueries.GetLotesEntradaActivos());
-            MateriaPrima = new ObservableCollection<formulaProduct>(InventoryQueries.GetAllMpSimplified());
-            Proveedores = new ObservableCollection<DisplayProveedor>(PersonaQueries.GetDisplayProveedores());
             LotesPaquetes = new ObservableCollection<LoteEntrada>(InventoryQueries.GetAllContainerLotes());
-            PaquetesMP = new ObservableCollection<formulaProduct>(InventoryQueries.GetAllContainersMP());
+            MateriaPrima = new ObservableCollection<formulaProduct>(ProductQueries.GetAllMpSimplified());
+            Proveedores = new ObservableCollection<DisplayProveedor>(PersonaQueries.GetDisplayProveedores());
+            PaquetesMP = new ObservableCollection<formulaProduct>(ProductQueries.GetAllContainersMP());
             newLoteCommand = new NewLoteEntCommand(this);
             newLotePacakgeCommand = new NewLotePackageCommand(this);
             NewLote = new LoteEntrada();

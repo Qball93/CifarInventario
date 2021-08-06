@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CifarInventario.ViewModels
+namespace CifarInventario.Views.Modals.ClientesModals
 {
     /// <summary>
-    /// Interaction logic for PaquetesVM.xaml
+    /// Interaction logic for NuevoClienteModal.xaml
     /// </summary>
-    public partial class PaquetesVM : Page
+    public partial class NuevoClienteModal : Window
     {
-        public PaquetesVM()
+        public NuevoClienteModal()
         {
             InitializeComponent();
         }

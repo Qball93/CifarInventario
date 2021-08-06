@@ -303,5 +303,55 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return entidades;
         }
 
+
+        public static List<IdName> getClientes()
+        {
+            var entidades = new List<IdName>();
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+
+
+
+
+                cmd = new OleDbCommand("SELECT nombre_commercial, id FROM clientes;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    IdName temp = new IdName();
+
+
+                    temp.ID = dr["id"].ToString();
+                    temp.Name = dr["nombre_commercial"].ToString();
+
+
+
+
+
+
+                    entidades.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener entidades commerciales  " + ex);
+            }
+
+
+            return entidades;
+        }
+
     }
 }

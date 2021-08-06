@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CifarInventario.Views.Pages
 {
     /// <summary>
-    /// Interaction logic for PaquetacionPage.xaml
+    /// Interaction logic for InventarioMP.xaml
     /// </summary>
-    public partial class PaquetacionPage : Page
+    public partial class InventarioMP : Page
     {
-        public PaquetacionPage()
+        public InventarioMP()
         {
             InitializeComponent();
         }

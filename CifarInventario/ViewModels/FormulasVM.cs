@@ -23,7 +23,7 @@ namespace CifarInventario.ViewModels
         {
             //General setup
             Formulas = new ObservableCollection<Formula>(FormulaQueries.GetFormulas());
-            NewFormulaProducts = new ObservableCollection<formulaProduct>(InventoryQueries.GetFormulaProducts());
+            NewFormulaProducts = new ObservableCollection<formulaProduct>(ProductQueries.GetFormulaProducts());
             InactiveFormulas = new ObservableCollection<Formula>(FormulaQueries.GetFormulasInactivas());
 
             NuevaFormulaCommand = new NewFormulaCommand(this);
@@ -262,34 +262,21 @@ namespace CifarInventario.ViewModels
         #region Delegate command creations
 
         public ICommand updateList => new DelegateCommand(UpdateDetallesList);
-
         public ICommand InactiveFormula => new DelegateCommand(SetFormulaInactive);
-
-        public ICommand ActiveFormula => new DelegateCommand(SetFormulaActive); 
-        
-        public ICommand newFormulaModal => new DelegateCommand(NewFormulaModal);
-        
+        public ICommand ActiveFormula => new DelegateCommand(SetFormulaActive);
+        public ICommand newFormulaModal => new DelegateCommand(NewFormulaModal);     
         public ICommand deleteNewFormulaDetalle => new DelegateCommand(DeleteNewFormulaDetalle);
-
         public ICommand editDetalleModal => new DelegateCommand(EditDetalleModal);
-
         public ICommand deleteDetalle => new DelegateCommand(DeleteDetalle);
-
         public ICommand formulaExtraInfoModal => new DelegateCommand(FormulaExtraInfoModal);
-
         public ICommand formulaProcedimientoModal => new DelegateCommand(FormulaProcedimientoModal);
-
         public ICommand deleteProcedimientoDetalle => new DelegateCommand(EliminarProcedimientoDetalle);
-
         public ICommand editarProcedimientoDetalle => new DelegateCommand(EditarProcediminetoDetalle);
         #endregion
 
         public EditDetalleCommand editDetalleCommand { get; set; }
-
         public NewDetalleCommand newDetalleCommand { get; set; }
-
         public NewInstructionCommand newInstructionCommand { get; set; }
-
         public EditFormulaCommand editFormulacommand { get; set; }
 
         public void SetFormulaActive(object parameter)
@@ -373,7 +360,7 @@ namespace CifarInventario.ViewModels
 
             if (Detalles.Any(p => p.Name == testDetalle.Name))
             {
-                System.Windows.MessageBox.Show("Esta MP ya se encuentra en la formula.");
+                MessageBox.Show("Esta MP ya se encuentra en la formula.");
             }
             else
             {
@@ -384,7 +371,9 @@ namespace CifarInventario.ViewModels
 
         public void FormulaExtraInfoModal(object parameter)
         {
-           
+            var test = new ExtraInfoModal(this);
+
+            test.ShowDialog();
         }
 
         public void FormulaProcedimientoModal(object parameter)

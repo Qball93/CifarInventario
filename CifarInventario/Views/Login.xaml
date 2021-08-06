@@ -26,8 +26,18 @@
                  FontSize="14"  Text="{Binding LoginUser.UserName , Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                  ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"/>
 
-        <!--PasswordBox components:PasswordBoxAttach.BoundPassword="{Binding LoginUser.Password, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Height="24.9" Margin="135.6,225,0,0"  VerticalAlignment="Top" Width="210" 
-                     Grid.Column="1" BorderBrush="{StaticResource MainThemeBrush}"   BorderThickness="0,0,0,4" FontSize="14" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" /-->
+        <PasswordBox components:PasswordBoxAttach.BoundPassword="{Binding LoginUser.Password,
+            Mode=TwoWay,ValidatesOnDataErrors=True,
+            UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Left" 
+                     Height="24.9"
+                     Margin="135.6,225,0,0" 
+                     VerticalAlignment="Top" Width="210" 
+                     Grid.Column="1"
+                     BorderBrush="{StaticResource MainThemeBrush}"
+                     BorderThickness="0,0,0,4"
+                     FontSize="14"
+                     ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" />
 
         <TextBlock HorizontalAlignment="Left" Margin="85,261,0,0" TextWrapping="Wrap" VerticalAlignment="Top" 
                    RenderTransformOrigin="-1.462,-1.231" Height="39" Width="171" FontSize="18" FontFamily="Century Gothic" 
@@ -64,6 +74,9 @@
                 <fa:IconBlock Icon="Times" Foreground="White"/>
             </Button.Content>
         </Button>
+
+        <Button Grid.Column="1" Margin="304,401,0,0" Content="Recuperacion Usuario" BorderBrush="{StaticResource MainThemeBrush}" BorderThickness="0,0,0,2" RenderTransformOrigin="2.048,0.464" Background="white" Foreground="Blue"  Padding="0,0,2,0" Click="Button_Close"/>
+
 
     </Grid>
 </Window>

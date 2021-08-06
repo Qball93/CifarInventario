@@ -1,4 +1,4 @@
-﻿using CifarInventario.ViewModels.Classes;
+﻿ using CifarInventario.ViewModels.Classes;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -45,7 +45,7 @@ namespace CifarInventario.Models
             set
             {
                 _codInterno = value;
-                OnPropertyChanged("CodInterno");
+                OnPropertyChanged(nameof(CodInterno));
             }
         }
 
@@ -55,7 +55,7 @@ namespace CifarInventario.Models
             set
             {
                 _conversionUnitaria = value;
-                OnPropertyChanged("ConversionUnitaria");
+                OnPropertyChanged(nameof(ConversionUnitaria));
             }
         }
 
@@ -66,9 +66,9 @@ namespace CifarInventario.Models
             {
                 _fechaEntrada = value;
                 FechaCheck = true;
-                ClearErrors("FechaEntrada");
-                IsEmptyString(value.ToString(), "FechaEntrada");
-                OnPropertyChanged("FechaEntrada");
+                ClearErrors(nameof(FechaEntrada));
+                IsEmptyString(value.ToString(), nameof(FechaEntrada));
+                OnPropertyChanged(nameof(FechaEntrada));
             }
         }
 
@@ -78,7 +78,7 @@ namespace CifarInventario.Models
             set
             {
                 _fechaVencimiento = value;
-                OnPropertyChanged("FechaVencimiento");
+                OnPropertyChanged(nameof(FechaVencimiento));
             }
         }
 
@@ -88,7 +88,7 @@ namespace CifarInventario.Models
             set
             {
                 _fechaFabricacion = value;
-                OnPropertyChanged("FechaFabricacion");
+                OnPropertyChanged(nameof(FechaFabricacion));
             }
         }
 
@@ -99,9 +99,9 @@ namespace CifarInventario.Models
             {
                 _procedencia = value;
                 ProcedenciaCheck = true;
-                ClearErrors("Procedencia");
-                IsEmptyString(value, "Procedencia");
-                OnPropertyChanged("Procedencia");
+                ClearErrors(nameof(Procedencia));
+                IsEmptyString(value, nameof(Procedencia));
+                OnPropertyChanged(nameof(Procedencia));
             }
         }
 
@@ -111,9 +111,9 @@ namespace CifarInventario.Models
             set {
                 _nombreFabricante = value;
                 FabricanteCheck = true;
-                ClearErrors("NombreFabricante");
-                IsEmptyString(value, "NombreFabricante");
-                OnPropertyChanged("NombreFabricante");
+                ClearErrors(nameof(NombreFabricante));
+                IsEmptyString(value, nameof(NombreFabricante));
+                OnPropertyChanged(nameof(NombreFabricante));
             }
         }
 
@@ -123,7 +123,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreProveedor = value;
-                OnPropertyChanged("NombreProveedor");
+                OnPropertyChanged(nameof(NombreProveedor));
             }
         }
 
@@ -134,10 +134,10 @@ namespace CifarInventario.Models
             {
                 _codLote = value;
                 CodCheck = true;
-                ClearErrors("CodLote");
-                IsEmptyString(value, "CodLote");
-                isAlphaNumeric(value, "CodLote");
-                OnPropertyChanged("CodLote");
+                ClearErrors(nameof(CodLote));
+                IsEmptyString(value, nameof(CodLote));
+                isAlphaNumeric(value, nameof(CodLote));
+                OnPropertyChanged(nameof(CodLote));
             }
         }
 
@@ -147,7 +147,7 @@ namespace CifarInventario.Models
             set
             {
                 _unidad = value;
-                OnPropertyChanged("Unidad");
+                OnPropertyChanged(nameof(Unidad));
             }
         }
 
@@ -157,7 +157,10 @@ namespace CifarInventario.Models
             set
             {
                 _cantidadActual = value;
-                OnPropertyChanged("CantidadActual");
+                ClearErrors(nameof(CantidadActual));
+                IsEmptyString(value.ToString(), nameof(CantidadActual));
+                is0Decimal(value.ToString(), nameof(CantidadActual));
+                OnPropertyChanged(nameof(CantidadActual));
             }
         }
 
@@ -168,10 +171,10 @@ namespace CifarInventario.Models
             {
                 _cantidadOriginal = value;
                 CantidadCheck = true;
-                ClearErrors("CantidadOriginal");
-                IsEmptyString(value.ToString(), "CantidadOriginal");
-                isDecimal(value.ToString(), "CantidadOriginal");
-                OnPropertyChanged("CantidadOriginal");
+                ClearErrors(nameof(CantidadOriginal));
+                IsEmptyString(value.ToString(), nameof(CantidadOriginal));
+                is0Decimal(value.ToString(), nameof(CantidadOriginal));
+                OnPropertyChanged(nameof(CantidadOriginal));
             }
         }
 
@@ -181,7 +184,7 @@ namespace CifarInventario.Models
             set
             {
                 _cantidadExacta = value;
-                OnPropertyChanged("CantidadExacta");
+                OnPropertyChanged(nameof(CantidadExacta));
             }
         }
 
@@ -201,7 +204,7 @@ namespace CifarInventario.Models
             set
             {
                 _certificadoAnalysis = value;
-                OnPropertyChanged("CertificadoAnalysis");
+                OnPropertyChanged(nameof(CertificadoAnalysis));
             }
         }
 
@@ -211,7 +214,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreMP = value;
-                OnPropertyChanged("NombreMP");
+                OnPropertyChanged(nameof(NombreMP));
             }
         }
 
@@ -221,7 +224,7 @@ namespace CifarInventario.Models
             set
             {
                 _codProveedor = value;
-                OnPropertyChanged("CodProveedor");
+                OnPropertyChanged(nameof(CodProveedor));
             }
         }
 

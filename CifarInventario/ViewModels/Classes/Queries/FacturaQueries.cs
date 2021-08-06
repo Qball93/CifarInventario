@@ -14,10 +14,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
         static private OleDbDataReader dr;
         static private OleDbCommand cmd;
 
-        public static Factura getFactura(int id)
+       /* public static Factura getFactura(int id)
         {
             var factura = new Factura();
-            factura.MP = new List<DetalleFactura>();
             factura.PT = new List<DetalleFactura>();
             
 
@@ -81,7 +80,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return factura;
         }
-
+       */
 
         public static void CreateFactura(Factura factura)
         {
@@ -90,15 +89,24 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO factura ([id_cliente],[id_empleado],[total],[subtotal],[imp],[fechaEmision],[abonado],[pendiente]) " +
-                        "VALUES (@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente) ";
+                    cmd.CommandText = @"INSERT INTO factura ([ID],[id_cliente],[id_empleado],[total],[subtotal],[impuesto],[fechaEmision],[abonado],[pendiente],[descuento]) " +
+                        "VALUES (@idFact,@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente,@descuento) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                     {
-                        new OleDbParameter("@idClient",factura.),
-                        new OleDbParameter("@codPT",lote.CodPT),
-                        new OleDbParameter("@cantidad",lote.Cantidad),
-                        new OleDbParameter("@codLoteEnt",lote.CodLoteEntrada)
+                        new OleDbParameter("@idFact",factura.IdFactura),
+                        new OleDbParameter("@idClient",factura.Cliente.ID),
+                        new OleDbParameter("@idEmp",factura.Empleado.ID),
+                        new OleDbParameter("@total",factura.Total),
+                        new OleDbParameter("@subtotal",factura.Sub),
+                        new OleDbParameter("@imp",factura.Imp),
+                        new OleDbParameter("@fechaEmission",factura.Emission.ToShortDateString()),
+                        new OleDbParameter("@abonado",OleDbType.Boolean) { Value = factura.EsAbonado },
+                        new OleDbParameter("@pendiente",factura.Pendiente),
+                        new OleDbParameter("@descuento",factura.Descuento)
+
+                       
+
                     });
 
                     cmd.ExecuteNonQuery();
@@ -108,14 +116,285 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 cn.Close();
 
-                updateLoteEntradaAmount(lote.CodLoteEntrada, -lote.Cantidad, codMP);
+                
 
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al crear Detalle Lote Salida  " + ex);
+                System.Windows.MessageBox.Show("Error al crear Factura " + ex);
             }
         }
 
+        public static void CreateDetalle(DetalleFactura detail, string IdFactura)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO factura_detalle ([id_factura],[id_producto],[id_lote_salida],[cantidad],[precio]) " +
+                        "VALUES (@idFactura,@idProducto,@idLote,@cantidad,@precio) ";
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@idFactura",IdFactura),
+                        new OleDbParameter("@idProducto",detail.Producto.ID),
+                        new OleDbParameter("@idLote",detail.LoteCod),
+                        new OleDbParameter("@cantidad",detail.Cantidad),
+                        new OleDbParameter("@precio",detail.Precio),
+                    });
+
+                    cmd.ExecuteNonQuery();
+
+
+                }
+
+                cn.Close();
+
+
+                
+
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al crear Factura " + ex);
+            }
+        }
+
+        public static List<Factura> GetFacturaList()
+        {
+            var facturas = new List<Factura>();
+
+            cn = DBConnection.MainConnection();
+
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT factura.ID, factura.descuento, id_cliente, id_empleado, total, subtotal, fechaEmision, abonado, impuesto, pendiente, " +
+                    " empleados.nombre & ' ' & empleados.apellido as emp_name, clientes.nombre_commercial, clientes.direccion, clientes.RTN " +
+                    "FROM(factura INNER JOIN clientes ON factura.id_cliente = clientes.id) INNER JOIN empleados ON factura.id_empleado = empleados.id;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    Factura fact = new Factura();
+
+                    fact.IdFactura = dr["ID"].ToString();
+                    fact.Cliente.ID = dr["id_cliente"].ToString();
+                    fact.Cliente.Name = dr["nombre_commercial"].ToString();
+                    fact.Empleado.ID = dr["id_empleado"].ToString();
+                    fact.Empleado.Name =  dr["emp_name"].ToString();
+                    fact.Direccion = dr["direccion"].ToString();
+                    fact.RTN = dr["RTN"].ToString();
+                    fact.Pendiente = double.Parse(dr["pendiente"].ToString());
+                    fact.Imp = double.Parse(dr["impuesto"].ToString());
+                    fact.EsAbonado = bool.Parse(dr["abonado"].ToString());
+                    fact.Emission = DateTime.Parse(dr["fechaEmision"].ToString());
+                    fact.Sub = double.Parse(dr["subtotal"].ToString());
+                    fact.Total = double.Parse(dr["total"].ToString());
+                    fact.Descuento = double.Parse(dr["descuento"].ToString());
+
+
+                    facturas.Add(fact);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar listado de facturas. " + ex.ToString());
+            }
+
+
+            return facturas;
+        }
+
+        public static List<DetalleFactura> GetDetallesFactura(int id)
+        {
+            var detalles = new List<DetalleFactura>();
+
+            cn = DBConnection.MainConnection();
+
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT *.factura_detalle,inventario_producto_terminado.nombre_producto_terminado from factura_detalle " +
+                    "INNER JOIN inventario_producto_terminado on inventario_producto_terminado.id_producto_terminado = factura_detalle.id_producto " +
+                    "where id_factura = " + id + ";", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    DetalleFactura temp = new DetalleFactura();
+
+                    temp.IdFactura = dr["id_factura"].ToString();
+                    temp.Producto.ID = dr["id_producto"].ToString();
+                    temp.Producto.Name = dr["nombre_producto_terminado"].ToString();
+                    temp.LoteCod = dr["id_lote_salida"].ToString();
+                    temp.Cantidad = int.Parse(dr["cantidad"].ToString());
+                    temp.Precio = double.Parse(dr["precio"].ToString());
+
+
+                    detalles.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar detalles de factura. " + ex.ToString());
+            }
+
+
+            return detalles;
+        }
+
+        public static Factura GetFacturaFromId(int id)
+        {
+            var fact = new Factura();
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT factura.ID, factura.descuento, id_cliente, id_empleado, total, subtotal, fechaEmision, abonado, impuesto, pendiente, " +
+                    " empleados.nombre & ' ' & empleados.apellido as emp_name, clientes.nombre_commercial, clientes.direccion, clientes.RTN " +
+                    "FROM(factura INNER JOIN clientes ON factura.id_cliente = clientes.id) INNER JOIN empleados ON factura.id_empleado = empleados.id " +
+                    "WHERE(((factura.ID) = '" + id + "'));", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    fact.IdFactura = dr["factura.ID"].ToString();
+                    fact.Cliente.ID = dr["id_cliente"].ToString();
+                    fact.Cliente.Name = dr["nombre_commercial"].ToString();
+                    fact.Empleado.ID = dr["id_empleado"].ToString();
+                    fact.Empleado.Name = dr["emp_name"].ToString();
+                    fact.Direccion = dr["direccion"].ToString();
+                    fact.RTN = dr["RTN"].ToString();
+                    fact.Pendiente = double.Parse(dr["pendiente"].ToString());
+                    fact.Imp = double.Parse(dr["impuesto"].ToString());
+                    fact.EsAbonado = bool.Parse(dr["abonado"].ToString());
+                    fact.Emission = DateTime.Parse(dr["fechaEmision"].ToString());
+                    fact.Sub = double.Parse(dr["subtotal"].ToString());
+                    fact.Total = double.Parse(dr["total"].ToString());
+                    fact.Descuento = double.Parse(dr["descuento"].ToString());
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener Factura. " + ex.ToString());
+            }
+
+            return fact;
+        }
+
+        public static bool isRepeatedFactura(string code)
+        {
+            var isDuplicate = false;
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT * FROM formulas where id = '" + code + "';", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+                if (dr.Read())
+                {
+                    isDuplicate = true;
+                }
+                else
+                {
+                    isDuplicate = false;
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al verificar factura duplicada. " + ex.ToString());
+            }
+
+            return isDuplicate;
+        }
+
+        public static void updateBalance(string idFactura, double amount)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE factura " +
+                    "SET pendiente = (pendiente - " + amount + ")  " +
+                    "where ID = '" + idFactura + "'; ", cn);
+                cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al actualizar balance the factura  " + ex);
+            }
+        }
+
+        public static void setAbonado(string idFactura)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE factura " +
+                    "SET abonado = false " +
+                    "where ID = '" + idFactura + "'; ", cn);
+                cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al cambiar status de factura  " + ex);
+            }
+        }
     }
+
+    
 }

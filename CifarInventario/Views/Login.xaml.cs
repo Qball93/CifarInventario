@@ -51,5 +51,13 @@ namespace CifarInventario.Views
             //MessageBox.Show(Convert.ToBase64String(new Hasher().generateSalt()));
 
         }
+
+        private void Button_Close(object sender, RoutedEventArgs e)
+        {
+
+            RecuperacionWindow newWindow = new RecuperacionWindow();
+            newWindow.Show();
+            this.Close();
+        }
     }
 }

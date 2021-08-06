@@ -20,7 +20,7 @@
 
     </Page.Resources>
     <Page.DataContext>
-        <vm:EmpleadosVm/>
+        <vm:EmpleadosVM/>
     </Page.DataContext>
 
     <Grid Background="{StaticResource GridBackgroundBrush}"   >

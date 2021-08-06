@@ -30,4 +30,26 @@ namespace CifarInventario.ViewModels.Converters
         }
     }
 
+    class BoolToTextSpanish : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool isActive = (bool)value;
+
+            if (isActive)
+                return "Si";
+
+            return "No";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string isActive = (string)value;
+
+            if (isActive == "Si")
+                return true;
+            return false;
+        }
+    }
+
 }

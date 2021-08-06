@@ -92,7 +92,7 @@
                                   SelectedValue="{Binding NewFormula.Cantidad}"
                                   Width="190"
                                   SelectedIndex="0"
-                            Margin="46,0,0,0"
+                                  Margin="46,0,0,0"
                                   FontSize="14"
                                   ToolTip="Unidad base de la formula">
 
@@ -108,12 +108,22 @@
 
         <DockPanel Grid.Row="3" Margin="45,0,45,0">
 
-            <TextBlock Height="38" Width="150" DockPanel.Dock="Top" Margin="0,0,0,0" FontSize="30"  Text="Formula" FontWeight="Bold" Foreground="Black">
+            <TextBlock Height="38"
+                       Width="150"
+                       DockPanel.Dock="Top" 
+                       Margin="0,0,0,0" 
+                       FontSize="30"
+                       Text="Formula" 
+                       FontWeight="Bold" 
+                       Foreground="Black">
                 
             </TextBlock>
 
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,0" Height="60" DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,0" 
+                        Height="60" 
+                        DockPanel.Dock="Bottom">
                 <Label Content="Materia Prima" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"></Label>
                 <ComboBox VerticalAlignment="Center"
                           ItemsSource="{Binding NewFormulaProducts}"

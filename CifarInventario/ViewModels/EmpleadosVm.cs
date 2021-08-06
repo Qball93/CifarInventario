@@ -10,9 +10,9 @@ using System.Collections.ObjectModel;
 
 namespace CifarInventario.ViewModels
 {
-    class EmpleadosVm
+    public class EmpleadosVM: INotifyPropertyChanged
     {
-        public EmpleadosVm()
+        public EmpleadosVM()
         {
             Empleados = new ObservableCollection<Empleado>(PersonaQueries.GetEmpleados());
         }

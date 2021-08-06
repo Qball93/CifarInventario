@@ -9,7 +9,7 @@
         BorderThickness="0"
         MouseDown="Window_MouseDown"
         WindowStyle="None"
-        Title="FormulaInstrucctionsModal" Height="440" Width="800">
+        Title="FormulaInstrucctionsModal" Height="450" Width="800">
     <Grid Background="{StaticResource GridBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
