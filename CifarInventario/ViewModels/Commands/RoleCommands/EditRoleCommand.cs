@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-
-namespace CifarInventario.ViewModels.Commands.PersonaCommands
+namespace CifarInventario.ViewModels.Commands.RoleCommands
 {
-    public class NuevoProveedorCommand: ICommand
+    public class EditRoleCommand
     {
-        public ProveedoresVM VM { get; set; }
+        public RolesVM VM { get; set; }
 
 
         public event EventHandler CanExecuteChanged
@@ -19,20 +18,20 @@ namespace CifarInventario.ViewModels.Commands.PersonaCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public NuevoProveedorCommand(ProveedoresVM vm)
+        public EditRoleCommand(RolesVM vm)
         {
             VM = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            //return true;
-            return !VM.NuevoProveedor.HasErrors && VM.NuevoProveedor.DireccionCheck && VM.NuevoProveedor.NombreCheck && VM.NuevoProveedor.TelefonoCheck;
+            
+            return !VM.SelectedRole.HasErrors && VM.SelectedRole.NameCheck;
         }
 
         public void Execute(object parameter)
         {
-            VM.CreateProveedor();
+            VM.agregarRole();
         }
     }
 }

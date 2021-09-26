@@ -91,7 +91,7 @@
         </DockPanel>
 
         <DockPanel Grid.Row="3" Margin="45,0,25,0">
-            <Button  Command="{Binding editFormulacommand}"  Content="Crear" FontSize="16" Margin="0,0,0,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+            <Button  Command="{Binding editFormulacommand}"  Content="Editar" FontSize="16" Margin="0,0,0,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
         </DockPanel>
 
 

@@ -7,6 +7,10 @@ using System.ComponentModel;
 using CifarInventario.ViewModels.Classes.Queries;
 using CifarInventario.Models;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using CifarInventario.ViewModels.Commands;
+using CifarInventario.ViewModels.Commands.PersonaCommands;
+using CifarInventario.Views.Modals.EmpleadosModals;
 
 namespace CifarInventario.ViewModels
 {
@@ -15,6 +19,8 @@ namespace CifarInventario.ViewModels
         public EmpleadosVM()
         {
             Empleados = new ObservableCollection<Empleado>(PersonaQueries.GetEmpleados());
+            nuevoEmpleadoCommand = new NuevoEmpleadoCommand(this);
+            editEmpleadoCommand = new EditEmpleadoCommand(this);
         }
 
 
@@ -26,23 +32,65 @@ namespace CifarInventario.ViewModels
             set
             {
                 _empleados = value;
-                OnPropertyChanged("Empleados");
+                OnPropertyChanged(nameof(Empleados));
 
             }
         }
 
-        private EntidadCommercial _selectedEmpleado;
+        private Empleado _selectedEmpleado;
 
-        public EntidadCommercial SelectedEmpleado
+        public Empleado SelectedEmpleado
         {
             get { return _selectedEmpleado; }
             set
             {
                 _selectedEmpleado = value;
-                OnPropertyChanged("SelectedEmpleado");
+                OnPropertyChanged(nameof(SelectedEmpleado));
             }
         }
 
+        private Empleado _newEmpleado;
+
+        public Empleado NewEmpleado
+        {
+            get { return _newEmpleado; }
+            set
+            {
+                _newEmpleado = value;
+                OnPropertyChanged(nameof(NewEmpleado));
+            }
+        }
+
+
+        public ICommand openEdit => new DelegateCommand(OpenEditModal);
+        public ICommand openNew => new DelegateCommand(OpenNewModal);
+        public NuevoEmpleadoCommand nuevoEmpleadoCommand { get; set; }
+        public EditEmpleadoCommand editEmpleadoCommand { get; set; }
+        public EditEmpleadoModal editModal { get; set; }
+
+
+        public void AgregarEmpleado()
+        {
+            PersonaQueries.CreateEmpleado(NewEmpleado);
+        }
+
+        public void EditarEmpleado()
+        {
+            PersonaQueries.updateEmpleado(SelectedEmpleado);
+        }
+
+        public void OpenEditModal(object parameter)
+        {
+            editModal = new EditEmpleadoModal(this);
+            editModal.ShowDialog();
+        }
+
+        public void OpenNewModal(object parameter)
+        {
+            NewEmpleado = new Empleado();
+            var temp = new NewEmpleadoModal(this);
+            temp.ShowDialog();
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

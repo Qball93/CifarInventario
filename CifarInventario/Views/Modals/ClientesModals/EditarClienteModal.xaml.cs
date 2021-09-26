@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CifarInventario.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,22 @@ namespace CifarInventario.Views.Modals.ClientesModals
     /// </summary>
     public partial class EditarClienteModal : Window
     {
-        public EditarClienteModal()
+        public EditarClienteModal(ClientesVM vm)
         {
             InitializeComponent();
+
+            DataContext = vm;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                this.DragMove();
         }
     }
 }

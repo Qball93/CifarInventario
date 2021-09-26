@@ -10,7 +10,7 @@ namespace CifarInventario.ViewModels.Commands.PersonaCommands
     public class EditProveedorCommand : ICommand
     {
         public ProveedoresVM VM { get; set; }
-
+        
 
         public event EventHandler CanExecuteChanged
         {

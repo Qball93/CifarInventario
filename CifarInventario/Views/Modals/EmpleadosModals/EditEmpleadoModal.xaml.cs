@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CifarInventario.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +11,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CifarInventario.ViewModels;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views.Modals.Proveedores
+namespace CifarInventario.Views.Modals.EmpleadosModals
 {
     /// <summary>
-    /// Interaction logic for NuevoProveedor.xaml
+    /// Interaction logic for EditEmpleadoModal.xaml
     /// </summary>
-    public partial class NuevoProveedor : Window
+    public partial class EditEmpleadoModal : Window
     {
-        public NuevoProveedor(ProveedoresVM vm)
+        public EditEmpleadoModal(EmpleadosVM vm)
         {
             InitializeComponent();
 
@@ -37,6 +37,5 @@ namespace CifarInventario.Views.Modals.Proveedores
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
-
     }
 }

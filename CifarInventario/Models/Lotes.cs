@@ -36,6 +36,27 @@ namespace CifarInventario.Models
             FechaEntrada = DateTime.Today;
         }
 
+        public LoteEntrada(LoteEntrada old)
+        {
+            CodLote = old.CodLote;
+            Unidad = old.Unidad;
+            CantidadActual = old.CantidadActual;
+            CantidadOriginal = old.CantidadOriginal;
+            CantidadExacta = old.CantidadExacta;
+            CodMP = old.CodMP;
+            CertificadoAnalysis = old.CertificadoAnalysis;
+            NombreMP = old.NombreMP;
+            CodProveedor = old.CodProveedor;
+            NombreProveedor = old.NombreProveedor;
+            NombreFabricante = old.NombreFabricante;
+            Procedencia = old.Procedencia;
+            FechaFabricacion = old.FechaFabricacion;
+            FechaVencimiento = old.FechaVencimiento;
+            FechaEntrada = old.FechaEntrada;
+            ConversionUnitaria = old.ConversionUnitaria;
+            CodInterno = old.CodInterno;
+
+        }
 
         public bool CantidadCheck, CodCheck, FabricanteCheck, FechaCheck, ProcedenciaCheck = false;
 
@@ -248,6 +269,20 @@ namespace CifarInventario.Models
             FechaCreacion = DateTime.Today;
         }
 
+        public LoteSalida(LoteSalida old)
+        {
+            OriginalLote = old.OriginalLote;
+            CodLote = old.CodLote;
+            CantidadActual = old.CantidadActual;
+            Unidad = old.Unidad;
+            CodFormula = old.CodFormula;
+            NombreFormula = old.NombreFormula;
+            CantidadCreacion = old.CantidadCreacion;
+            FechaCreacion = old.FechaCreacion;
+            FechaVencimiento = old.FechaVencimiento;
+
+        }
+
         private string _originalLote;
         public string OriginalLote
         {
@@ -255,7 +290,7 @@ namespace CifarInventario.Models
             set
             {
                 _originalLote = value;
-                OnPropertyChanged("OriginalLote");
+                OnPropertyChanged(nameof(OriginalLote));
             }
         }
 
@@ -267,10 +302,10 @@ namespace CifarInventario.Models
             {
                 _codLote = value;
                 CodCheck = true;
-                ClearErrors("CodLote");
-                IsEmptyString(value, "CodLote");
-                isAlphaNumeric(value, "CodLote");
-                OnPropertyChanged("CodLote");
+                ClearErrors(nameof(CodLote));
+                IsEmptyString(value, nameof(CodLote));
+                isAlphaNumeric(value, nameof(CodLote));
+                OnPropertyChanged(nameof(CodLote));
 
             }
         }
@@ -282,7 +317,7 @@ namespace CifarInventario.Models
             set
             {
                 _cantidadActual = value;
-                OnPropertyChanged("CantidadActual");
+                OnPropertyChanged(nameof(CantidadActual));
             }
         }
 
@@ -293,7 +328,7 @@ namespace CifarInventario.Models
             set
             {
                 _unidad = value;
-                OnPropertyChanged("Unidad");
+                OnPropertyChanged(nameof(Unidad));
             }
         }
 
@@ -304,7 +339,7 @@ namespace CifarInventario.Models
             set
             {
                 _codFormula = value;
-                OnPropertyChanged("CodFormula");
+                OnPropertyChanged(nameof(CodFormula));
             }
         }
 
@@ -315,7 +350,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreFormula = value;
-                OnPropertyChanged("NombreFormula");
+                OnPropertyChanged(nameof(NombreFormula));
             }
         }
 
@@ -329,9 +364,9 @@ namespace CifarInventario.Models
                 {
                     _CantidadCreacion = value;
                     CantidadCheck = true;
-                    ClearErrors("CantidadCreacion");
-                    isDecimal(value.ToString(), "CantidadCreacion");
-                    OnPropertyChanged("CantidadCreacion");
+                    ClearErrors(nameof(CantidadCreacion));
+                    isDecimal(value.ToString(), nameof(CantidadCreacion));
+                    OnPropertyChanged(nameof(CantidadCreacion));
                 }
             }
         }
@@ -380,7 +415,16 @@ namespace CifarInventario.Models
         }
 
 
-
+        public LoteSalidaDetalle(LoteSalidaDetalle old)
+        {
+            CodLoteEntrada = old.CodLoteEntrada;
+            CodLoteSalida = old.CodLoteSalida;
+            Cantidad = old.Cantidad;
+            LotesProducto = old.LotesProducto;
+            Unidad = old.Unidad;
+            NombreMP = old.NombreMP;
+            CodMP = old.CodMP;
+        }
 
         private string _codLoteEntrada;
         public string CodLoteEntrada

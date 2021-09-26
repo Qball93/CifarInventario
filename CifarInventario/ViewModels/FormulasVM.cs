@@ -37,7 +37,7 @@ namespace CifarInventario.ViewModels
 
 
             UnidadCreada = new ObservableCollection<string> { "galones", "kilos" };
-            FormasFarmaceuticas = new ObservableCollection<string> { "jarabe", "tableta", "pildora" };
+            FormasFarmaceuticas = new ObservableCollection<string> { "jarabe", "tableta", "pildora","suspension" };
 
 
             //new formula modal window setup

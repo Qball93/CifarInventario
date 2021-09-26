@@ -8,8 +8,21 @@ using System.ComponentModel;
 
 namespace CifarInventario.Models
 {
-    public class Role: INotifyPropertyChanged
+    public class Role: Validators, INotifyPropertyChanged
     {
+
+        public bool NameCheck = false;
+
+
+        public Role(Role old)
+        {
+            Id = old.Id;
+            RoleName = old.RoleName;
+        }
+
+
+        public Role() { }
+
         public int Id
         {
             get { return _id; }
@@ -26,8 +39,20 @@ namespace CifarInventario.Models
             get { return _roleName;  }
             set
             {
+                NameCheck = true;
                 _roleName = value;
+                isAlphaNumeric(value, nameof(RoleName));
                 OnPropertyChanged(nameof(RoleName));
+            }
+        }
+
+        public bool Estado
+        {
+            get { return _estado;  }
+            set
+            {
+                _estado = value;
+                OnPropertyChanged(nameof(Estado));
             }
         }
 
@@ -36,6 +61,8 @@ namespace CifarInventario.Models
         private int _id;
 
         private string _roleName;
+
+        private bool _estado;
         
 
 
@@ -57,7 +84,18 @@ namespace CifarInventario.Models
 
         public bool preguntaCheck, respuestaCheck = false;
 
+        public Preguntas()
+        {
 
+        }
+
+        public Preguntas(Preguntas old)
+        {
+            UserId = old.UserId;
+            Pregunta = old.Pregunta;
+            Respuesta = old.Respuesta;
+            Salt = old.Salt;
+        }
 
         private int _userId;
         public int UserId
@@ -131,9 +169,22 @@ namespace CifarInventario.Models
         public string salt { get; set; }
         public Role UserRole { get; set; }
 
+        public User(User old)
+        {
+            id = old.id;
+            salt = old.salt;
+            UserRole = old.UserRole;
+            UserName = old.UserName;
+            Password = old.Password;
+            Status = old.Status;
+
+        }
+        public User()
+        {
+
+        }
 
         private string _userName;
-
         public string UserName
         {
             get { return _userName; }
@@ -149,10 +200,7 @@ namespace CifarInventario.Models
             }
         }
 
-
         private string _password; 
-
-
         public string Password 
         { 
             get { return _password; }
@@ -169,7 +217,6 @@ namespace CifarInventario.Models
 
         
         private bool _status;
-
         public bool Status
         {
             get { return _status; }

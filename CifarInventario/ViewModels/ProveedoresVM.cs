@@ -19,10 +19,10 @@ namespace CifarInventario.ViewModels
         
         public ProveedoresVM()
         {
+            //editModal = new EditarProveedor(this);
             Proveedores = new ObservableCollection<EntidadCommercial>(PersonaQueries.GetEntity("proveedor"));
             nuevoProveedorCommand = new NuevoProveedorCommand(this);
             editProveedorCommand = new EditProveedorCommand(this);
-            editModal = new EditarProveedor(this);
         }
 
 
@@ -34,11 +34,11 @@ namespace CifarInventario.ViewModels
             set
             {
                 _proveedores = value;
-                OnPropertyChanged("Proveedores");
+                OnPropertyChanged(nameof(Proveedores));
 
             }
         }
-
+        
         private EntidadCommercial _selectedProveedor;
 
         public EntidadCommercial SelectedProveedor
@@ -47,10 +47,10 @@ namespace CifarInventario.ViewModels
             set
             {
                 _selectedProveedor = value;
-                OnPropertyChanged("SelectedProveedor");
+                OnPropertyChanged(nameof(SelectedProveedor));
             }
         }
-
+        
 
         private EntidadCommercial _nuevoProveedor;
         public EntidadCommercial NuevoProveedor
@@ -59,10 +59,10 @@ namespace CifarInventario.ViewModels
             set
             {
                 _nuevoProveedor = value;
-                OnPropertyChanged("NuevoProveedor");
+                OnPropertyChanged(nameof(NuevoProveedor));
             }
         }
-
+      
 
         public ICommand openEdit => new DelegateCommand(OpenEditModal);
         public ICommand openNew => new DelegateCommand(OpenNewModal);
@@ -73,12 +73,14 @@ namespace CifarInventario.ViewModels
 
         public void OpenEditModal(object parameter)
         {
+            editModal = new EditarProveedor(this);
             editModal.ShowDialog();
         }
 
         public void OpenNewModal(object parameter)
         {
-            var temp = new NuevoProveedor(this);
+            NuevoProveedor = new EntidadCommercial(); 
+            var temp = new NuevoProveedorModal(this);
             temp.ShowDialog();
         }
 

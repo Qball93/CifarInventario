@@ -21,17 +21,19 @@ namespace CifarInventario.Models
         private string _rtn;
 
 
-        public EntidadCommercial()
+        public EntidadCommercial() { }
+
+        public EntidadCommercial(EntidadCommercial old)
         {
-            NombreContacto = "";
-            CorreoContacto = "";
-            Commentario = "";
-            RTN = "";
+            Id = old.Id;
+            NombreCommercial = old.NombreCommercial;
+            NombreContacto = old.NombreContacto;
+            Direccion = old.Direccion;
+            Telefono = old.Telefono;
+            CorreoContacto = old.CorreoContacto;
+            Commentario = old.Commentario;
+            RTN = old.RTN;
         }
-
-
-
-
 
         public bool NombreCheck, DireccionCheck, TelefonoCheck = false;
 
@@ -65,6 +67,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreContacto = value;
+                ClearErrors(nameof(NombreContacto));
                 isAlphaNumeric(value, nameof(NombreContacto));
                 OnPropertyChanged(nameof(NombreContacto));
             }
@@ -93,7 +96,7 @@ namespace CifarInventario.Models
                 TelefonoCheck = true;
                 ClearErrors(nameof(Telefono));
                 IsEmptyString(value, nameof(Telefono));
-                isStepNumber(value, nameof(Telefono));
+                isAlphaNumeric(value, nameof(Telefono));
                 OnPropertyChanged(nameof(Telefono));
             }
         }
@@ -104,6 +107,7 @@ namespace CifarInventario.Models
             set
             {
                 _correoContacto = value;
+                ClearErrors(nameof(CorreoContacto));
                 isAlphaNumeric(value, nameof(CorreoContacto));
                 OnPropertyChanged(nameof(CorreoContacto));
             }
@@ -116,6 +120,7 @@ namespace CifarInventario.Models
             set
             {
                 _commentario = value;
+                ClearErrors(nameof(Commentario));
                 isAlphaNumeric(value, nameof(Commentario));
                 OnPropertyChanged(nameof(Commentario));
             }
@@ -127,6 +132,7 @@ namespace CifarInventario.Models
             set
             {
                 _rtn = value;
+                ClearErrors(nameof(RTN));
                 isAlphaNumeric(value, nameof(RTN));
                 OnPropertyChanged(nameof(RTN));
             }
@@ -142,13 +148,28 @@ namespace CifarInventario.Models
         }
     }
 
-    public class Empleado : INotifyPropertyChanged
+    public class Empleado : Validators, INotifyPropertyChanged
     {
         private int _id;
         private string _nombre;
         private string _apellido;
         private string _telefono;
         private string _correo;
+
+
+        public bool nombreCheck, apellidoCheck, telefonoCheck, correoCheck = false;
+
+        public Empleado() { }
+
+        public Empleado(Empleado old)
+        {
+            Id = old.Id;
+            Nombre = old.Nombre;
+            Apellido = old.Apellido;
+            Telefono = old.Telefono;
+            Correo = old.Correo;
+        }
+
         
         public int Id
         {
@@ -156,7 +177,7 @@ namespace CifarInventario.Models
             set
             {
                 _id = value;
-                OnPropertyChanged("Id");
+                OnPropertyChanged(nameof(Id));
             }
         }
 
@@ -165,8 +186,12 @@ namespace CifarInventario.Models
             get { return _nombre; }
             set
             {
+                nombreCheck = true;
                 _nombre = value;
-                OnPropertyChanged("Nombre");
+                ClearErrors(nameof(Nombre));
+                IsEmptyString(value,nameof(Nombre));
+                IsLetters(value, nameof(Nombre));
+                OnPropertyChanged(nameof(Nombre));
             }
         }
 
@@ -176,7 +201,11 @@ namespace CifarInventario.Models
             set
             {
                 _apellido = value;
-                OnPropertyChanged("Apellido");
+                apellidoCheck = true;
+                ClearErrors(nameof(apellidoCheck));
+                IsEmptyString(value, nameof(Apellido));
+                IsLetters(value, nameof(Apellido));
+                OnPropertyChanged(nameof(Apellido));
             }
         }
 
@@ -186,7 +215,11 @@ namespace CifarInventario.Models
             set
             {
                 _telefono = value;
-                OnPropertyChanged("Telefono");
+                telefonoCheck = true;
+                ClearErrors(nameof(Telefono));
+                IsEmptyString(value, nameof(Telefono));
+                isStepNumber(value, nameof(Telefono));
+                OnPropertyChanged(nameof(Telefono));
             }
         }
 
@@ -196,7 +229,10 @@ namespace CifarInventario.Models
             set
             {
                 _correo = value;
-                OnPropertyChanged("Correo");
+                correoCheck = true;
+                ClearErrors(nameof(Correo));
+                IsEmptyString(value, nameof(Correo));
+                OnPropertyChanged(nameof(Correo));
             }
         }
 
@@ -216,13 +252,26 @@ namespace CifarInventario.Models
         private string _nombreProveedor;
         private string _nombreContacto;
 
+        public DisplayProveedor()
+        {
+
+        }
+
+        public DisplayProveedor(DisplayProveedor old)
+        {
+            Id = old.Id;
+            NombreContacto = old.NombreContacto;
+            NombreProveedor = old.NombreProveedor;
+        }
+
+
         public int Id
         {
             get { return _id; }
             set
             {
                 _id = value;
-                OnPropertyChanged("Id");
+                OnPropertyChanged(nameof(Id));
             }
         }
 
@@ -232,7 +281,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreProveedor = value;
-                OnPropertyChanged("NombreProveedor");
+                OnPropertyChanged(nameof(NombreProveedor));
             }
         }
 
@@ -242,7 +291,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreContacto = value;
-                OnPropertyChanged("NombreContacto");
+                OnPropertyChanged(nameof(NombreContacto));
             }
         }
 

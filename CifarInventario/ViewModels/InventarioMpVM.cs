@@ -113,11 +113,11 @@ namespace CifarInventario.ViewModels
 
         public void updateCollectionInstance(MpProduct updatedInstance)
         {
-            SelectedMP.Id = NewProduct.Id;
-            SelectedMP.NombreProducto = NewProduct.NombreProducto;
-            SelectedMP.Conversion = NewProduct.Conversion;
-            SelectedMP.UnidadMetrica = NewProduct.UnidadMetrica;
-            SelectedMP.UnidadMuestra = NewProduct.UnidadMuestra;
+            SelectedMP.Id = updatedInstance.Id;
+            SelectedMP.NombreProducto = updatedInstance.NombreProducto;
+            SelectedMP.Conversion = updatedInstance.Conversion;
+            SelectedMP.UnidadMetrica = updatedInstance.UnidadMetrica;
+            SelectedMP.UnidadMuestra = updatedInstance.UnidadMuestra;
 
         }
 

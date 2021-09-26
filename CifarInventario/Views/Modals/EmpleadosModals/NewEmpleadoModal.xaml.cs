@@ -13,14 +13,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views.Modals.ClientesModals
+namespace CifarInventario.Views.Modals.EmpleadosModals
 {
     /// <summary>
-    /// Interaction logic for NuevoClienteModal.xaml
+    /// Interaction logic for NewEmpleadoModal.xaml
     /// </summary>
-    public partial class NuevoClienteModal : Window
+    public partial class NewEmpleadoModal : Window
     {
-        public NuevoClienteModal(ClientesVM vm)
+        public NewEmpleadoModal(EmpleadosVM vm)
         {
             InitializeComponent();
 
@@ -38,8 +38,4 @@ namespace CifarInventario.Views.Modals.ClientesModals
                 this.DragMove();
         }
     }
-
-    
-
-
 }

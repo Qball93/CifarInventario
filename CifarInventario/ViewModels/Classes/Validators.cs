@@ -16,9 +16,17 @@ namespace CifarInventario.ViewModels.Classes
         public readonly string PreciseNumber = @"^(?!0*(\.0+)?$)(\d+|\d*\.\d+)$";
         public readonly string moneyRegEx = @"^(0|0?[1-9]\d*)\.\d\d$";
         public readonly string alphanumeric = @"[a-zA-Z0-9_]*$";
+        public readonly string onlyLetters = @"^[a-zA-Z]+$";
         public readonly string EmptyNumber = @"[0]";
         public readonly string positiveInt = @"^[1-9]\d*$";
         public readonly string DecimalIncluding0 = @"^\d+(\.\d+)?$";
+
+
+        public void IsLetters(string property, string propertyName)
+        {
+            if (!(Regex.IsMatch(property, onlyLetters)))
+                AddError(propertyName, "Este campo solo acepta letas.");
+        }
 
         public void is0Decimal(string property, string propertyName)
         {

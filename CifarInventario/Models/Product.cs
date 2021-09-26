@@ -513,6 +513,20 @@ namespace CifarInventario.Models
 
         public bool cantidadCheck = false;
 
+        public LotePackageDetalle()
+        {
+
+        }
+
+        public LotePackageDetalle(LotePackageDetalle old)
+        {
+            CodLoteEntrada = old.CodLoteEntrada;
+            CodLoteSalida = old.CodLoteSalida;
+            CodPT = old.CodPT;
+            Cantidad = old.Cantidad;
+            NombreEmpaque = old.NombreEmpaque;
+
+        }
 
 
         private string _codLoteSalida;
@@ -522,7 +536,7 @@ namespace CifarInventario.Models
             set
             {
                 _codLoteSalida = value;
-                OnPropertyChanged("CodLoteSalida");
+                OnPropertyChanged(nameof(CodLoteSalida));
             }
         }
 
@@ -533,7 +547,7 @@ namespace CifarInventario.Models
             set
             {
                 _codPT = value;
-                OnPropertyChanged("CodPT");
+                OnPropertyChanged(nameof(CodPT));
             }
         }
 
@@ -545,10 +559,10 @@ namespace CifarInventario.Models
             {
                 cantidadCheck = true;
                 _cantidad = value;
-                ClearErrors("Cantidad");
-                IsEmptyString(value.ToString(), "Cantidad");
-                isStepNumber(value.ToString(),"Cantidad");
-                OnPropertyChanged("Cantidad");
+                ClearErrors(nameof(Cantidad));
+                IsEmptyString(value.ToString(), nameof(Cantidad));
+                isStepNumber(value.ToString(),nameof(Cantidad));
+                OnPropertyChanged(nameof(Cantidad));
             }
         }
 
@@ -559,7 +573,7 @@ namespace CifarInventario.Models
             set
             {
                 _codLoteEntrada = value;
-                OnPropertyChanged("CodLoteEntrada");
+                OnPropertyChanged(nameof(CodLoteEntrada));
             }
         }
 
@@ -570,7 +584,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombreEmpaque = value;
-                OnPropertyChanged("NombreEmpaque");
+                OnPropertyChanged(nameof(NombreEmpaque));
             }
         }
 
@@ -589,7 +603,18 @@ namespace CifarInventario.Models
         public bool nameCheck = false;
 
 
+        public ProductoTeminadoParaLista()
+        {
 
+        }
+
+        public ProductoTeminadoParaLista(ProductoTeminadoParaLista old)
+        {
+            CodPT = old.CodPT;
+            NombrePT = old.NombrePT;
+            Precio = old.Precio;
+            Cantidad = old.Cantidad;
+        }
 
         private string _codPT;
         public string CodPT
@@ -598,7 +623,7 @@ namespace CifarInventario.Models
             set
             {
                 _codPT = value;
-                OnPropertyChanged("CodPT");
+                OnPropertyChanged(nameof(CodPT));
             }
         }
 
@@ -610,7 +635,7 @@ namespace CifarInventario.Models
             {
                 _nombrePT = value;
                 nameCheck = true;
-                OnPropertyChanged("NombrePT");
+                OnPropertyChanged(nameof(NombrePT));
             }
         }
 
@@ -621,7 +646,7 @@ namespace CifarInventario.Models
             set
             {
                 _precio = value;
-                OnPropertyChanged("Precio");
+                OnPropertyChanged(nameof(Precio));
             }
         }
 
@@ -632,7 +657,7 @@ namespace CifarInventario.Models
             set
             {
                 _cantidad = value;
-                OnPropertyChanged("Cantidad");
+                OnPropertyChanged(nameof(Cantidad));
             }
         }
 
@@ -711,6 +736,18 @@ namespace CifarInventario.Models
                 OnPropertyChanged("Precio");
             }
         }
+
+        public ProductoTerminado(ProductoTerminado old)
+        {
+            CodPT = old.CodPT;
+            NombrePT = old.NombrePT;
+            Existencia = old.Existencia;
+            Entrada = old.Entrada;
+            Salida = old.Salida;
+            Precio = old.Precio;
+        }
+
+        public ProductoTerminado() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

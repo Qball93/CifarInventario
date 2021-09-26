@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace CifarInventario.Models
 {
+
     public class Factura:Validators, INotifyPropertyChanged
     {
 
@@ -23,6 +24,22 @@ namespace CifarInventario.Models
             
         }
 
+        public Factura(Factura old)
+        {
+            IdFactura = old.IdFactura;
+            Empleado = old.Empleado;
+            Cliente = old.Cliente;
+            Total = old.Total;
+            Imp = old.Imp;
+            Sub = old.Sub;
+            Emission = old.Emission;
+            EsAbonado = old.EsAbonado;
+            Pendiente = old.Pendiente;
+            Direccion = old.Direccion;
+            RTN = old.RTN;
+            Descuento = old.Descuento;
+
+        }
 
         public bool IdCheck = false;
 
@@ -42,20 +59,6 @@ namespace CifarInventario.Models
             }
         }
 
-        /*private int _idEmpleado;
-        public int IdEmpleado
-        {
-            get { return _idEmpleado; }
-            set
-            {
-                _idEmpleado = value;
-                OnPropertyChanged("IdEmpleado");
-            }
-        }*/
-
-        // private (int id, string nombre) _empleado;
-
-
         private IdName _empleado;
         public IdName Empleado
         {
@@ -66,20 +69,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(Empleado));
             }
         }
-
-
-
-
-      /*  public Tuple<int, string> Empleado
-        {
-            get { return _empleado; }
-            set
-            {
-                _empleado = value;
-                OnPropertyChanged("Empleado");
-            }
-        }*/
-
 
         private IdName _cliente;
         public IdName Cliente
@@ -204,9 +193,28 @@ namespace CifarInventario.Models
         }
     }
 
-
     public class ExtendedFactura : Validators, INotifyPropertyChanged
     {
+        public ExtendedFactura()
+        {
+
+        }
+
+        public ExtendedFactura(ExtendedFactura old)
+        {
+            IdFactura = old.IdFactura;
+            Empleado = old.Empleado;
+            Cliente = old.Cliente;
+            Total = old.Total;
+            Imp = old.Imp;
+            Sub = old.Sub;
+            Emission = old.Emission;
+            EsAbonado = old.EsAbonado;
+            Pendiente = old.Pendiente;
+            NombreCommercial = old.NombreCommercial;
+        }
+
+
         private int _idFactura;
         public int IdFactura
         {
@@ -331,6 +339,16 @@ namespace CifarInventario.Models
         public DetalleFactura()
         {
             Producto = new IdName();
+        }
+
+        public DetalleFactura(DetalleFactura old)
+        {
+            LoteCod = old.LoteCod;
+            IdFactura = old.IdFactura;
+            Producto = old.Producto;
+            Precio = old.Precio;
+            Total = old.Total;
+            Cantidad = old.Cantidad;
         }
 
         public bool cantidadCheck = false;

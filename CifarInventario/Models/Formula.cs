@@ -21,6 +21,21 @@ namespace CifarInventario.Models
 
         public bool CodCheck, NombreCheck, PrecaucionCheck = false;
 
+        public Formula() { }
+
+        public Formula(Formula old)
+        {
+            Transformacion = old.Transformacion;
+            Cantidad = old.Cantidad;
+            CodFormula = old.CodFormula;
+            NombreFormula = old.NombreFormula;
+            Precauciones = old.Precauciones;
+            FormaFarm = old.FormaFarm;
+            TransCantidad = old.TransCantidad;
+            Ingredients = old.Ingredients;
+        }
+
+
         public string Transformacion
         {
             get { return _codTrans; }
@@ -37,7 +52,7 @@ namespace CifarInventario.Models
             set
             {
                 _cantidad = value;
-                OnPropertyChanged("Cantidad");
+                OnPropertyChanged(nameof(Cantidad));
             }
         }
 
@@ -48,10 +63,10 @@ namespace CifarInventario.Models
             {
                 _codFormula = value;
                 CodCheck = true;
-                ClearErrors("CodFormula");
-                IsEmptyString(value, "CodFormula");
-                isAlphaNumeric(value, "CodFormula");
-                OnPropertyChanged("CodFormula");
+                ClearErrors(nameof(CodFormula));
+                IsEmptyString(value, nameof(CodFormula));
+                isAlphaNumeric(value, nameof(CodFormula));
+                OnPropertyChanged(nameof(CodFormula));
             }
         }
 
@@ -97,10 +112,10 @@ namespace CifarInventario.Models
             set
             {
                 _transCantidad = value;
-                ClearErrors("TransCantidad");
-                IsEmptyString(value.ToString(), "TransCantidad");
-                isDecimal(value.ToString(), "TransCantidad");
-                OnPropertyChanged("TransCantidad");
+                ClearErrors(nameof(TransCantidad));
+                IsEmptyString(value.ToString(), nameof(TransCantidad));
+                isDecimal(value.ToString(), nameof(TransCantidad));
+                OnPropertyChanged(nameof(TransCantidad));
             }
         }
 
@@ -140,6 +155,14 @@ namespace CifarInventario.Models
             Unidad = unit;
         }
 
+        public DetalleFormula(DetalleFormula old)
+        {
+            CodFormula = old.CodFormula;
+            Name = old.Name;
+            IdMp = old.IdMp;
+            Quantity = old.Quantity;
+            Unidad = old.Unidad;
+        }
 
         public string CodFormula
         {
@@ -150,7 +173,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged("CodFormula");
             }
         }
-
         public string Name
         {
             get { return _name; }
@@ -165,10 +187,9 @@ namespace CifarInventario.Models
             get { return _idMp; }
             set {
                 _idMp = value;
-                OnPropertyChanged("IdMp");
+                OnPropertyChanged(nameof(IdMp));
             }
         }
-
         public string Quantity {
             get 
             { 
@@ -178,20 +199,19 @@ namespace CifarInventario.Models
             {
                 _quantity = value;
                 QuantityCheck = true;
-                ClearErrors("Quantity");
-                IsEmptyString(value,"Quantity");
-                isDecimal(value,"Quantity");
-                OnPropertyChanged("Quantity");
+                ClearErrors(nameof(Quantity));
+                IsEmptyString(value,nameof(Quantity));
+                isDecimal(value,nameof(Quantity));
+                OnPropertyChanged(nameof(Quantity));
             }
         }
-
         public string Unidad
         {
             get { return _unidad; }
             set
             {
                 _unidad = value;
-                OnPropertyChanged("Unidad");
+                OnPropertyChanged(nameof(Unidad));
             }
         }
 

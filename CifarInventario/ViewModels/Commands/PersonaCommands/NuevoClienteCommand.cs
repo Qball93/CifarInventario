@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-
 namespace CifarInventario.ViewModels.Commands.PersonaCommands
 {
-    public class NuevoProveedorCommand: ICommand
+    public class NuevoClienteCommand : ICommand
     {
-        public ProveedoresVM VM { get; set; }
+        public ClientesVM VM { get; set; }
 
 
         public event EventHandler CanExecuteChanged
@@ -19,7 +18,7 @@ namespace CifarInventario.ViewModels.Commands.PersonaCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public NuevoProveedorCommand(ProveedoresVM vm)
+        public NuevoClienteCommand(ClientesVM vm)
         {
             VM = vm;
         }
@@ -27,12 +26,12 @@ namespace CifarInventario.ViewModels.Commands.PersonaCommands
         public bool CanExecute(object parameter)
         {
             //return true;
-            return !VM.NuevoProveedor.HasErrors && VM.NuevoProveedor.DireccionCheck && VM.NuevoProveedor.NombreCheck && VM.NuevoProveedor.TelefonoCheck;
+            return !VM.NewClient.HasErrors && VM.NewClient.DireccionCheck && VM.NewClient.NombreCheck && VM.NewClient.TelefonoCheck;
         }
 
         public void Execute(object parameter)
         {
-            VM.CreateProveedor();
+            VM.agregarCliente();
         }
     }
 }

@@ -196,9 +196,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"UPDATE @tipo " +
-                        "SET nombre_commercial = @name, nombre_contacto = @contact, direccion = @direccion, correo_contacto = @correo, commentario = @commentario " +
-                        ",RTN = @rtn, telefono = @telefono  WHERE id = @id";
+                    cmd.CommandText = @"UPDATE " +type+
+                        " SET nombre_commercial = '"+entidad.NombreCommercial+"', nombre_contacto = '"+entidad.NombreContacto+"', direccion = '"+entidad.Direccion+"', correo_contacto = '"+entidad.CorreoContacto+"', commentario = '"+entidad.Commentario+"'   "+
+                        ",RTN = '"+entidad.RTN+"', telefono = "+entidad.Telefono+"  WHERE id = " + entidad.Id;
 
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
@@ -225,6 +225,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 System.Windows.MessageBox.Show("Error al actualizar "+type+"  " + ex);
             }
+
+
+            System.Windows.MessageBox.Show(" " + type + " actualizado con exito.");
         }
 
         public static void updateEmpleado(Empleado newEmployee)
