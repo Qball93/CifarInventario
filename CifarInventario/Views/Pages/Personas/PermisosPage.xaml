@@ -1,4 +1,4 @@
-﻿<Page x:Class="CifarInventario.Views.Pages.EmpleadosPage"
+﻿<Page x:Class="CifarInventario.Views.Pages.RoleRelationships"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,7 +9,7 @@
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
       Height="700" Width="1000"
-      Title="EmpleadosPage">
+      Title="LotesCreacion">
 
     <Page.Resources>
         <converters:BoolToActive x:Key="boolToActive"/>
@@ -20,18 +20,37 @@
 
     </Page.Resources>
     <Page.DataContext>
-        <vm:EmpleadosVM/>
+        <vm:PermisoVM/>
     </Page.DataContext>
 
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
-        <TextBlock Margin="40,40,201,587" Text="Listado de Empleados" FontSize="40" FontWeight="Bold" Foreground="Black">
+        <DockPanel  Margin="40,40,101,587">
+            <TextBlock Text="Permisos para Rol" FontSize="40" FontWeight="Bold" Foreground="Black" DockPanel.Dock="Left">
 
-        </TextBlock>
+            </TextBlock>
 
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Empleados}" SelectedItem="{Binding SelectedEmpleado}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+           
+
+            <Label Content="Rol Usuario" VerticalAlignment="Center" Margin="50,0,0,0" FontSize="16"/>
+            <ComboBox ItemsSource="{Binding Roles}" 
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectedValue="{Binding SelectedRol.Id}"
+                      SelectedValuePath="Id"
+                      DisplayMemberPath="RoleName"
+                      FontSize="16" Margin="0,0,20,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right">
+            </ComboBox>
+
+            <Button Margin="0,20,0,20" Width="100" Content="Actualizar Rol" Command="{Binding getSubs}">
+
+            </Button>
+
+        </DockPanel>
+
+
+        <DataGrid Margin="40,113,40,187" Height="400" ItemsSource="{Binding Path=Permissions}" SelectedItem="{Binding SelectedPermission}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
             <DataGrid.Resources>
-                
+
                 <Style TargetType="DataGrid">
                     <Setter Property="RowHeaderWidth" Value="0" />
                     <Setter Property="BorderBrush" Value="black"/>
@@ -48,44 +67,31 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Width="30" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Nombre" Width="*" Binding="{Binding Nombre}"/>
-                <DataGridTextColumn Header="Apellido" Width="*" Binding="{Binding Apellido}"/>
-                <DataGridTextColumn Header="Telefono" Width="*" Binding="{Binding Telefono}"/>
-                <DataGridTextColumn Header="Correo Contacto" Width="*" Binding="{Binding Correo}"/>
-                
-                <DataGridTemplateColumn Header=" Acciones" Width="*">
+                <DataGridTextColumn Header="  Id  " Width="Auto" Binding="{Binding IdSubMenu}"/>
+                <DataGridTextColumn Header="  Nombre Submenu  " Width="Auto" Binding="{Binding NombreSubMenu}"/>
+                <DataGridTextColumn Header="  Estado  "   Width="Auto"  Binding="{Binding Estado , Converter={StaticResource boolToActive}}"  />
+                <DataGridTemplateColumn Header=" Acciones" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
-                                <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditUser}" Style="{StaticResource editButton}" ToolTip="Editar Empleado">
+                                <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.togglePermissions}" Style="{StaticResource editButton}" ToolTip="Cambiar Estado">
                                     <StackPanel Orientation="Horizontal">
                                         <fa:IconBlock Icon="Edit" Foreground="White"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
-                            
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
+
+
             </DataGrid.Columns>
 
         </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding CreateNew}"  VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Agregar Empleado"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+
 
     </Grid>
-
 </Page>

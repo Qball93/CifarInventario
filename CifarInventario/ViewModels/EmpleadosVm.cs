@@ -50,7 +50,6 @@ namespace CifarInventario.ViewModels
         }
 
         private Empleado _newEmpleado;
-
         public Empleado NewEmpleado
         {
             get { return _newEmpleado; }
@@ -60,27 +59,43 @@ namespace CifarInventario.ViewModels
                 OnPropertyChanged(nameof(NewEmpleado));
             }
         }
-
+        
 
         public ICommand openEdit => new DelegateCommand(OpenEditModal);
         public ICommand openNew => new DelegateCommand(OpenNewModal);
         public NuevoEmpleadoCommand nuevoEmpleadoCommand { get; set; }
         public EditEmpleadoCommand editEmpleadoCommand { get; set; }
         public EditEmpleadoModal editModal { get; set; }
-
+        public ICommand limpiarModal => new DelegateCommand(limpiar);
 
         public void AgregarEmpleado()
         {
             PersonaQueries.CreateEmpleado(NewEmpleado);
+            Empleados.Add(NewEmpleado);
+            limpiar(1);
         }
 
         public void EditarEmpleado()
         {
             PersonaQueries.updateEmpleado(SelectedEmpleado);
+            
+            UpdateCollectionInstance();
+            System.Windows.MessageBox.Show("Empleado Actualizado");
+            editModal.Close();
+            
+        }
+
+        public void UpdateCollectionInstance()
+        {
+            SelectedEmpleado.Id = NewEmpleado.Id;
+            SelectedEmpleado.Nombre = NewEmpleado.Nombre;
+            SelectedEmpleado.Apellido = NewEmpleado.Apellido;
+            SelectedEmpleado.Correo = NewEmpleado.Correo;
         }
 
         public void OpenEditModal(object parameter)
         {
+            NewEmpleado = new Empleado(SelectedEmpleado);
             editModal = new EditEmpleadoModal(this);
             editModal.ShowDialog();
         }
@@ -91,6 +106,13 @@ namespace CifarInventario.ViewModels
             var temp = new NewEmpleadoModal(this);
             temp.ShowDialog();
         }
+
+        public void limpiar(object parameter)
+        {
+            NewEmpleado = new Empleado();
+        }
+
+        
 
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -80,7 +80,7 @@
         <Button HorizontalAlignment="Left" Margin="775,580,0,0" Command="{Binding openNewModal}"  VerticalAlignment="Top" Height="40" Width="150" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="1" >
             <StackPanel Orientation="Horizontal">
                 <fa:IconBlock Icon="Plus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Ingresar Nueva MP"/>
+                <TextBlock Foreground="white" Text="  Ingresar Nuevo PT"/>
             </StackPanel>
         </Button>
         <Button HorizontalAlignment="Left" Margin="625,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}"  Grid.Column="1">

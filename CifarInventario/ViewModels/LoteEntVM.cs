@@ -151,8 +151,11 @@ namespace CifarInventario.ViewModels
 
         public void reset(object parameter)
         {
-
+            NewLote = new LoteEntrada();
+            
         }
+
+
 
 
         public void CreateLotePaquete()
@@ -167,6 +170,8 @@ namespace CifarInventario.ViewModels
             //System.Windows.MessageBox.Show(NewLote.CantidadExacta  + " " + SelectedMateriaPrima.conversionValue);
 
             InventoryQueries.CreateLoteEntrada(NewLote);
+            LotesPaquetes.Add(NewLote);
+            reset(1);
 
             System.Windows.MessageBox.Show("Nuevo Lote Paquete Creado");
         }
@@ -203,6 +208,9 @@ namespace CifarInventario.ViewModels
             //System.Windows.MessageBox.Show(NewLote.CantidadExacta  + " " + SelectedMateriaPrima.conversionValue);
             
             InventoryQueries.CreateLoteEntrada(NewLote);
+            LotesActivos.Add(NewLote);
+
+            reset(1);
 
             System.Windows.MessageBox.Show("Nuevo Lote Creado");
         }

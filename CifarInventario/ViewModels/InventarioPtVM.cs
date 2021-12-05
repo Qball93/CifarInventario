@@ -75,6 +75,13 @@ namespace CifarInventario.ViewModels
         }
 
 
+        public void updateCollectionInstance(PtProduct newEntity)
+        {
+            SelectedProduct.Id = NewProduct.Id;
+            SelectedProduct.Nombre = NewProduct.Nombre;
+            SelectedProduct.Precio = NewProduct.Precio;
+        }
+
         public void Limpiar(object parameter)
         {
             NewProduct = new PtProduct();
@@ -93,9 +100,12 @@ namespace CifarInventario.ViewModels
         public void OpenCreateModal(object parameter)
         {
             var test = new NewPtModal(this);
-
+            NewProduct = new PtProduct();
             test.ShowDialog();
         }
+
+
+
 
         public void CreatePT()
         {
@@ -110,13 +120,19 @@ namespace CifarInventario.ViewModels
                 NewProduct.Entrada = 0;
                 NewProduct.Salida = 0;
                 System.Windows.MessageBox.Show("Producto creado en el inventario.");
+                Limpiar();
                 InventarioPt.Add(NewProduct);
-                NewModal.Close();
             }
 
 
 
 
+        }
+
+
+        public void Limpiar()
+        {
+            NewProduct = new PtProduct();
         }
 
         public void EditPT()
@@ -127,12 +143,10 @@ namespace CifarInventario.ViewModels
             }
             else
             {
-                ProductQueries.CreateInventarioProductoTerminado(NewProduct);
-                SelectedProduct.Id = NewProduct.Id;
-                SelectedProduct.Nombre = NewProduct.Nombre;
-                SelectedProduct.Precio = NewProduct.Precio;
+                System.Windows.MessageBox.Show(NewProduct.Id  + NewProduct.Nombre + NewProduct.Precio);
+                ProductQueries.updateInventarioProductoTerminadoInfo(NewProduct, SelectedProduct.Id);
                 System.Windows.MessageBox.Show("Informacion de Producto Actualizada.");
-                InventarioPt.Add(NewProduct);
+                updateCollectionInstance(NewProduct);
                 NewModal.Close();
             }
         }

@@ -32,6 +32,7 @@
 
         <DataGrid Margin="40,0,40,80"
                   Height="400"
+                  Name="dtPrime"
                   ItemsSource="{Binding Path=Facturas}"
                   SelectedItem="{Binding SelectedFactura}"
                   AutoGenerateColumns="False"
@@ -59,6 +60,8 @@
                 <DataGridTextColumn Header=" Id "  Binding="{Binding IdFactura}"/>
                 <DataGridTextColumn Header=" Nombre "  Binding="{Binding Cliente.Name}"/>
                 <DataGridTextColumn Header=" Pendiente " Binding="{Binding Pendiente}"/>
+                <DataGridTextColumn Header=" Vendedor "  Binding="{Binding Vendedor}"/>
+                <DataGridTextColumn Header=" Zona " Binding="{Binding Zona}"/>
                 <DataGridTextColumn Header=" Abonado " Binding="{Binding EsAbonado, Converter={StaticResource boolToSpanish}}"/>
                 <DataGridTextColumn Header=" Fecha Emission "  Binding="{Binding Emission, StringFormat={}{0:MM/dd/yyyy}}"/>
                 <DataGridTextColumn Header=" Total "  Binding="{Binding Total}"/>
@@ -72,6 +75,11 @@
                                         <fa:IconBlock Icon="Edit" Foreground="White"/>
                                     </StackPanel>
                                 </Button>
+                                <Button  Margin="5,0,0,0" Height="30" Width=" 40" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openExportPdf}" Style="{StaticResource blueButton}" ToolTip="Imprimir Factura">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconBlock Icon="Newspaper" Foreground="White"/>
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
 
                         </DataTemplate>
@@ -82,7 +90,7 @@
 
         </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNewFacturaModal}"  VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNewFacturaModal}" Click="ButtonExport"   VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
             <StackPanel Orientation="Horizontal">
                 <fa:IconBlock Icon="UserPlus" Foreground="White"/>
                 <TextBlock Foreground="white" Text=" Nueva Factura "/>

@@ -169,6 +169,28 @@ namespace CifarInventario.Models
             }
         }
 
+        private string _zona;
+        public string Zona
+        {
+            get { return _zona; }
+            set
+            {
+                _zona = value;
+                OnPropertyChanged(nameof(Zona));
+            }
+        }
+
+        private string _vendedor;
+        public string Vendedor
+        {
+            get { return _vendedor; }
+            set
+            {
+                _vendedor = value;
+                OnPropertyChanged(nameof(Vendedor));
+            }
+        }
+
         private double _descuento;
         public double Descuento
         {

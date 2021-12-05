@@ -58,6 +58,48 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         }
 
+
+        public static List<IdName> GetEmpleadosDropDown()
+        {
+            var empleados = new List<IdName>();
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("SELECT * FROM empleados;", cn);
+                dr = cmd.ExecuteReader();
+
+
+                while (dr.Read())
+                {
+                    IdName temp = new IdName();
+
+                    temp.ID = dr["id"].ToString();
+                    temp.Name = dr["nombre"].ToString();
+
+
+                    empleados.Add(temp);
+
+
+                }
+
+
+
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener empleados para DropDown  " + ex);
+            }
+
+
+            return empleados;
+
+        }
+
         public static List<EntidadCommercial> GetEntity(string type)
         {
             var entidades = new List<EntidadCommercial>();
@@ -119,13 +161,16 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     cmd.Parameters.AddRange(new OleDbParameter[]
                     {
                         new OleDbParameter("@name",newEmployee.Nombre),
-                        new OleDbParameter("@status",newEmployee.Apellido),
+                        new OleDbParameter("@apelldio",newEmployee.Apellido),
                         new OleDbParameter("@telefono",newEmployee.Telefono),
                         new OleDbParameter("@correo",newEmployee.Correo)
                     });
 
 
                     cmd.ExecuteNonQuery();
+
+
+
                 }
 
 
@@ -143,8 +188,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             System.Windows.MessageBox.Show("Empleado creado con exito.");
         }
 
-        public static void CreateEntidad(EntidadCommercial newEntity,string type)
+        public static int CreateEntidad(EntidadCommercial newEntity,string type)
         {
+            int ID = 0;
             cn = DBConnection.MainConnection();
             try
             {
@@ -168,22 +214,27 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
 
                     cmd.ExecuteNonQuery();
+                    cmd.CommandText = "Select @@Identity";
+                    ID = (int)cmd.ExecuteScalar();
+                    
                 }
 
 
 
-
+                
                 cn.Close();
 
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("Error al crear " + type + "  " + ex);
+                return 0;
             }
 
 
 
             System.Windows.MessageBox.Show(" "+type+" creado con exito.");
+            return ID;
 
         }
 
@@ -198,10 +249,10 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 {
                     cmd.CommandText = @"UPDATE " +type+
                         " SET nombre_commercial = '"+entidad.NombreCommercial+"', nombre_contacto = '"+entidad.NombreContacto+"', direccion = '"+entidad.Direccion+"', correo_contacto = '"+entidad.CorreoContacto+"', commentario = '"+entidad.Commentario+"'   "+
-                        ",RTN = '"+entidad.RTN+"', telefono = "+entidad.Telefono+"  WHERE id = " + entidad.Id;
+                        ",RTN = '"+entidad.RTN+"', telefono = '"+entidad.Telefono+"'  WHERE id = " + entidad.Id;
 
 
-                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    /*cmd.Parameters.AddRange(new OleDbParameter[]
                     {
                         new OleDbParameter("@name",entidad.NombreCommercial),
                         new OleDbParameter("@commentario",entidad.Commentario),
@@ -212,7 +263,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         new OleDbParameter("@telefono",entidad.Telefono),
                         new OleDbParameter("@rtn",entidad.RTN),
                         new OleDbParameter("@id",entidad.Id)
-                    });
+                    });*/
 
 
                     cmd.ExecuteNonQuery();
@@ -240,19 +291,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
                     cmd.CommandText = @"UPDATE empleados "+
-                        "SET nombre = @name, apellido = @apellido, telefono = @telefono, correo = @correo  WHERE id = @id";
+                        "SET nombre = '" + newEmployee.Nombre +"', apellido = '" + newEmployee.Apellido + 
+                        "' , telefono = '"+newEmployee.Telefono+"', correo = '" + newEmployee.Correo +"'  WHERE id = " + newEmployee.Id;
 
 
-                    cmd.Parameters.AddRange(new OleDbParameter[]
-                    {
-                        new OleDbParameter("@name",newEmployee.Nombre),
-                        new OleDbParameter("@apellido",newEmployee.Apellido),
-                        new OleDbParameter("@correo",newEmployee.Correo),
-                        new OleDbParameter("@telefono",newEmployee.Telefono),
-                        new OleDbParameter("@id",newEmployee.Id)
-                    });
-
-
+                   
                     cmd.ExecuteNonQuery();
                 }
 

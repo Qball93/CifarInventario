@@ -946,8 +946,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE lote_salida " +
-                    "SET a =  false ) " +
-                    "where codigo_lote_interno = '" + codLote + "'; ", cn);
+                    "SET activo =  false  " +
+                    "where codigo_lote = '" + codLote + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
                 cn.Close();
@@ -955,7 +955,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al desactiva Lote  " + ex);
+                System.Windows.MessageBox.Show("Error al desactivar Lote  " + ex);
             }
         }
 
@@ -965,8 +965,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE lote_salida " +
-                    "SET activo =  true ) " +
-                    "where codigo_lote_interno = '" + codLote + "'; ", cn);
+                    "SET activo =  true  " +
+                    "where codigo_lote = '" + codLote + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
                 cn.Close();
@@ -1021,6 +1021,26 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 System.Windows.MessageBox.Show("Error al vaciar Lote  " + ex);
             }
 
+        }
+
+        public static void UpdateLoteConversion(string CodMp, double conversion)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE lote_entrada " +
+                    "SET conversion_unitaria =  " + conversion + 
+                    " where cod_mp = '" + CodMp + "'; ", cn);
+
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al conversion en Lotes  " + ex);
+            }
         }
 
 

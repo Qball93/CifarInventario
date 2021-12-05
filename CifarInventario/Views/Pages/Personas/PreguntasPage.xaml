@@ -58,7 +58,7 @@
             <Label
                 Width="150"
                 
-                Content="Nueva Resputes">
+                Content="Nueva Respuesta">
 
             </Label>
             <TextBox
@@ -73,6 +73,7 @@
         <Button
             Content="Actualizar Pregunta y Respuesta"
             Foreground="White"
+            Command="{Binding updatePregunta}"
             Background="{StaticResource MainThemeBrush}"
             Margin="650,550,110,100"
             />

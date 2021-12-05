@@ -34,11 +34,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 {
 
 
-                    Role tempRole = new Role();
+                    Role tempRole = new();
 
                     tempRole.RoleName = dr["nombre"].ToString();
                     tempRole.Id = int.Parse(dr["id"].ToString());
-                    tempRole.Estado = bool.Parse(dr["estado"].ToString());
+                    //tempRole.Estado = bool.Parse(dr["estado"].ToString());
 
 
                     roles.Add(tempRole);
@@ -58,9 +58,12 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return roles;
         }
 
+       
 
-        public static void CreateRole(string name)
+
+        public static int CreateRole(string name)
         {
+            int ID = 0;
             cn = DBConnection.MainConnection();
             try
             {
@@ -77,6 +80,12 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                     cmd.ExecuteNonQuery();
 
+
+                    cmd.CommandText = "Select @@Identity";
+                    ID = (int)cmd.ExecuteScalar();
+
+                    MenuQueries.iterateSubMenus(ID);
+
                     cn.Close();
 
                 }
@@ -86,6 +95,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 System.Windows.MessageBox.Show("Error al crear el rol.  " + ex);
             }
+
+
+            return ID;
         }
 
         public static void EditName(Role newRole)
@@ -96,13 +108,13 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
                     cmd.CommandText = @"UPDATE roles " +
-                    "set nombre = @nombre" +
+                    "set nombre = @nombre " +
                     "where id = @id;";
 
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                         {
-                        new OleDbParameter("@pregunta",newRole.RoleName),
+                        new OleDbParameter("@nombre",newRole.RoleName),
                         new OleDbParameter("@id",newRole.Id)
                         });
 
@@ -128,7 +140,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 cmd = new OleDbCommand("UPDATE roles " +
                     "SET estado = true " +
-                    "where id = '" + id + "'; ", cn);
+                    "where id = " + id + "; ", cn);
                 cmd.ExecuteNonQuery();
 
 

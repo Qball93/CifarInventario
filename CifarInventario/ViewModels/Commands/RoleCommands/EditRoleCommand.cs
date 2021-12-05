@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace CifarInventario.ViewModels.Commands.RoleCommands
 {
-    public class EditRoleCommand
+    public class EditRoleCommand: ICommand
     {
         public RolesVM VM { get; set; }
 
@@ -25,13 +25,12 @@ namespace CifarInventario.ViewModels.Commands.RoleCommands
 
         public bool CanExecute(object parameter)
         {
-            
-            return !VM.SelectedRole.HasErrors && VM.SelectedRole.NameCheck;
+            return !VM.NewRole.HasErrors && VM.NewRole.NameCheck;
         }
 
         public void Execute(object parameter)
         {
-            VM.agregarRole();
+            VM.editarRole();
         }
     }
 }

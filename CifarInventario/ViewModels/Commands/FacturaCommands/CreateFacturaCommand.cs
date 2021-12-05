@@ -27,7 +27,7 @@ namespace CifarInventario.ViewModels.Commands.FacturaCommands
         public bool CanExecute(object parameter)
         {
             //return true;
-            return VM.NewFactura.HasErrors && VM.NewFactura.IdCheck;
+            return !VM.NewFactura.HasErrors && VM.NewFactura.IdCheck;
         }
 
         public void Execute(object parameter)

@@ -10,11 +10,12 @@
         ResizeMode="NoResize"
         MouseDown="Window_MouseDown"
         WindowStyle="None"
-        Title="CreateFacturaModal" Height="720" Width="800">
+        Title="CreateFacturaModal" Height="780" Width="800">
     <Grid Background="{StaticResource GridBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="380"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
@@ -250,7 +251,42 @@
 
         </DockPanel>
 
-        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="4">
+
+        <DockPanel Margin="40,0,40,0"  Grid.Row="4">
+            <Label
+                Content="Vendedor"
+                VerticalAlignment="Center"
+                Margin="0,0,0,0"
+                Width="160"
+                FontSize="14">
+            </Label>
+            <ComboBox
+                VerticalAlignment="Center"
+                Width="200"
+                ItemsSource="{Binding Vendedores}"
+                SelectedIndex="1"
+                SelectedItem="{Binding NewFactura.Vendedor}"
+                FontSize="14"></ComboBox>
+
+            <Label
+                Content="Zona"
+                VerticalAlignment="Center"
+                Margin="40,0,0,0"
+                Width="100"
+                FontSize="14">
+            </Label>
+            <ComboBox
+                VerticalAlignment="Center"
+                Width="200"
+                ItemsSource="{Binding Zonas}"
+                SelectedIndex="1"
+                SelectedItem="{Binding NewFactura.Zona}"
+                FontSize="14"></ComboBox>
+
+        </DockPanel>
+
+
+        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="5">
             <CheckBox
                 DockPanel.Dock="Left"
                 FontSize="16"
@@ -287,7 +323,9 @@
 
         </DockPanel>
 
-        <DockPanel Margin="40,0,40,0" Height="60" Grid.Row="5">
+        
+
+        <DockPanel Margin="40,0,40,0" Height="60" Grid.Row="6">
 
             <Label
                     Content="Subtotal :"
@@ -326,7 +364,7 @@
         </DockPanel>
         
         
-        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="6">
+        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="7">
 
             <Button
                 Foreground="White"

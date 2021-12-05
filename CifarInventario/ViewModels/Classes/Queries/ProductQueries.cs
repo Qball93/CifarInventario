@@ -329,9 +329,28 @@ namespace CifarInventario.ViewModels.Classes.Queries
         }
 
 
-        public static void updateInventarioProductoTerminadoInfo(PtProduct pt)
+        public static void updateInventarioProductoTerminadoInfo(PtProduct pt, string oldId)
         {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE inventario_producto_terminado " +
+                    "SET id_producto_terminado = '" +pt.Id+"',nombre_producto_terminado = '" +pt.Nombre+"', precio = " + pt.Precio +
+                    " where id_producto_terminado = '" + oldId + "'; ", cn);
+                cmd.ExecuteNonQuery();
 
+
+
+
+
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al actualizar informacion de PT  " + ex);
+            }
         }
 
        /* public static void updateInvMpBaseUnit(string codMP, double conversion, string newBaseUunit)
@@ -403,7 +422,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }       
 
-        public static void updateMateriaPrimaInfo(MpProduct mp)
+        public static void updateMateriaPrimaInfo(MpProduct mp, string oldId)
         {
             cn = DBConnection.MainConnection();
             try
@@ -413,7 +432,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 cmd = new OleDbCommand("UPDATE materia_prima " +
                     "SET codigo = '" + mp.Id + "', nombre_producto = '" + mp.NombreProducto + "', unidad_metrica = '" + mp.UnidadMetrica + "', conversion_unitaria = " + mp.Conversion + ", unidad_muestra = '" + mp.UnidadMuestra + "'  "  +
-                    "where codigo = '" + mp.Id + "'; ", cn);
+                    "where codigo = '" + oldId + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
 
@@ -575,14 +594,52 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }*/
 
-        public static void updateProductoTerminadoAmount(string codPT, int amountChanged)
+        public static void updateProductoTerminadoAmount(string codPT, int amountChanged, string idLote)
         {
             cn = DBConnection.MainConnection();
             try
             {
                 cmd = new OleDbCommand("UPDATE producto_terminado " +
                     "SET existencia =  (existencia + " + amountChanged + " ) " +
-                    "where cod_pt = '" + codPT + "'; ", cn);
+                    "where cod_pt = '" + codPT + "'  and id_lote = '" + idLote  + "'  ; ", cn);
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al actualizar existencia the producto Terminado  " + ex);
+            }
+        }
+
+        public static void updateProductoTerminadoAddAmount(string codPT, int amountChanged, string idLote)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE producto_terminado " +
+                    "SET existencia =  (existencia + " + amountChanged + " ) , entrada = (entrada + " + amountChanged + " ) " +
+                    "where cod_pt = '" + codPT + "'  and id_lote = '" + idLote + "'  ; ", cn);
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al actualizar existencia the producto Terminado  " + ex);
+            }
+        }
+
+        public static void updateProductoTermnadoRemoveAmount(string codPT, int amountChanged, string idLote)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE producto_terminado " +
+                    "SET existencia =  (existencia + " + amountChanged + " ) , salida = (salida + " + amountChanged + " ) " +
+                    "where cod_pt = '" + codPT + "'  and id_lote = '" + idLote + "'  ; ", cn);
                 cmd.ExecuteNonQuery();
 
                 cn.Close();
@@ -655,6 +712,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 cn.Close();
 
                 InventoryQueries.updateLoteSalidaAmount(cantidad, lote.IdLote);
+                System.Windows.MessageBox.Show(lote.CodPT + "    " + lote.Existencia);
                 InventarioPTAddAmount(lote.CodPT, lote.Existencia);
 
             }
@@ -705,7 +763,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO inventario_producto_terminado ([id_producto],[nombre_producto],[precio]) " +
+                    cmd.CommandText = @"INSERT INTO inventario_producto_terminado ([id_producto_terminado],[nombre_producto_terminado],[precio]) " +
                         "VALUES (@idProducto,@nombreProduct,@precio) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
@@ -737,14 +795,14 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 cmd = new OleDbCommand("UPDATE inventario_producto_terminado " +
                     "SET existencia =  (existencia + " + Amount + " ), entrada = (entrada + " + Amount + ") " +
-                    "where cod_pt = '" + codPT + "'; ", cn);
+                    "where id_producto_terminado = '" + codPT + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
                 cn.Close();
             }
             catch(Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al actualizar Existencia +  " + ex);
+                System.Windows.MessageBox.Show("Error al actualizar Existencia " + ex);
             }
         }
 
@@ -753,9 +811,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             cn = DBConnection.MainConnection();
             try
             {
-                cmd = new OleDbCommand("UPDATE producto_terminado " +
-                    "SET existencia =  (existencia - " + Amount + " ), salida = (salida - " + Amount + ") " +
-                    "where cod_pt = '" + codPT + "'; ", cn);
+                cmd = new OleDbCommand("UPDATE inventario_producto_terminado " +
+                    "SET existencia =  (existencia - " + Amount + " ), salida = (salida + " + Amount + ") " +
+                    "where id_producto_terminado = '" + codPT + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
                 cn.Close();

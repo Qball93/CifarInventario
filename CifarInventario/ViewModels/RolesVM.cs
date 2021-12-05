@@ -19,6 +19,8 @@ namespace CifarInventario.ViewModels
         public RolesVM()
         {
             Roles = new ObservableCollection<Role>(RoleQueries.GetRoles());
+            NewRole = new Role();
+
             newRoleCommand = new NuevoRoleCommand(this);
             editRoleCommand = new EditRoleCommand(this);
         }
@@ -67,7 +69,7 @@ namespace CifarInventario.ViewModels
         
         public void openNewRoleModal(object parameter)
         {
-            NewRole = new Role();
+            
             var temp = new NewRoleModal(this);
             temp.ShowDialog();
 
@@ -82,18 +84,23 @@ namespace CifarInventario.ViewModels
         
         public void agregarRole()
         {
-            RoleQueries.CreateRole(NewRole.RoleName);
-            NewRole = new Role();
-            System.Windows.MessageBox.Show("Nuevo Role Creado.");
+            NewRole.Id = RoleQueries.CreateRole(NewRole.RoleName);
+            System.Windows.MessageBox.Show("Nuevo Rol Creado.");
             Roles.Add(NewRole);
+            limpiar();
         }
 
         public void editarRole()
         {
-            RoleQueries.EditName(SelectedRole);
+            RoleQueries.EditName(NewRole);
             updateCollectionInstance(NewRole);
-            System.Windows.MessageBox.Show("Nombre de Role cambiado.");
+            System.Windows.MessageBox.Show("Nombre de Rol cambiado.");
             editModal.Close();
+        }
+
+        public void limpiar()
+        {
+            NewRole = new Role();
         }
 
 

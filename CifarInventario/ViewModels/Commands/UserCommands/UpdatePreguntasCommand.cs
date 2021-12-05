@@ -25,8 +25,8 @@ namespace CifarInventario.ViewModels.Commands.UserCommands
 
         public bool CanExecute(object parameter)
         {
-            return VM.RecoveryQuestion.HasErrors && VM.RecoveryQuestion.preguntaCheck && VM.RecoveryQuestion.respuestaCheck;
-           // return !VM.NewUser.HasErrors && VM.NewUser.UserCheck;
+            return !VM.RecoveryQuestion.HasErrors && VM.RecoveryQuestion.preguntaCheck && VM.RecoveryQuestion.respuestaCheck;
+            //return false;
         }
 
         public void Execute(object parameter)

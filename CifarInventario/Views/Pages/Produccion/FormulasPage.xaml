@@ -249,8 +249,7 @@
                                   ItemsSource="{Binding NewFormulaProducts}"
                                   SelectedValue="{Binding NewFormulaSelectedProduct}"
                                   Width="200"
-                                  SelectedIndex="1"
-                                  DisplayMemberPath="nombre"
+                                  DisplayMemberPath="Nombre"
                                   Margin="20,0,0,0"
                                   FontSize="16"
                                   ToolTip="Elija MP para formula">

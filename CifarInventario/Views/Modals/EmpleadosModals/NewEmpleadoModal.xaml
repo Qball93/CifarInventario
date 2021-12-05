@@ -10,7 +10,7 @@
         BorderThickness="0"
         MouseDown="Window_MouseDown"
         WindowStyle="None"
-        Title="Nuevo Empleado" Height="200" Width="800">
+        Title="Nuevo Empleado" Height="200" Width="810">
 
 
 
@@ -95,8 +95,8 @@
 
 
         <DockPanel  Grid.Row="4" Margin="45,0,45,0">
-            <Button DockPanel.Dock="Left" Content="Limpiar" FontSize="16" Margin="420,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
-            <Button  Command="{Binding editProveedorCommand}"  Content="Crear" FontSize="16" Margin="0,0,20,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+            <Button DockPanel.Dock="Left" Content="Limpiar" Command="{Binding limpiarModal}" FontSize="16" Margin="420,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
+            <Button  Command="{Binding nuevoEmpleadoCommand}"  Content="Crear" FontSize="16" Margin="0,0,20,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
         </DockPanel>
 
     </Grid>

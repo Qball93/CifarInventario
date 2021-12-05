@@ -84,7 +84,7 @@ namespace CifarInventario.ViewModels
 
         public void agregarCliente()
         {
-            PersonaQueries.CreateEntidad(NewClient, "clientes");
+            NewClient.Id = PersonaQueries.CreateEntidad(NewClient, "clientes");
             Clientes.Add(NewClient);
         }
 

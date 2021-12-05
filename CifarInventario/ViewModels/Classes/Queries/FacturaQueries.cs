@@ -89,8 +89,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO factura ([ID],[id_cliente],[id_empleado],[total],[subtotal],[impuesto],[fechaEmision],[abonado],[pendiente],[descuento]) " +
-                        "VALUES (@idFact,@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente,@descuento) ";
+                    cmd.CommandText = @"INSERT INTO factura ([ID],[id_cliente],[id_empleado],[total],[subtotal],[impuesto],[fechaEmision],[abonado],[pendiente],[descuento],[vendedor],[zona]) " +
+                        "VALUES (@idFact,@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente,@vendedor,@zona,@descuento) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                     {
@@ -103,7 +103,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         new OleDbParameter("@fechaEmission",factura.Emission.ToShortDateString()),
                         new OleDbParameter("@abonado",OleDbType.Boolean) { Value = factura.EsAbonado },
                         new OleDbParameter("@pendiente",factura.Pendiente),
-                        new OleDbParameter("@descuento",factura.Descuento)
+                        new OleDbParameter("@descuento",factura.Descuento),
+                        new OleDbParameter("@zona",factura.Zona),
+                        new OleDbParameter("@vendedor",factura.Vendedor)
 
                        
 
@@ -172,7 +174,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT factura.ID, factura.descuento, id_cliente, id_empleado, total, subtotal, fechaEmision, abonado, impuesto, pendiente, " +
+                cmd = new OleDbCommand("SELECT factura.ID, factura.descuento,factura.vendedor,factura.zona, id_cliente, id_empleado, total, subtotal, fechaEmision, abonado, impuesto, pendiente, " +
                     " empleados.nombre & ' ' & empleados.apellido as emp_name, clientes.nombre_commercial, clientes.direccion, clientes.RTN " +
                     "FROM(factura INNER JOIN clientes ON factura.id_cliente = clientes.id) INNER JOIN empleados ON factura.id_empleado = empleados.id;", cn);
                 dr = cmd.ExecuteReader();
@@ -199,6 +201,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     fact.Sub = double.Parse(dr["subtotal"].ToString());
                     fact.Total = double.Parse(dr["total"].ToString());
                     fact.Descuento = double.Parse(dr["descuento"].ToString());
+                    fact.Vendedor = dr["vendedor"].ToString();
+                    fact.Zona = dr["zona"].ToString();
 
 
                     facturas.Add(fact);
@@ -218,7 +222,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return facturas;
         }
 
-        public static List<DetalleFactura> GetDetallesFactura(int id)
+        public static List<DetalleFactura> GetDetallesFactura(string id)
         {
             var detalles = new List<DetalleFactura>();
 
@@ -227,9 +231,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT *.factura_detalle,inventario_producto_terminado.nombre_producto_terminado from factura_detalle " +
+                cmd = new OleDbCommand("SELECT * from factura_detalle " +
                     "INNER JOIN inventario_producto_terminado on inventario_producto_terminado.id_producto_terminado = factura_detalle.id_producto " +
-                    "where id_factura = " + id + ";", cn);
+                    "where id_factura = '" + id + "';", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -245,7 +249,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     temp.Producto.Name = dr["nombre_producto_terminado"].ToString();
                     temp.LoteCod = dr["id_lote_salida"].ToString();
                     temp.Cantidad = int.Parse(dr["cantidad"].ToString());
-                    temp.Precio = double.Parse(dr["precio"].ToString());
+                    temp.Precio = double.Parse(dr["factura_Detalle.precio"].ToString());
 
 
                     detalles.Add(temp);
@@ -376,9 +380,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
             cn = DBConnection.MainConnection();
             try
             {
+#pragma warning disable CA1416 // Validate platform compatibility
                 cmd = new OleDbCommand("UPDATE factura " +
                     "SET abonado = false " +
                     "where ID = '" + idFactura + "'; ", cn);
+#pragma warning restore CA1416 // Validate platform compatibility
                 cmd.ExecuteNonQuery();
 
 
@@ -393,6 +399,45 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 System.Windows.MessageBox.Show("Error al cambiar status de factura  " + ex);
             }
+        }
+
+        public static List<string> getVendedores()
+        {
+            var vendedores = new List<string>();
+
+            cn = DBConnection.MainConnection();
+
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT * From Vendedores;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    string fact = "";
+
+                    fact= dr["Nombre"].ToString();
+
+
+                    vendedores.Add(fact);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar listado de vendedores. " + ex.ToString());
+            }
+
+            return vendedores;
         }
     }
 

@@ -86,6 +86,10 @@
 
                     </TextBlock>
 
+                    
+
+
+
                     <DataGrid   Margin="40,94,40,174"
                                 Height="400"
                                 ItemsSource="{Binding Path=Lotes}"
@@ -268,7 +272,7 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
-                    <TextBlock Margin="40,28,200,580" Text="Formulas Inactivas" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.ColumnSpan="3">
+                    <TextBlock Margin="40,28,200,580" Text="Lotes Inactivos" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.ColumnSpan="3">
 
                     </TextBlock>
 

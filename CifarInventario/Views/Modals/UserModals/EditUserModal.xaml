@@ -12,12 +12,10 @@
         WindowStyle="None"
         Title="EditUserModal" Height="450" Width="400">
     
-    <Window.DataContext>
-        <vm:UserPageVM x:Name="vm"/>
-    </Window.DataContext>
     <Grid x:Name="Main">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -35,7 +33,7 @@
 
         <DockPanel Grid.Row="1" >
             <Label Content="Nuevo Nombre" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16"/>
-            <TextBox FontSize="16" Text="{Binding SelectedUser.UserName, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox FontSize="16" Text="{Binding NewUser.UserName, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,20,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right" />
         </DockPanel>
 
@@ -44,16 +42,26 @@
             <Label Content="Rol Usuario" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16"/> 
             <ComboBox ItemsSource="{Binding Roles}" 
                       IsSynchronizedWithCurrentItem="True"
-                      SelectedValue="{Binding SelectedUser.UserRole.Id}"
+                      SelectedValue="{Binding NewUser.UserRole.Id}"
                       SelectedValuePath="Id"
                       DisplayMemberPath="RoleName"
                       FontSize="16" Margin="0,0,20,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right">
             </ComboBox>
         </DockPanel>
 
+        <DockPanel Grid.Row="4" >
+            <Label Content="Empleado" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16"/>
+            <ComboBox ItemsSource="{Binding Empleados}" 
+                      IsSynchronizedWithCurrentItem="True"
+                      SelectedValue="{Binding NewUser.Empleado}"
+                      DisplayMemberPath="Name"
+                      FontSize="16" Margin="0,0,20,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right">
+            </ComboBox>
+        </DockPanel>
+
         <DockPanel Grid.Row="3" >
             <Label Content="Estado Activo " VerticalAlignment="Center" Margin="70,0,0,0" FontSize="16"/>
-            <CheckBox IsChecked="{Binding SelectedUser.Status}" Margin="0,0,120,0" VerticalAlignment="Center" HorizontalAlignment="Right">
+            <CheckBox IsChecked="{Binding NewUser.Status}" Margin="0,0,120,0" VerticalAlignment="Center" HorizontalAlignment="Right">
                 <CheckBox.LayoutTransform>
                     <ScaleTransform ScaleX="2" ScaleY="2" />
                 </CheckBox.LayoutTransform>

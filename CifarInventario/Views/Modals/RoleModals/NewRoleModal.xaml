@@ -33,7 +33,7 @@
         </DockPanel>
 
         <DockPanel Grid.Row="5">
-            <Button x:Name="testt" Command="{Binding newRoleCommand}"  Content="Actualizar" FontSize="16" Margin="0,0,20,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+            <Button Command="{Binding newRoleCommand}"  Content="Crear" FontSize="16" Margin="0,0,20,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
         </DockPanel>
 
     </Grid>

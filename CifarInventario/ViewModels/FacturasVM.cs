@@ -14,6 +14,17 @@ using CifarInventario.ViewModels.Commands.FacturaCommands;
 using System.Windows.Input;
 using CifarInventario.ViewModels.Commands;
 using CifarInventario.Views.Modals.FacturaModals;
+using Table = iText.Layout.Element.Table;
+using Paragraph = iText.Layout.Element.Paragraph;
+using Border = iText.Layout.Borders.Border;
+using System.IO;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Kernel.Geom;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Kernel.Font;
+using iText.IO.Font.Constants;
 
 namespace CifarInventario.ViewModels
 {
@@ -24,6 +35,11 @@ namespace CifarInventario.ViewModels
             Facturas = new ObservableCollection<Factura>(FacturaQueries.GetFacturaList());
             Productos = new ObservableCollection<ProductoTeminadoParaLista>(ProductQueries.GetPTSimp());
             Clientes = new ObservableCollection<IdName>(PersonaQueries.getClientes());
+            Vendedores = new List<string>(FacturaQueries.getVendedores());
+
+
+            Zonas = new ObservableCollection<string> { "Norte", "Sur", "Este", "Oeste" };
+
             Globals.setId(1);
             editModal = new EditFacturaModal(this);
 
@@ -34,6 +50,7 @@ namespace CifarInventario.ViewModels
             NewFacturaGenerarLotes = new CreateFacturaGenerarLotes(this);
             NewFacturaAddDetalle = new CreateFacturaAddDetalle(this);
             UpdateBalanceCommand = new UpdateFacturaBalanceCommand(this);
+
             //FacturaEditModal = new OpenEditModal(this);
 
 
@@ -41,6 +58,44 @@ namespace CifarInventario.ViewModels
 
 
         }
+
+
+
+
+        private string _firstLine;
+        private string _secondLine;
+        private string _thirdLine;
+
+        public string FirstLine
+        {
+            get { return _firstLine; }
+            set
+            {
+                _firstLine = value;
+                OnPropertyChanged(nameof(FirstLine));
+            }
+        }
+
+        public string SecondLine
+        {
+            get { return _secondLine; }
+            set
+            {
+                _secondLine = value;
+                OnPropertyChanged(nameof(SecondLine));
+            }
+        }
+
+        public string ThirdLine
+        {
+            get { return _thirdLine; }
+            set
+            {
+                _thirdLine = value;
+                OnPropertyChanged(nameof(ThirdLine));
+            }
+        }
+
 
         //Combobox controls
         private bool _isLoteEnabled;
@@ -96,7 +151,30 @@ namespace CifarInventario.ViewModels
             set
             {
                 _empleados = value;
-                OnPropertyChanged("Empleados");
+                OnPropertyChanged(nameof(Empleados));
+            }
+        }
+
+        private ObservableCollection<string> _zonas;
+        public ObservableCollection<string> Zonas
+        {
+            get { return _zonas; }
+            set
+            {
+                _zonas = value;
+                OnPropertyChanged(nameof(Zonas));
+            }
+        }
+
+
+        private List<string> _vendedores;
+        public List<string> Vendedores
+        {
+            get { return _vendedores; }
+            set
+            {
+                _vendedores = value;
+                OnPropertyChanged(nameof(Vendedores));
             }
         }
 
@@ -234,6 +312,10 @@ namespace CifarInventario.ViewModels
         public ICommand openNewFacturaModal => new DelegateCommand(OpenNewFacturaModal);
         public ICommand removeProductFromFactura => new DelegateCommand(RemoveProductFromFactura);
         public ICommand openEditModal => new DelegateCommand(OpenEditModal);
+        public ICommand openExportPdf => new DelegateCommand(OpenExportModal);
+        public ICommand limpiarExportPdf => new DelegateCommand(limpiarExportModal);
+        public ICommand exportFacturaPdf => new DelegateCommand(ExportFacturaPDF);
+        public ICommand exportList => new DelegateCommand(ExportList);
 
         public CreateFacturaAddDetalle NewFacturaAddDetalle { get; set; }
         public CreateFacturaGenerarLotes NewFacturaGenerarLotes { get; set; }
@@ -241,6 +323,150 @@ namespace CifarInventario.ViewModels
         //public OpenEditModal FacturaEditModal { get; set; }
         public UpdateFacturaBalanceCommand UpdateBalanceCommand {get; set;}
         
+
+
+        public void ExportList(object parameter)
+        {
+
+            string DEST = @"D:\Downloads\ListadoFactura.pdf";
+
+            
+        }
+
+
+        public void limpiarExportModal(object parameter)
+        {
+            FirstLine = "";
+            SecondLine = "";
+            ThirdLine = "";
+        }
+
+
+
+        public void OpenExportModal(object parameter)
+        {
+            FirstLine = "";
+            SecondLine = "";
+            ThirdLine = "";
+
+            var temp = new PrePrintModal(this);
+
+            temp.ShowDialog();
+        }
+
+        public void ExportFacturaPDF(object paramter)
+        {
+            string DEST = @"D:\Downloads\factura" + SelectedFactura.IdFactura + ".pdf";
+
+            DetallesSelected = new ObservableCollection<DetalleFactura>(FacturaQueries.GetDetallesFactura(SelectedFactura.IdFactura));
+
+            FileInfo file = new FileInfo(DEST);
+            file.Directory.Create();
+
+
+            PdfWriter writer = new PdfWriter(DEST);
+
+            PdfDocument pdf = new PdfDocument(writer);
+
+            Document document = new Document(pdf, PageSize.A4);
+
+            document.SetMargins(40, 40, 20, 20);
+
+            PdfFont italized = PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLDITALIC);
+            PdfFont normal = PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN);
+
+
+
+            string valor = "L.47.20";
+            string descuento = "L.00.00";
+            string valorTotal = "L.123.42";
+
+
+
+            Paragraph p = new Paragraph("\n\n\n\n\n\n\n\n\n\n");
+            p.Add(char.MinValue + "                                         " + SelectedFactura.Emission + " \n\n\n");
+            p.Add(char.MinValue + "                                " + SelectedFactura.Cliente.Name + "\n\n");
+
+            p.SetFontSize(9);
+            p.SetFont(normal);
+            document.Add(p);
+
+
+            Table details = new Table(UnitValue.CreatePercentArray(new float[] { 3.0f, 2.0f })).UseAllAvailableWidth();
+
+            details.SetTextAlignment(TextAlignment.LEFT);
+            details.SetFontSize(9);
+            details.SetFont(normal);
+
+            details.AddCell(new Cell().Add(new Paragraph(char.MinValue + "                                   " + SelectedFactura.Direccion)).SetBorder(Border.NO_BORDER));
+            details.AddCell(new Cell().Add(new Paragraph(SelectedFactura.RTN)).SetBorder(Border.NO_BORDER));
+
+
+            document.Add(details);
+
+            document.Add(new Paragraph("\n\n"));
+
+
+
+            Table table = new Table(UnitValue.CreatePercentArray(new float[] { 1.1f, 3.4f, 0.9f, 0.9f, 1.1f })).UseAllAvailableWidth();
+
+
+
+            table.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
+            table.SetFontSize(9);
+            table.SetFont(normal);
+
+
+            foreach (var element in DetallesSelected)
+            {
+                table.AddCell(new Cell().Add(new Paragraph(char.MinValue + "      " + element.Cantidad.ToString())).SetBorder(Border.NO_BORDER));
+                table.AddCell(new Cell().Add(new Paragraph(element.Producto.Name + "    " + element.LoteCod)).SetBorder(Border.NO_BORDER));
+                table.AddCell(new Cell().Add(new Paragraph(element.Precio.ToString())).SetBorder(Border.NO_BORDER));
+                table.AddCell(new Cell().Add(new Paragraph(descuento)).SetBorder(Border.NO_BORDER));
+                table.AddCell(new Cell().Add(new Paragraph(valorTotal)).SetBorder(Border.NO_BORDER));
+
+
+
+
+
+            }
+
+
+
+
+            
+
+
+
+
+            document.Add(table);
+
+            Paragraph letras = new Paragraph(FirstLine + "\n");
+            letras.Add(SecondLine + "\n");
+            letras.Add(ThirdLine);
+            letras.SetFixedPosition(80, 115, 300);
+            letras.SetFontSize(9);
+            document.Add(letras);
+
+
+
+            Paragraph x = new Paragraph("Cantidad Total\n");
+            x.Add("Exento\n");
+            x.Add("Exonerado\n");
+            x.Add("Gravado 15\n");
+            x.Add("Gravado 18\n");
+            x.Add("15 isv\n");
+            x.Add("18 isv\n");
+            x.Add("Total a Pagar\n");
+            x.SetFixedPosition(450, 95, 200);
+            x.SetFontSize(9);
+            x.SetFixedLeading(18);
+
+            document.Add(x);
+
+            document.Close();
+
+        }
 
         public void OpenEditModal(object parameter)
         {
@@ -288,7 +514,7 @@ namespace CifarInventario.ViewModels
              NewFactura.Imp = 0.00;*/
 
 
-            if (NewFactura.Descuento > NewFactura.Total)
+            if (NewFactura.Descuento > NewFactura.Sub)
             {
                 System.Windows.MessageBox.Show("Descuento no puede ser mayor al Total de la Factura");
             }
@@ -321,6 +547,8 @@ namespace CifarInventario.ViewModels
                     foreach (var element in NewFacturaDetalles)
                     {
                         FacturaQueries.CreateDetalle(element, NewFactura.IdFactura);
+                        ProductQueries.updateProductoTerminadoAmount(element.Producto.ID, -element.Cantidad, element.LoteCod);
+                        ProductQueries.InventarioPTRemoveAmount(element.Producto.ID, element.Cantidad);
                     }
 
                     System.Windows.MessageBox.Show("Factura Creada");
@@ -390,7 +618,7 @@ namespace CifarInventario.ViewModels
                 NewFacturaNewDetalle.Producto.ID = SelectedProduct.CodPT;
                 NewFacturaNewDetalle.Precio = SelectedProduct.Precio;
                 NewFacturaNewDetalle.Total = Math.Round(SelectedProduct.Precio * NewFacturaNewDetalle.Cantidad, 2);
-                NewFactura.Sub += NewFacturaNewDetalle.Total;
+                NewFactura.Sub += Math.Round(NewFacturaNewDetalle.Total,2);
                 temp = NewFacturaNewDetalle;
                 NewFacturaDetalles.Add(temp);
                 ProductPairs.Add(tempPair);
@@ -403,11 +631,10 @@ namespace CifarInventario.ViewModels
             
         }
 
-        public void AplicarDescuentoModal(object parameter)
+        public void AplicarDescuentoModal(object parameter)       
         {
+        }    
 
-        }
-        
         public void RemoveProductFromFactura(object parameter)
         {
 
@@ -450,6 +677,11 @@ namespace CifarInventario.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        
+
+
+
 
         private void OnPropertyChanged(string propertyName)
         {

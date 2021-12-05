@@ -25,7 +25,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
             cn = DBConnection.MainConnection();
             try
             {
-                cmd = new OleDbCommand("SELECT * FROM usuarios inner join roles ON usuarios.id_rol = roles.id", cn);
+                cmd = new OleDbCommand("SELECT * FROM (usuarios INNER JOIN roles ON usuarios.id_rol = roles.id)" +
+                    "INNER JOIN empleados on empleados.id = usuarios.id_empleado", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -36,14 +37,19 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 {
                     User tempUser = new User();
                     Role tempRole = new Role();
+                    IdName empleado = new IdName();
 
                     tempUser.UserName = dr["usuario"].ToString();
                     tempRole.Id = int.Parse(dr["roles.id"].ToString());
-                    tempRole.RoleName = dr["nombre"].ToString();
+                    tempRole.RoleName = dr["roles.nombre"].ToString();
                     tempUser.Status = Convert.ToBoolean(dr["status"]);
                     tempUser.id = int.Parse(dr["usuarios.id"].ToString());
+                    empleado.ID = dr["id_empleado"].ToString();
+                    empleado.Name = dr["empleados.nombre"].ToString();
+
 
                     tempUser.UserRole = tempRole;
+                    tempUser.Empleado = empleado;
 
 
                     users.Add(tempUser);
@@ -106,14 +112,14 @@ namespace CifarInventario.ViewModels.Classes.Queries
         }
 
 
-        public static void SetNewUserInfo(int newRole, bool newStatus, string newUsername, int id)
+        public static void SetNewUserInfo(int newRole, bool newStatus, string newUsername, int id, int NewEmp)
         {
             cn = DBConnection.MainConnection();
             try
             {
                 cmd = new OleDbCommand("UPDATE usuarios " +
-                    "SET id_rol = " + newRole + " ,status = " + newStatus + ", usuario = '" + newUsername +"' "+
-                    "WHERE id = " + id + ";", cn);
+                    "SET id_rol = " + newRole + " ,status = " + newStatus + ", usuario = '" + newUsername +"', id_empleado = "+ NewEmp +
+                    " WHERE id = " + id + ";", cn);
                 cmd.ExecuteNonQuery();
 
 
@@ -130,35 +136,44 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
-        public static void CreateNewUser(int newRole, bool newStatus, string newUsername, string password, string salt)
+        public static void CreateNewUser(int newRole, bool newStatus, string newUsername, string password, string salt, int UserID)
         {
+
+            int ID = 0;
             cn = DBConnection.MainConnection();
             try
             {
 
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO usuarios ([id_rol],[status],[usuario],[password],[salt])" +
-                        "VALUES (@id_rol,@status,@usuario,@password,@salt)";
+                    cmd.CommandText = @"INSERT INTO usuarios ([id_rol],status,[usuario],[password],[salt],[id_empleado])" +
+                        "VALUES (@id_rol,@status,@usuario,@password,@salt,@empleado)";
 
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                     {
                         new OleDbParameter("@id_rol",newRole),
-                        new OleDbParameter("@status",newStatus),
+                        new OleDbParameter("@status", OleDbType.Boolean) {Value = newStatus },
                         new OleDbParameter("@usuario",newUsername),
                         new OleDbParameter("@password",password),
-                        new OleDbParameter("@salt",salt)
+                        new OleDbParameter("@salt",salt),
+                        new OleDbParameter("@empleado",UserID)
                     });
 
+                   // cmd.Parameters[1].Value = newStatus;
 
                     cmd.ExecuteNonQuery();
+
+                    cmd.CommandText = "Select @@Identity";
+                    ID = (int)cmd.ExecuteScalar();
+                    createPregunta(ID);
                 }
 
 
 
-
+                    
                     cn.Close();
+
 
             }
             catch (Exception ex)
@@ -170,11 +185,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
             System.Windows.MessageBox.Show("Usuario creado con exito.");
         }
 
+        public static void AsignarEmpleadoAUsuario() { }
 
-        public static void CreatePregunta(Preguntas pregunta)
-        {
-
-        }
 
         public static Preguntas getPregunta(string userName)
         {
@@ -187,7 +199,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"select pregunta,respuesta,salt,Id_Usuario from Preguntas " +
+                    cmd.CommandText = @"select Preguntas.pregunta, Preguntas.respuesta, Preguntas.salt, Preguntas.Id_Usuario from Preguntas " +
                     "INNER JOIN usuarios on usuarios.id = Preguntas.Id_Usuario " +
                     "WHERE usuarios.usuario = @UserName";
 
@@ -240,7 +252,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
                     cmd.CommandText = @"UPDATE Preguntas " +
-                    "set pregunta = @pregunta, respuesta = @respuesta, @salt = salt " +
+                    "set pregunta = @pregunta, respuesta = @respuesta, salt = @salt " +
                     "where Id_Usuario = @id;";
 
 
@@ -268,7 +280,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         }
 
-        public static void createPregunta(Preguntas pregunta)
+        public static void createPregunta(int userID)
         {
             cn = DBConnection.MainConnection();
             try
@@ -276,15 +288,15 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
                     cmd.CommandText = @"INSERT INTO Preguntas ([Id_Usuario],[pregunta],[respuesta],[salt]) " +
-                    "values (@id,@pregunta,@respuesta@salt) ";
-
+                    "values (@id,@pregunta,@respuesta,@salt) ";
+                    
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                         {
-                        new OleDbParameter("@id",pregunta.UserId),
-                        new OleDbParameter("@pregunta",pregunta.Pregunta),
-                        new OleDbParameter("@respuesta",pregunta.Respuesta),
-                        new OleDbParameter("@salt",pregunta.Salt)
+                        new OleDbParameter("@id",userID),
+                        new OleDbParameter("@pregunta","Este usuario no tiene pregunta asignada"),
+                        new OleDbParameter("@respuesta","ASFWE21QZXQCA123@#!@"),
+                        new OleDbParameter("@salt","ASFWE21QZXQCA123@#!@")
                         });
 
                     cmd.ExecuteNonQuery();
@@ -296,7 +308,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al conseguir pregunta recuperacion.  " + ex);
+                System.Windows.MessageBox.Show("Error al crear pregunta recuperacion.  " + ex);
             }
         }
 

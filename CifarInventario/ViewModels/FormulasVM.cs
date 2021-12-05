@@ -23,8 +23,8 @@ namespace CifarInventario.ViewModels
         {
             //General setup
             Formulas = new ObservableCollection<Formula>(FormulaQueries.GetFormulas());
-            NewFormulaProducts = new ObservableCollection<formulaProduct>(ProductQueries.GetFormulaProducts());
             InactiveFormulas = new ObservableCollection<Formula>(FormulaQueries.GetFormulasInactivas());
+            NewFormulaProducts = new ObservableCollection<formulaProduct>(ProductQueries.GetFormulaProducts());
 
             NuevaFormulaCommand = new NewFormulaCommand(this);
             AddDetalleNewFormulaDataGrid = new NewFormulaDetalleDatagridCommand(this);
@@ -272,12 +272,19 @@ namespace CifarInventario.ViewModels
         public ICommand formulaProcedimientoModal => new DelegateCommand(FormulaProcedimientoModal);
         public ICommand deleteProcedimientoDetalle => new DelegateCommand(EliminarProcedimientoDetalle);
         public ICommand editarProcedimientoDetalle => new DelegateCommand(EditarProcediminetoDetalle);
+        public ICommand limpiarFormula => new DelegateCommand(limpiar);
         #endregion
 
         public EditDetalleCommand editDetalleCommand { get; set; }
         public NewDetalleCommand newDetalleCommand { get; set; }
         public NewInstructionCommand newInstructionCommand { get; set; }
         public EditFormulaCommand editFormulacommand { get; set; }
+
+
+        public void limpiar(object parameter)
+        {
+            NewFormula = new Formula();
+        }
 
         public void SetFormulaActive(object parameter)
         {
@@ -290,6 +297,9 @@ namespace CifarInventario.ViewModels
 
         public void UpdateDetallesList(object parameter)
         {
+
+
+            
             Detalles = new ObservableCollection<DetalleFormula>(FormulaQueries.GetDetalles(SelectedFormula.CodFormula));
         }
 
@@ -543,7 +553,9 @@ namespace CifarInventario.ViewModels
 
                 //System.Windows.MessageBox.Show("This is form" + NewFormula.FormaFarm);
                 FormulaQueries.agregarFormula(NewFormulaDetalles.ToList(), NewFormula);
-                //System.Windows.MessageBox.Show("Formula Maestra creada.");
+                Formulas.Add(NewFormula);
+                System.Windows.MessageBox.Show("Formula Maestra creada.");
+                limpiar(1);
             }
         }
 

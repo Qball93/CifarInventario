@@ -69,6 +69,7 @@ namespace CifarInventario.Models
                 _nombreContacto = value;
                 ClearErrors(nameof(NombreContacto));
                 isAlphaNumeric(value, nameof(NombreContacto));
+                IsEmptyString(value, nameof(NombreContacto));
                 OnPropertyChanged(nameof(NombreContacto));
             }
         }
@@ -109,6 +110,7 @@ namespace CifarInventario.Models
                 _correoContacto = value;
                 ClearErrors(nameof(CorreoContacto));
                 isAlphaNumeric(value, nameof(CorreoContacto));
+                IsEmptyString(value, nameof(CorreoContacto));
                 OnPropertyChanged(nameof(CorreoContacto));
             }
         }
@@ -121,6 +123,7 @@ namespace CifarInventario.Models
             {
                 _commentario = value;
                 ClearErrors(nameof(Commentario));
+                IsEmptyString(value, nameof(Commentario));
                 isAlphaNumeric(value, nameof(Commentario));
                 OnPropertyChanged(nameof(Commentario));
             }
@@ -133,6 +136,7 @@ namespace CifarInventario.Models
             {
                 _rtn = value;
                 ClearErrors(nameof(RTN));
+                IsEmptyString(value, nameof(RTN));
                 isAlphaNumeric(value, nameof(RTN));
                 OnPropertyChanged(nameof(RTN));
             }

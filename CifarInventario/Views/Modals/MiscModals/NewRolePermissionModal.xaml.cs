@@ -4,41 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using CifarInventario.ViewModels;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using CifarInventario.ViewModels;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views.Modals.UserModals
+namespace CifarInventario.Views.Modals.MiscModals
 {
     /// <summary>
-    /// Interaction logic for NewUser.xaml
+    /// Interaction logic for NewRolePermissionModal.xaml
     /// </summary>
-    public partial class NewUser : Window
+    public partial class NewRolePermissionModal : Window
     {
-        public NewUser(UserPageVM vm)
+        public NewRolePermissionModal(PermisoVM vm)
         {
             InitializeComponent();
+
             DataContext = vm;
-        }
-
-        private void ColumnDefinition_IsKeyboardFocusWithinChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

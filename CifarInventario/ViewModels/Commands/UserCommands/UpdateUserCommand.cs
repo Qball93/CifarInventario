@@ -31,7 +31,7 @@ namespace CifarInventario.ViewModels.Commands.UserCommands
 
         public void Execute(object parameter)
         {
-            VM.CreateUser();
+            VM.UpdateUser();
         }
     }
 }

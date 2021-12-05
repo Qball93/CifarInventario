@@ -5,6 +5,7 @@ using CifarInventario.Models;
 using CifarInventario.ViewModels.Classes;
 using System.Linq;
 using CifarInventario.ViewModels.Classes.Queries;
+using CifarInventario.ViewModels.Commands.UserCommands;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +17,13 @@ namespace CifarInventario.ViewModels
         {
             App.Current.Properties["userID"] = "master";
             RecoveryQuestion = new Preguntas();
-            SingleQuestion = UserQueries.getPregunta(App.Current.Properties["userID"].ToString()).Respuesta;
+            RecoveryQuestion = UserQueries.getPregunta(App.Current.Properties["userID"].ToString());
+            SingleQuestion = RecoveryQuestion.Pregunta;
+            RecoveryQuestion.Pregunta = "";
+            RecoveryQuestion.Respuesta = "";
+            RecoveryQuestion.preguntaCheck = false;
+            RecoveryQuestion.respuestaCheck = false;
+            updatePregunta = new UpdatePreguntasCommand(this);
 
 
         }
@@ -44,6 +51,7 @@ namespace CifarInventario.ViewModels
             }
         }
 
+        public UpdatePreguntasCommand updatePregunta { get; set; }
 
 
 
@@ -52,9 +60,14 @@ namespace CifarInventario.ViewModels
             RecoveryQuestion.Salt = Hasher.generateSalt();
             RecoveryQuestion.Respuesta = Hasher.Encrypt(RecoveryQuestion.Respuesta, RecoveryQuestion.Salt);
 
-            UserQueries.CreatePregunta(RecoveryQuestion);
+            UserQueries.updatePregunta(RecoveryQuestion);
 
             SingleQuestion = RecoveryQuestion.Pregunta;
+
+            RecoveryQuestion.Pregunta = "";
+            RecoveryQuestion.Respuesta = "";
+            RecoveryQuestion.preguntaCheck = false;
+            RecoveryQuestion.respuestaCheck = false;
 
 
             System.Windows.MessageBox.Show("Pregunta Actualizada");

@@ -66,14 +66,22 @@ namespace CifarInventario.ViewModels
 
         public ICommand openEdit => new DelegateCommand(OpenEditModal);
         public ICommand openNew => new DelegateCommand(OpenNewModal);
+        public ICommand limpiar => new DelegateCommand(Limpiar);
         public NuevoProveedorCommand nuevoProveedorCommand { get; set; }
         public EditProveedorCommand editProveedorCommand { get; set; }
         public EditarProveedor editModal { get; set; }
 
 
+        public void Limpiar(object parameter)
+        {
+            NuevoProveedor = new EntidadCommercial();
+        }
+
+
         public void OpenEditModal(object parameter)
         {
             editModal = new EditarProveedor(this);
+            NuevoProveedor = new EntidadCommercial(SelectedProveedor);
             editModal.ShowDialog();
         }
 
@@ -87,15 +95,31 @@ namespace CifarInventario.ViewModels
 
         public void CreateProveedor()
         {
-            PersonaQueries.CreateEntidad(NuevoProveedor,"proveedor");
+            NuevoProveedor.Id = PersonaQueries.CreateEntidad(NuevoProveedor,"proveedor");
+            Proveedores.Add(NuevoProveedor);
         }
 
         public void EditProveedor()
         {
 
-            PersonaQueries.updateEntidad(SelectedProveedor, "proveedor");
+            PersonaQueries.updateEntidad(NuevoProveedor, "proveedor");
+            updateInstanceCollection(NuevoProveedor);
             editModal.Close();
         }
+
+        public void updateInstanceCollection(EntidadCommercial updatedInstance)
+        {
+            SelectedProveedor.Id = updatedInstance.Id;
+            SelectedProveedor.NombreCommercial = updatedInstance.NombreCommercial;
+            SelectedProveedor.NombreContacto = updatedInstance.NombreContacto;
+            SelectedProveedor.Direccion = updatedInstance.Direccion;
+            SelectedProveedor.Telefono = updatedInstance.Telefono;
+            SelectedProveedor.CorreoContacto = updatedInstance.CorreoContacto;
+            SelectedProveedor.Commentario = updatedInstance.Commentario;
+            SelectedProveedor.RTN = updatedInstance.RTN;
+        }
+
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -11,8 +11,10 @@ namespace CifarInventario.Models
     public class Role: Validators, INotifyPropertyChanged
     {
 
-        public bool NameCheck = false;
-
+        public bool NameCheck;
+        private int _id;
+        private string _roleName;
+        private bool _estado;
 
         public Role(Role old)
         {
@@ -36,11 +38,13 @@ namespace CifarInventario.Models
 
         public string RoleName
         {
-            get { return _roleName;  }
+            get { return _roleName; }
             set
             {
                 NameCheck = true;
                 _roleName = value;
+                ClearErrors(nameof(RoleName));
+                IsEmptyString(value, nameof(RoleName));
                 isAlphaNumeric(value, nameof(RoleName));
                 OnPropertyChanged(nameof(RoleName));
             }
@@ -58,11 +62,7 @@ namespace CifarInventario.Models
 
 
 
-        private int _id;
-
-        private string _roleName;
-
-        private bool _estado;
+        
         
 
 
@@ -116,6 +116,7 @@ namespace CifarInventario.Models
             set
             {
                 _pregunta = value;
+                preguntaCheck = true;
                 ClearErrors(nameof(Pregunta));
                 IsEmptyString(value, nameof(Pregunta));
                 isAlphaNumeric(value, nameof(Pregunta));
@@ -130,6 +131,7 @@ namespace CifarInventario.Models
             set
             {
                 _respuesta = value;
+                respuestaCheck = true;
                 ClearErrors(nameof(Respuesta));
                 IsEmptyString(value, nameof(Respuesta));
                 isAlphaNumeric(value, nameof(Respuesta));
@@ -168,6 +170,7 @@ namespace CifarInventario.Models
         public int id { get; set; }
         public string salt { get; set; }
         public Role UserRole { get; set; }
+        
 
         public User(User old)
         {
@@ -175,10 +178,11 @@ namespace CifarInventario.Models
             salt = old.salt;
             UserRole = old.UserRole;
             UserName = old.UserName;
-            Password = old.Password;
             Status = old.Status;
+            Empleado = old.Empleado;
 
         }
+
         public User()
         {
 
@@ -190,8 +194,8 @@ namespace CifarInventario.Models
             get { return _userName; }
             set
             {
-                UserCheck = true;
                 _userName = value;
+                UserCheck = true;
                 ClearErrors(nameof(UserName));
                 IsEmptyString(value, nameof(UserName));
                 isAlphaNumeric(value, nameof(UserName));
@@ -227,6 +231,16 @@ namespace CifarInventario.Models
             }
         }
 
+        private IdName _empleado;
+        public IdName Empleado
+        {
+            get { return _empleado; }
+            set
+            {
+                _empleado = value;
+                OnPropertyChanged(nameof(Empleado));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -33,7 +33,9 @@ namespace CifarInventario.ViewModels
         public UserPageVM()
         {
             Usuarios = new ObservableCollection<User>(UserQueries.GetUsers());
+            Empleados = new List<IdName>(PersonaQueries.GetEmpleadosDropDown());
             Roles = new ObservableCollection<Role>(UserQueries.GetRoles());
+            SelectedRole = new Role();
             NuevoUsuarioCommand = new NewUserCommand(this);
             UpdateUsuarioCommand = new UpdateUserCommand(this);
             NewPasswordCommand = new UpdateUserPassword(this);
@@ -76,6 +78,19 @@ namespace CifarInventario.ViewModels
         }
 
 
+        private List<IdName> _empleados;
+
+        public List<IdName> Empleados
+        {
+            get { return _empleados; }
+            set
+            {
+                _empleados = value;
+                OnPropertyChanged(nameof(Empleados));
+            }
+        }
+
+
         //public ObservableCollection<Role> Roles { get; set; }
 
 
@@ -92,6 +107,9 @@ namespace CifarInventario.ViewModels
         public ObservableCollection<Role> Roles { get; set; }
 
         public Role SelectedRole { get; set; }
+
+
+        public EditUserModal editModal { get; set; }
 
 
         private User _newUser;
@@ -127,7 +145,9 @@ namespace CifarInventario.ViewModels
             NewUser.salt = Hasher.generateSalt();
             NewUser.Password = Hasher.Encrypt(NewUser.Password, NewUser.salt);
 
-            UserQueries.CreateNewUser(SelectedRole.Id, Estado, NewUser.UserName, NewUser.Password, NewUser.salt);
+           // System.Windows.MessageBox.Show(SelectedRole.Id + " " + Estado + " " + NewUser.UserName + " " + NewUser.Password + " " + NewUser.salt + " " + NewUser.Empleado.ID);
+
+            UserQueries.CreateNewUser(SelectedRole.Id, NewUser.Status, NewUser.UserName, NewUser.Password, NewUser.salt, int.Parse(NewUser.Empleado.ID));
             NewUser.UserRole = SelectedRole;
 
             Usuarios.Add(NewUser);
@@ -141,7 +161,17 @@ namespace CifarInventario.ViewModels
 
         public void UpdateUser()
         {
-            UserQueries.SetNewUserInfo(SelectedUser.UserRole.Id, SelectedUser.Status, SelectedUser.UserName, SelectedUser.id);
+
+
+            
+            UserQueries.SetNewUserInfo(NewUser.UserRole.Id, NewUser.Status, NewUser.UserName, NewUser.id, int.Parse(NewUser.Empleado.ID));
+
+            updateCollectionInstance();
+
+            System.Windows.MessageBox.Show("Usuario Actualizado");
+
+
+            editModal.Close();
         }
 
         public void UpdateUserPassword()
@@ -176,11 +206,25 @@ namespace CifarInventario.ViewModels
 
         public void UpdateUserModal(object parameter)
         {
-            var UpdateView = new EditUserModal(this);
 
-            UpdateView.ShowDialog();
+            NewUser = new User(SelectedUser);
+
+
+            editModal = new EditUserModal(this);
+            editModal.ShowDialog();
+
+
 
            // Usuarios.Remove(Usuarios.Where(i => i.id == SelectedUser.id).Single());
+
+        }
+
+
+        public void updateCollectionInstance()
+        {
+            SelectedUser.UserName = NewUser.UserName;
+            SelectedUser.Empleado = NewUser.Empleado;
+            SelectedUser.UserRole = NewUser.UserRole;
 
         }
 

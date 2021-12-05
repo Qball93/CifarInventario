@@ -102,7 +102,13 @@ namespace CifarInventario.ViewModels
             }
             else
             {
-                ProductQueries.updateMateriaPrimaInfo(NewProduct);
+
+                if(NewProduct.Conversion != SelectedMP.Conversion)
+                {
+                    InventoryQueries.UpdateLoteConversion(SelectedMP.Id, NewProduct.Conversion);
+                }
+                ProductQueries.updateMateriaPrimaInfo(NewProduct, SelectedMP.Id);
+                
                 updateCollectionInstance(NewProduct);
                 System.Windows.MessageBox.Show("Informacion de MP actualizada.");
                 NewModal.Close();

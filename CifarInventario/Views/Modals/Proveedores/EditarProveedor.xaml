@@ -10,7 +10,7 @@
         BorderThickness="0"
         MouseDown="Window_MouseDown"
         WindowStyle="None"
-        Title="EditarProveedor" Height="450" Width="800">
+        Title="EditarProveedor" Height="370" Width="810">
 
 
 
@@ -47,7 +47,7 @@
                         <TextBox FontSize="16"
                                  ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                  RelativeSource={x:Static RelativeSource.Self}}" 
-                     Text="{Binding SelectedProveedor.NombreCommercial,
+                     Text="{Binding NuevoProveedor.NombreCommercial,
                             Mode=TwoWay,
                             ValidatesOnDataErrors=True,
                             UpdateSourceTrigger=PropertyChanged}"
@@ -58,7 +58,7 @@
                         <TextBox FontSize="16"
                                  ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                  RelativeSource={x:Static RelativeSource.Self}}" 
-                     Text="{Binding SelectedProveedor.Direccion,
+                     Text="{Binding NuevoProveedor.Direccion,
                             Mode=TwoWay,
                             ValidatesOnDataErrors=True,
                             UpdateSourceTrigger=PropertyChanged}"
@@ -71,7 +71,7 @@
                     <DockPanel DockPanel.Dock="Top" Height="50">
                         <Label Content="Nombre Contacto" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
                         <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                    Text="{Binding SelectedProveedor.NombreContacto, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding NuevoProveedor.NombreContacto, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,0,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right" />
                     </DockPanel>
                     <DockPanel>
@@ -80,7 +80,7 @@
                                Margin="20,0,0,0"
                                FontSize="14"/>
                         <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                        Text="{Binding SelectedProveedor.Telefono, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                        Text="{Binding NuevoProveedor.Telefono, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                          Margin="0,0,0,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right" />
 
 
@@ -108,7 +108,7 @@
                         <TextBox FontSize="16"
                                  ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                  RelativeSource={x:Static RelativeSource.Self}}" 
-                     Text="{Binding SelectedProveedor.CorreoContacto,
+                     Text="{Binding NuevoProveedor.CorreoContacto,
                             Mode=TwoWay,
                             ValidatesOnDataErrors=True,
                             UpdateSourceTrigger=PropertyChanged}"
@@ -124,7 +124,7 @@
                         <TextBox FontSize="16"
                                  ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
                                  RelativeSource={x:Static RelativeSource.Self}}" 
-                     Text="{Binding SelectedProveedor.RTN,
+                     Text="{Binding NuevoProveedor.RTN,
                             Mode=TwoWay,
                             ValidatesOnDataErrors=True,
                             UpdateSourceTrigger=PropertyChanged}"
@@ -141,15 +141,15 @@
             <Label FontSize="18" DockPanel.Dock="Left" Height="40" Width="150"  Content="Comentarios"></Label>
             <TextBox Margin="20,20,50,20" TextWrapping="Wrap" AcceptsReturn="True"
                        ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                       Text="{Binding SelectedProveedor.Commentario, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding NuevoProveedor.Commentario, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                        Background="LightBlue"
                        ></TextBox>
         </DockPanel>
 
 
         <DockPanel  Grid.Row="4" Margin="45,0,45,0">
-            <Button DockPanel.Dock="Left" Content="Limpiar" FontSize="16" Margin="420,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
-            <Button  Command="{Binding editProveedorCommand}"  Content="Crear" FontSize="16" Margin="0,0,20,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
+            <Button DockPanel.Dock="Left" Command="{Binding limpiar}" Content="Limpiar" FontSize="16" Margin="420,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
+            <Button  Command="{Binding editProveedorCommand}"  Content="Editar" FontSize="16" Margin="0,0,20,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
         </DockPanel>
 
     </Grid>

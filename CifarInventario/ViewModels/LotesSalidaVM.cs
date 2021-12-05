@@ -24,7 +24,9 @@ namespace CifarInventario.ViewModels
 
             Lotes = new ObservableCollection<LoteSalida>(InventoryQueries.GetLoteSalidas());
             //Transformaciones = new ObservableCollection<LoteSalida>(InventoryQueries.GetLotesTransform());
-            SelectedLote = Lotes[0];
+
+
+            
             //MessageBox.Show(SelectedLote.CodLote);
             createPackageCommand = new CreatePTFromLoteCommand(this);
             generateLotesMp = new GenerateLotesFromMpCommand(this);
@@ -37,7 +39,7 @@ namespace CifarInventario.ViewModels
             NewLotePackageDetalle = new LotePackageDetalle();
 
 
-            LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
+            
             LotesInactive = new ObservableCollection<LoteSalida>(InventoryQueries.GetLotesInactivos());
             PTList = new ObservableCollection<ProductoTeminadoParaLista>(ProductQueries.GetPTSimp());
             ListadoMP = new ObservableCollection<formulaProduct>(ProductQueries.GetAllContainersMP());
@@ -249,12 +251,28 @@ namespace CifarInventario.ViewModels
 
         public ICommand deleteEmpauqe => new DelegateCommand(EliminarLotePackage);
 
+        public ICommand loadPaquetes => new DelegateCommand(LoadPaquetes);
+
+
         public CreatePTFromLoteCommand createPackageCommand { get; set; }
 
         public GenerateLotesFromMpCommand generateLotesMp { get; set; }
 
 
         public AgregarDetalleEmpaque agregarDetalleEmpaque { get; set; }
+
+
+        public void LoadPaquetes(object parameter)
+        {
+            if(SelectedLote != null)
+            {
+                LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
+            }
+            else
+            {
+                LotesPaquete = new ObservableCollection<LotePackage>();
+            }
+        }
 
         public void OpenDetallePackageModal(object parameter)
         {
@@ -305,25 +323,33 @@ namespace CifarInventario.ViewModels
         
         public void UpdateFinishedProductList(object parameter)
         {
-            LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
+            if (SelectedLote != null)
+            {
+                LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
+            }
+            else
+            {
+                LotesPaquete = new ObservableCollection<LotePackage>();
+            }
         }
 
         public void SetLoteActive(object parameter)
         {
             InventoryQueries.SetLoteSalidaActive(SelectedInactive.CodLote);
 
-            Lotes.Remove(SelectedLote);
-            LotesInactive.Add(SelectedLote);
+            Lotes.Add(SelectedInactive);
+            LotesInactive.Remove(SelectedInactive);
 
 
         }
 
         public void SetLoteInactive(object parameter)
         {
-            InventoryQueries.SetLoteSalidaActive(SelectedLote.CodLote);
+            System.Windows.MessageBox.Show(SelectedLote.CodLote);
+            InventoryQueries.SetLoteSalidaInactive(SelectedLote.CodLote);
 
-            Lotes.Add(SelectedInactive);
-            LotesInactive.Remove(SelectedInactive);
+            LotesInactive.Add(SelectedLote);
+            Lotes.Remove(SelectedLote);
         }
 
         public void AgregarDetalleEmpaque()

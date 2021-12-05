@@ -73,42 +73,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                         element.SubMenuList.Add(subTemp);
                     }
-
-                   
-
                 }
-
-                //cn.Close();
-                /*while (dr.Read())
-                {
-                    SubMenu subTemp = new SubMenu();
-
-
-                    if(temp.MenuText == dr["nombre_menu"].ToString())
-                    {
-                        subTemp.SubMenuText = dr["nombre_submenu"].ToString();
-
-                        temp.SubMenuList.Add(subTemp);
-                    }
-                    else
-                    {
-                        if(temp != null)
-                        {
-                            CurrentMenu.Add(temp);
-                        }
-
-                        temp.MenuText = dr["nombre_menu"].ToString();
-                        temp.MenuIcon = dr["icon_string"].ToString();
-                        subTemp.SubMenuText = dr["nombre_submenu"].ToString();
-
-                        temp.SubMenuList.Add(subTemp);
-
-                    }
-
-                }*/
-
-
-                //CurrentMenu.Add(temp);
 
                 dr.Close();
                 cn.Close();
@@ -121,12 +86,179 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
 
 
-            //System.Windows.MessageBox.Show(CurrentMenu[3].SubMenuList[0].SubMenuText);
-
-
-
-
             return CurrentMenu;
+        }
+
+
+        public static List<IdName> getSubmenus()
+        {
+            List<IdName> Submenus = new List<IdName>();
+
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT * from submenu;", cn);
+
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+
+                while (dr.Read())
+                {
+
+                    IdName temp = new IdName();
+
+
+                    temp.ID = dr["id"].ToString();
+                    temp.Name = dr["nombre_submenu"].ToString();
+
+
+                    Submenus.Add(temp);
+
+                    //System.Windows.MessageBox.Show("this is the name " + CurrentMenu[].MenuText);
+                }
+
+
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener los menus " + ex);
+            }
+
+
+            return Submenus;
+
+        }
+
+        public static List<SubMenuPermission> getSubMenusForRole(int rol)
+        {
+            List<SubMenuPermission> SubMenus = new List<SubMenuPermission>();
+
+
+            
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT * FROM submenu INNER JOIN subMenuPermissions ON subMenuPermissions.id_submenu = submenu.id WHERE subMenuPermissions.id_role = " + rol + ";", cn);
+
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+
+                while (dr.Read())
+                {
+
+                    SubMenuPermission temp = new();
+                    
+                    temp.IdSubMenu = int.Parse(dr["id_submenu"].ToString());
+                    temp.NombreSubMenu = dr["nombre_submenu"].ToString();
+                    temp.Estado = bool.Parse(dr["activo"].ToString());
+
+
+                    SubMenus.Add(temp);
+
+                    //System.Windows.MessageBox.Show("this is the name " + CurrentMenu[].MenuText);
+                }
+
+
+
+                dr.Close();
+                cn.Close();
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener los menus " + ex);
+            }
+
+            return SubMenus;
+        }
+
+
+        public static void agregarPermiso(int rolId, int submenuId)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO subMenuPermissions ([id_role],[id_submenu],[activo]) " +
+                    "values (@rol,@submenu,False) ";
+
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                        {
+                        new OleDbParameter("@id",rolId),
+                        new OleDbParameter("@submenuId",submenuId)
+                        });
+
+                    cmd.ExecuteNonQuery();
+
+                    cn.Close();
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al agregar permiso al Rol.  " + ex);
+            }
+        }
+
+        public static void iterateSubMenus(int rolId)
+        {
+            List<IdName> Menus = getSubmenus();
+
+
+            foreach(var element in Menus)
+            {
+                agregarPermiso(rolId, int.Parse(element.ID));
+            }
+        }
+
+
+
+
+
+
+
+        public static void cambiarEstadoPermiso(int rolId, int submenuId, bool Estado)
+        {
+
+            System.Windows.MessageBox.Show(" " + Estado + "" + rolId + submenuId);
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE subMenuPermissions " +
+                    "SET activo = " + Estado +
+                    " where id_role = " + rolId + " and id_submenu = " + submenuId+" ; ", cn);
+                cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al cambiar Estdo Permiso " + ex);
+            }
         }
     }
 }

@@ -12,10 +12,7 @@
         WindowStyle="None"
         Title="NewFormulaModal" Height="810" Width="800">
     
-    
-    <Window.DataContext>
-        <vm:FormulasVM x:Name="vm"/>
-    </Window.DataContext>
+
     
     
     <Grid>
@@ -342,7 +339,7 @@
 
 
         <DockPanel  Grid.Row="10" Margin="45,0,45,0">
-            <Button DockPanel.Dock="Left" Content="Limpiar" FontSize="16" Margin="50,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
+            <Button DockPanel.Dock="Left" Command="{Binding limpiarFormula}" Content="Limpiar" FontSize="16" Margin="50,0,0,0" Height="40" Width="100" Foreground="White" Background="{StaticResource MainThemeBrush}" />
             <Button  Command="{Binding NuevaFormulaCommand}"  Content="Crear" FontSize="16" Margin="0,0,40,0" Height="40" Width="100"  Foreground="White" Background="{StaticResource MainThemeBrush}" HorizontalAlignment="Right"/>
         </DockPanel>
 
