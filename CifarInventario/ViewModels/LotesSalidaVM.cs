@@ -12,11 +12,11 @@ using CifarInventario.ViewModels.Commands.LoteSalCommands;
 using CifarInventario.Views.Modals.LotesSalidamodal;
 using CifarInventario.ViewModels.Classes.Queries;
 using System.Windows;
-
+using CifarInventario.ViewModels.Classes;
 
 namespace CifarInventario.ViewModels
 {
-    public class LotesSalidaVM: INotifyPropertyChanged
+    public class LotesSalidaVM: Validators, INotifyPropertyChanged
     {
 
         public LotesSalidaVM()
@@ -31,6 +31,7 @@ namespace CifarInventario.ViewModels
             createPackageCommand = new CreatePTFromLoteCommand(this);
             generateLotesMp = new GenerateLotesFromMpCommand(this);
             agregarDetalleEmpaque = new AgregarDetalleEmpaque(this);
+            deleteDetalleCommand = new DeleteDetalleCommand(this);
 
 
 
@@ -219,6 +220,18 @@ namespace CifarInventario.ViewModels
         public formulaProduct EmptyProduct { get; set; }
 
 
+        private double _newLoteamount;
+        public double NewLoteAmount
+        {
+            get { return _newLoteamount; }
+            set
+            {
+                _newLoteamount = value;
+                isDecimal(value.ToString(), nameof(NewLoteAmount));
+                OnPropertyChanged(nameof(NewLoteAmount));
+            }
+        }
+
         /*  private LoteSalida _selectedTransformacion;
 
           public LoteSalida SelectedTransformacion
@@ -247,19 +260,17 @@ namespace CifarInventario.ViewModels
 
         public ICommand openDetallePackageModal => new DelegateCommand(OpenDetallePackageModal);
 
-        public ICommand deletePackage => new DelegateCommand(EliminarLotePackage);
-
-        public ICommand deleteEmpauqe => new DelegateCommand(EliminarLotePackage);
-
         public ICommand loadPaquetes => new DelegateCommand(LoadPaquetes);
 
+        public ICommand deleteProcedimientoDetalle => new DelegateCommand(EliminarPtEmpaqueDetalle);
 
+        public ICommand openDeleteModal => new DelegateCommand(OpenDeleteModal);
+
+        public EditDataGridPackageModal deleteModal { get; set; }
         public CreatePTFromLoteCommand createPackageCommand { get; set; }
-
         public GenerateLotesFromMpCommand generateLotesMp { get; set; }
-
-
         public AgregarDetalleEmpaque agregarDetalleEmpaque { get; set; }
+        public DeleteDetalleCommand deleteDetalleCommand { get; set; }
 
 
         public void LoadPaquetes(object parameter)
@@ -276,8 +287,10 @@ namespace CifarInventario.ViewModels
 
         public void OpenDetallePackageModal(object parameter)
         {
-            DetallePaquete = new ObservableCollection<LotePackageDetalle>(InventoryQueries.getMPFromPTLoteDetalles());
+            DetallePaquete = new ObservableCollection<LotePackageDetalle>(InventoryQueries.getMPFromPTLoteDetalles(SelectedLote.CodLote,SelectedPackage.CodPT));
 
+
+// System.Windows.MessageBox.Show(SelectedPackage.CodPT + " " + SelectedLote.CodLote);
 
 
             var testView = new DataGridPackageModal(this);
@@ -345,7 +358,7 @@ namespace CifarInventario.ViewModels
 
         public void SetLoteInactive(object parameter)
         {
-            System.Windows.MessageBox.Show(SelectedLote.CodLote);
+           
             InventoryQueries.SetLoteSalidaInactive(SelectedLote.CodLote);
 
             LotesInactive.Add(SelectedLote);
@@ -362,17 +375,25 @@ namespace CifarInventario.ViewModels
             }
             else
             {
-                NewLotePackageDetalle.CodLoteEntrada = EmptyMPLote.CodInterno;
-                NewLotePackageDetalle.CodLoteSalida = SelectedLote.CodLote;
-                NewLotePackageDetalle.CodPT = SelectedPackage.CodPT;
-                NewLotePackageDetalle.NombreEmpaque = EmptyProduct.Nombre;
-                ProductQueries.CreateProductoTerminadoDetalle(NewLotePackageDetalle, EmptyMPLote.CodMP);
-                LotePackageDetalle test = new LotePackageDetalle();
-                test = NewLotePackageDetalle;
-                DetallePaquete.Add(test);
+
+                if(InventoryQueries.EmpaqueAlreadyInPT(EmptyMPLote.CodInterno, SelectedLote.CodLote, SelectedPackage.CodPT))
+                {
+                    MessageBox.Show("Este empaque ya esta utilizado en el Producto Terminado porfavor utilizar un lote diferent o volver a cear la entrada.");
+                }
+                else
+                {
+                    NewLotePackageDetalle.CodLoteEntrada = EmptyMPLote.CodInterno;
+                    NewLotePackageDetalle.CodLoteSalida = SelectedLote.CodLote;
+                    NewLotePackageDetalle.CodPT = SelectedPackage.CodPT;
+                    NewLotePackageDetalle.NombreEmpaque = EmptyProduct.Nombre;
+                    ProductQueries.CreateProductoTerminadoDetalle(NewLotePackageDetalle, EmptyMPLote.CodMP);
+                    LotePackageDetalle test = new LotePackageDetalle();
+                    test = NewLotePackageDetalle;
+                    DetallePaquete.Add(test);
 
 
-                MessageBox.Show("Success");
+                    MessageBox.Show("Empaque agregado a Producto Terminado");
+                }
 
             }
         }
@@ -385,14 +406,37 @@ namespace CifarInventario.ViewModels
 
         }
 
-        public void EliminarEmpaqueDataGrid(object parameter)
+        public void EliminarPtEmpaqueDetalle(object parameter)
         {
+            ProductQueries.removeDetallePtEmpaqueLote(SelectedLote.CodLote,SelectedDetalle.CodPT,SelectedDetalle.CodLoteEntrada,SelectedDetalle.Cantidad,SelectedDetalle.CodMp);
+            DetallePaquete.Remove(SelectedDetalle);
 
+            MessageBox.Show("Detalle Eliminado");
         }
 
-        public void EliminarLotePackage(object paramter)
+        public void OpenDeleteModal(object paramter)
+        {
+            DetallePaquete = new ObservableCollection<LotePackageDetalle>(InventoryQueries.getMPFromPTLoteDetalles(SelectedLote.CodLote, SelectedPackage.CodPT));
+
+            if(DetallePaquete.Count > 0)
+            {
+                MessageBox.Show("Este Producto Terminado aun tiene empaques utilizados por favor eliminalos antes de poder eliminar este producto terminado.");
+            }
+            else
+            {
+                deleteModal = new EditDataGridPackageModal(this);
+                deleteModal.ShowDialog();
+            }
+        }
+
+        public void EliminarLotePackage()
         {
 
+            ProductQueries.deleteProductoTerminadoLote(SelectedPackage.CodPT, SelectedLote.CodLote, NewLoteAmount, SelectedPackage.Existencia);
+
+
+
+            deleteModal.Close();
         }
 
 

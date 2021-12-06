@@ -729,15 +729,16 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO detalle_pt_lote ([cod_lote_salida],[cod_prod_terminado],[cantidad],[cod_lote_mp_empaque]) " +
-                        "VALUES (@codSalida,@codPT,@cantidad,@codLoteEnt) ";
+                    cmd.CommandText = @"INSERT INTO detalle_pt_lote ([cod_lote_salida],[cod_prod_terminado],[cantidad],[cod_lote_mp_empaque],[cod_mp]) " +
+                        "VALUES (@codSalida,@codPT,@cantidad,@codLoteEnt,@codMp) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                     {
                         new OleDbParameter("@codSalida",lote.CodLoteSalida),
                         new OleDbParameter("@codPT",lote.CodPT),
                         new OleDbParameter("@cantidad",lote.Cantidad),
-                        new OleDbParameter("@codLoteEnt",lote.CodLoteEntrada)
+                        new OleDbParameter("@codLoteEnt",lote.CodLoteEntrada),
+                        new OleDbParameter("@codMp",codMP)
                     });
 
                     cmd.ExecuteNonQuery();
@@ -823,6 +824,65 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 System.Windows.MessageBox.Show("Error al actualizar Existencia - " + ex);
             }
         }
+
+        public static void deleteProductoTerminadoLote(string cod_pt, string id_lote, double amount, int existencia)
+        {
+            cn = DBConnection.MainConnection();
+
+
+            try
+            {
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM producto_terminado " +
+                        "WHERE cod_pt = '" + cod_pt + "' and id_lote = '" + id_lote + "'  ;";
+
+                    cmd.ExecuteNonQuery();
+
+                }
+
+                
+                cn.Close();
+
+                InventarioPTRemoveAmount(cod_pt, existencia);
+                InventoryQueries.updateLoteSalidaAmount(amount, id_lote);
+
+                
+
+                
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al eliminar este producto terminado  " + ex);
+            }
+        }
+
+        public static void removeDetallePtEmpaqueLote(string cod_lote_salida, string cod_prod_terminado, string cod_lote_mp_empaque, int cantidad, string codMP)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM detalle_pt_lote " +
+                        "WHERE cod_lote_salida = '" + cod_lote_salida + "' and cod_prod_terminado = '" + cod_prod_terminado + "' and cod_lote_mp_empaque = '" + cod_lote_mp_empaque + "' ;";
+
+
+                    cmd.ExecuteNonQuery();
+
+
+                }
+
+                cn.Close();
+
+                InventoryQueries.updateLoteEntradaAmount(cod_lote_mp_empaque, cantidad, codMP);
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al elimnar este detalle de empaque " + ex);
+            }
+        }
+
 
 
         public static bool isRepeatedPtCode(string codPt)

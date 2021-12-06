@@ -588,6 +588,17 @@ namespace CifarInventario.Models
             }
         }
 
+        private string _codMp;
+        public string CodMp
+        {
+            get { return _codMp; }
+            set
+            {
+                _codMp = value;
+                OnPropertyChanged(nameof(_codMp));
+            }
+        }
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

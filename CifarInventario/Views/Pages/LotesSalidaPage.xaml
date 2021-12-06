@@ -211,17 +211,17 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.editDetalleModal}"  Style="{StaticResource editButton}" ToolTip="Editar Detalle">
+                                            <!--Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.editDetalleModal}"  Style="{StaticResource editButton}" ToolTip="Editar Detalle">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Edit" Foreground="White"/>
                                                 </StackPanel>
-                                            </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDetallePackageModal}"  Style="{StaticResource blueButton}" ToolTip="Paquetes Utilizados">
+                                            </Button-->
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 32" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDetallePackageModal}"  Style="{StaticResource keyButton}" ToolTip="Paquetes Utilizados">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <fa:IconBlock Icon="Times" Foreground="White"/>
+                                                    <fa:IconBlock Icon="Tape" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.deleteDetalle}"  Style="{StaticResource removeButton}" ToolTip="Deshacer">
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDeleteModal}"  Style="{StaticResource removeButton}" ToolTip="Deshacer">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Trash" Foreground="White"/>
                                                 </StackPanel>

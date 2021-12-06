@@ -593,7 +593,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return pt;
         }
 
-        public static List<LotePackageDetalle> getMPFromPTLoteDetalles()
+        public static List<LotePackageDetalle> getMPFromPTLoteDetalles(string CodLote, string CodPt)
         {
             var pt = new List<LotePackageDetalle>();
 
@@ -602,8 +602,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT cod_lote_salida,cod_prod_terminado,cantidad,cod_lote_mp_empaque,nombre_producto " +
-                    "FROM detalle_pt_lote INNER JOIN materia_prima ON detalle_pt_lote.cod_mp = materia_prima.codigo;", cn);
+                cmd = new OleDbCommand("SELECT cod_lote_salida,cod_prod_terminado,cantidad,cod_lote_mp_empaque,nombre_producto, cod_mp " +
+                    "FROM detalle_pt_lote INNER JOIN materia_prima ON detalle_pt_lote.cod_mp = materia_prima.codigo " +
+                    "WHERE cod_lote_salida = '" + CodLote + "' and cod_prod_terminado = '" + CodPt + "'   ;", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -619,10 +620,10 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     temp.Cantidad = int.Parse(dr["cantidad"].ToString());
                     temp.NombreEmpaque = dr["nombre_producto"].ToString();
                     temp.CodLoteSalida = dr["cod_lote_salida"].ToString();
-                    
+                    temp.CodMp = dr["cod_mp"].ToString();
 
 
-
+                    System.Windows.MessageBox.Show(temp.NombreEmpaque);
 
                     pt.Add(temp);
 
@@ -638,6 +639,52 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
 
             return pt;
+        }
+
+        public static bool EmpaqueAlreadyInPT(string Cod_lote_mp, string Cod_lote_salida, string cod_prod_terminado)
+        {
+
+
+            cn = DBConnection.MainConnection();
+            bool result = false;
+
+            try
+            {
+
+                cmd = new OleDbCommand("SELECT * FROM detalle_pt_lote where cod_lote_salida = '" + Cod_lote_salida + "'   " +
+                    "and cod_prod_terminado = '" + cod_prod_terminado + "' and cod_lote_mp_empaque =  '" + Cod_lote_mp + "' ;", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+                if (dr.Read())
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al revisar lote paquete repetido " + ex.ToString());
+            }
+
+            
+
+
+
+
+
+            return result;
+
+
         }
 
         public static List<LoteEntrada> getLotesForMP(string CodLote, int cantidad)
@@ -1022,6 +1069,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
 
         }
+
+        
+
 
         public static void UpdateLoteConversion(string CodMp, double conversion)
         {
