@@ -7,9 +7,8 @@ using System.Windows.Input;
 
 namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 {
-    public class DeleteDetalleCommand: ICommand
+    public class EditarLoteSalCommand : ICommand
     {
-
         public LotesSalidaVM VM { get; set; }
 
 
@@ -19,7 +18,7 @@ namespace CifarInventario.ViewModels.Commands.LoteSalCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public DeleteDetalleCommand(LotesSalidaVM vm)
+        public EditarLoteSalCommand(LotesSalidaVM vm)
         {
             VM = vm;
         }
@@ -27,13 +26,13 @@ namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 
         public bool CanExecute(object parameter)
         {
-            return true;
-            //return !VM.HasErrors;
+            //return true;
+            return !VM.NewLote.HasErrors;
         }
 
         public void Execute(object parameter)
         {
-            //VM.AgregarDetalleEmpaque();
+            VM.EditarLoteSalida();
         }
     }
 }

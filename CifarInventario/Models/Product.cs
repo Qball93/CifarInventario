@@ -460,9 +460,9 @@ namespace CifarInventario.Models
             {
                 _existencia = value;
                 existenciaCheck = true;
-                ClearErrors("Existencia");
-                isStepNumber(value.ToString(),"Existencia");
-                OnPropertyChanged("Existencia");
+                ClearErrors(nameof(Existencia));
+                isStepNumber(value.ToString(),nameof(Existencia));
+                OnPropertyChanged(nameof(Existencia));
                 
             }
         }
@@ -475,6 +475,17 @@ namespace CifarInventario.Models
             {
                 _precio = value;
                 OnPropertyChanged("Precio");
+            }
+        }
+
+        private int cantidad_original;
+        public int Cantidad_Original
+        {
+            get { return cantidad_original; }
+            set
+            {
+                cantidad_original = value;
+                OnPropertyChanged(nameof(Cantidad_Original));
             }
         }
 

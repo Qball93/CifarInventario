@@ -120,8 +120,8 @@
                             <DataGridTextColumn  Header=" Nombre Formula "  Binding="{Binding NombreFormula}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Cantidad "  Binding="{Binding CantidadActual}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Unidad "  Binding="{Binding Unidad}"></DataGridTextColumn>
-                            <DataGridTextColumn  Header=" Fecha Creado " Binding="{Binding FechaCreacion}"/>
-                            <DataGridTextColumn  Header=" Fecha Vencimiento  " Binding="{Binding FechaVencimiento}"/>
+                            <DataGridTextColumn  Header=" Fecha Creado " Binding="{Binding FechaCreacion, StringFormat=d}"/>
+                            <DataGridTextColumn  Header=" Fecha Vencimiento  " Binding="{Binding FechaVencimiento, StringFormat=d}"/>
                             <DataGridTemplateColumn  Header=" Acciones ">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -131,12 +131,12 @@
                                                     <fa:IconBlock Icon="Times" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.formulaExtraInfoModal}"  Style="{StaticResource editButton}" ToolTip="Editar Existencia">
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openEditarModal}"  Style="{StaticResource editButton}" ToolTip="Editar Existencia">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Edit" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openPackageModal}"  Style="{StaticResource keyButton}" ToolTip="Convertir en Producto Terminado">
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openAmountSelectionModal}"  Style="{StaticResource keyButton}" ToolTip="Convertir en Producto Terminado">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Archive" Foreground="White"/>
                                                 </StackPanel>
@@ -186,7 +186,7 @@
                         <Run Text="{Binding SelectedLote.CodLote}"/>
                     </TextBlock>
 
-                    <DataGrid   Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=LotesPaquete}" SelectedItem="{Binding SelectedPackage}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16">
+                    <DataGrid   Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=LotesPT}" SelectedItem="{Binding SelectedLotePT}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -207,6 +207,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn  Header=" Nombre Producto Terminado "  Binding="{Binding NombrePT}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Existencia "  Binding="{Binding Existencia}"></DataGridTextColumn>
+                            <DataGridTextColumn  Header=" Cantidad Original "  Binding="{Binding CantidadOriginal}"></DataGridTextColumn>
                             <DataGridTemplateColumn  Header=" Acciones ">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -216,7 +217,7 @@
                                                     <fa:IconBlock Icon="Edit" Foreground="White"/>
                                                 </StackPanel>
                                             </Button-->
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 32" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDetallePackageModal}"  Style="{StaticResource keyButton}" ToolTip="Paquetes Utilizados">
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 32" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDesempaqueModal}"  Style="{StaticResource keyButton}" ToolTip="Paquetes Utilizados">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Tape" Foreground="White"/>
                                                 </StackPanel>

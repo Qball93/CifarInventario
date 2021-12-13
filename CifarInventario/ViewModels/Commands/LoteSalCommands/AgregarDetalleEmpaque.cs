@@ -26,13 +26,12 @@ namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 
         public bool CanExecute(object parameter)
         {
-            //return true;
-            return !VM.NewLotePackage.HasErrors;
+            return VM.LoteListEnabled && (VM.EmptyMPLote != null);
         }
 
         public void Execute(object parameter)
         {
-            VM.EliminarLotePackage();
+            VM.AgregarDetalleEmpaque();
         }
     }
 }

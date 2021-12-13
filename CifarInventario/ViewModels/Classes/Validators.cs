@@ -61,7 +61,7 @@ namespace CifarInventario.ViewModels.Classes
         public void isDecimal(string property, string propertyName)
         {
             if (!(Regex.IsMatch(property, PreciseNumber)))
-                AddError(propertyName, "Este campo solo acepta numeros y decimales.");
+                AddError(propertyName, "Este campo solo acepta decimales positivos.");
         }
 
         #region INotifyDataErrorInfo members

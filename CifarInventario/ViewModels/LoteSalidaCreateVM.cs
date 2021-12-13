@@ -168,7 +168,7 @@ namespace CifarInventario.ViewModels
             }
 
 
-            System.Windows.MessageBox.Show("Lote Producto Terminado Creado");
+            System.Windows.MessageBox.Show("Lote Salida Creado");
 
             salidaModal.Close();
 

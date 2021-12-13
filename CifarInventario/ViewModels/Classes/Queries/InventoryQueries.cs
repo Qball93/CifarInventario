@@ -78,7 +78,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return lotes;
         }
 
-
         public static List<LoteEntrada> GetAllLotes()
         {
             var lotes = new List<LoteEntrada>();
@@ -550,16 +549,17 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return pt;
         }
 
-        public static List<LotePackage> getPTfromLote(string codLote)
+        public static List<LotePT> getPTfromLote(string codLote)
         {
-            var pt = new List<LotePackage>();
+            var pt = new List<LotePT>();
 
             cn = DBConnection.MainConnection();
 
             try
             {
-                cmd = new OleDbCommand("SELECT cod_pt,id_lote,producto_terminado.existencia,nombre_producto_terminado,precio from producto_terminado INNER JOIN inventario_producto_terminado " +
-                    "ON producto_terminado.cod_pt = inventario_producto_terminado.id_producto_terminado where id_lote = '" + codLote + "' ;", cn);
+                cmd = new OleDbCommand("SELECT cod_pt, Codigo_Correlativo, id_lote, lotes_producto_terminado.existencia, cantidad_original, nombre_producto FROM lotes_producto_terminado " +
+                    "INNER JOIN inventario_producto_terminado ON inventario_producto_terminado.id_producto_terminado = lotes_producto_terminado.cod_pt " +
+                    "WHERE lotes_producto_terminado.id_lote = '" + codLote + "' ;", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -568,12 +568,14 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 while (dr.Read())
                 {
-                    LotePackage temp = new LotePackage();
+                    LotePT temp = new LotePT();
 
-                    temp.CodPT = dr["cod_pt"].ToString();
-                    temp.NombrePT = dr["nombre_producto_terminado"].ToString();
+                    temp.CodigoPT = dr["cod_pt"].ToString();
+                    temp.NombrePT = dr["nombre_producto"].ToString();
                     temp.Existencia = int.Parse(dr["existencia"].ToString());
-                    temp.Precio = double.Parse(dr["precio"].ToString());
+                    temp.CantidadOriginal = dr["cantidad_original"].ToString();
+                    temp.CodigoCorrelativo = dr["Codigo_Correlativo"].ToString();
+                    temp.CodigoLoteSalida = codLote;
 
 
 
@@ -587,7 +589,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al buscar Productos Terminados para Venta. " + ex.ToString());
+                System.Windows.MessageBox.Show("Error al buscar Lotes de Producto Terminados. " + ex.ToString());
             }
 
             return pt;
@@ -652,7 +654,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
 
                 cmd = new OleDbCommand("SELECT * FROM detalle_pt_lote where cod_lote_salida = '" + Cod_lote_salida + "'   " +
-                    "and cod_prod_terminado = '" + cod_prod_terminado + "' and cod_lote_mp_empaque =  '" + Cod_lote_mp + "' ;", cn);
+                    "and cod_lote_prod_terminado = '" + cod_prod_terminado + "' and cod_lote_mp_empaque =  '" + Cod_lote_mp + "' ;", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -931,6 +933,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         public static void updateLoteSalidaAmount(double cantidad, string codigo)
         {
+
+            
             cn = DBConnection.MainConnection();
             try
             {
@@ -948,6 +952,29 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
      
+        public static void updateLoteSalida(LoteSalida lote)
+        {
+            cn = DBConnection.MainConnection();
+            //System.Windows.MessageBox.Show(lote.CodLote + "  " + lote.FechaVencimiento);
+            try
+            {
+                cmd = new OleDbCommand("UPDATE lote_salida " +
+                    "SET cantidad_actual =   " + lote.CantidadActual +" , cantidad_entrada = " + lote.CantidadCreacion +", fecha_creacion = '" + lote.FechaCreacion +
+                    "', fecha_vencimiento = '" + lote.FechaVencimiento +"' " +
+                    "where codigo_lote = '" + lote.CodLote + "'; ", cn);
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al actualizar informacion de lote salida  " + ex);
+            }
+        }
+
+
+
         public static void createLoteSalidaDetalle(LoteSalidaDetalle lote, string codLoteSalida)
         {
             cn = DBConnection.MainConnection();
@@ -1070,9 +1097,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         }
 
-        
-
-
         public static void UpdateLoteConversion(string CodMp, double conversion)
         {
             cn = DBConnection.MainConnection();
@@ -1092,6 +1116,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 System.Windows.MessageBox.Show("Error al conversion en Lotes  " + ex);
             }
         }
+
+
 
 
         public static void reEntryLote(string codLote, double CurrentDisplayAmount, double OriginalDisplayAmount, double formAmount)

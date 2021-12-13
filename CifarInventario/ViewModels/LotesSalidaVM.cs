@@ -16,57 +16,58 @@ using CifarInventario.ViewModels.Classes;
 
 namespace CifarInventario.ViewModels
 {
-    public class LotesSalidaVM: Validators, INotifyPropertyChanged
+    public class LotesSalidaVM : Validators, INotifyPropertyChanged
     {
 
         public LotesSalidaVM()
         {
 
             Lotes = new ObservableCollection<LoteSalida>(InventoryQueries.GetLoteSalidas());
-            //Transformaciones = new ObservableCollection<LoteSalida>(InventoryQueries.GetLotesTransform());
-
-
-            
-            //MessageBox.Show(SelectedLote.CodLote);
-            createPackageCommand = new CreatePTFromLoteCommand(this);
-            generateLotesMp = new GenerateLotesFromMpCommand(this);
-            agregarDetalleEmpaque = new AgregarDetalleEmpaque(this);
-            deleteDetalleCommand = new DeleteDetalleCommand(this);
-
 
 
             EmptyAmount = new LoteSalida();
-            NewLotePackage = new LotePackage();
-            NewLotePackageDetalle = new LotePackageDetalle();
-
-
-            
             LotesInactive = new ObservableCollection<LoteSalida>(InventoryQueries.GetLotesInactivos());
-            PTList = new ObservableCollection<ProductoTeminadoParaLista>(ProductQueries.GetPTSimp());
-            ListadoMP = new ObservableCollection<formulaProduct>(ProductQueries.GetAllContainersMP());
-            EmptyProduct = ListadoMP[0];
 
 
 
         }
 
+        //empty selection for MP combobox
+        public formulaProduct EmptyProduct { get; set; }
+        public LoteEntrada EmptyMPLote { get; set; }
+        public LoteSalida EmptyAmount { get; set; }
+        public ProductoTeminadoParaLista SelectedPT { get; set; }
 
-        public LotePaqueteModal loteModal;
-
-        #region DataGrid Lists
-
-        private ObservableCollection<ProductoTeminadoParaLista> _ptList;
-        public ObservableCollection<ProductoTeminadoParaLista> PTList
+        private bool _mpListEnabled;
+        public bool MpListEnabled
         {
-            get { return _ptList; }
+            get { return _mpListEnabled; }
             set
             {
-                _ptList = value;
-                OnPropertyChanged("PTList");
+                _mpListEnabled = value;
+                OnPropertyChanged(nameof(MpListEnabled));
             }
         }
 
-        public ProductoTeminadoParaLista SelectedPT { get; set; }
+        private bool _loteListEnabled;
+        public bool LoteListEnabled
+        {
+            get { return _loteListEnabled; }
+            set
+            {
+                _loteListEnabled = value;
+                OnPropertyChanged(nameof(LoteListEnabled));
+            }
+        }
+
+
+        public bool CanExecuteAgregar { get; set; }
+
+
+        //Modal Objects to control their flow
+        public CreatePTLoteModal loteModal;
+        public AmountsForPTModal amountModal;
+        public EditPackageModal desempaqueModal;
 
         private ObservableCollection<LoteSalida> _lotes;
         public ObservableCollection<LoteSalida> Lotes
@@ -75,64 +76,7 @@ namespace CifarInventario.ViewModels
             set
             {
                 _lotes = value;
-                OnPropertyChanged("Lotes");
-            }
-        }
-
-        private ObservableCollection<LoteSalida> _lotesInactive;
-        public ObservableCollection<LoteSalida> LotesInactive
-        {
-            get { return _lotesInactive; }
-            set
-            {
-                _lotesInactive = value;
-                OnPropertyChanged("LotesInactive");
-            }
-        }
-
-        /* private ObservableCollection<LoteSalida> _transformaciones;
-
-         public ObservableCollection<LoteSalida> Transformaciones
-         {
-             get { return _transformaciones; }
-             set
-             {
-                 _transformaciones = value;
-                 OnPropertyChanged("Transformaciones");
-             }
-         }*/
-
-
-        private ObservableCollection<LotePackage> _lotePaquete;
-        public ObservableCollection<LotePackage> LotesPaquete
-        {
-            get { return _lotePaquete; }
-            set
-            {
-                _lotePaquete = value;
-                OnPropertyChanged("LotesPaquete");
-            }
-        }
-
-        private LotePackage _selectedPackage;
-        public LotePackage SelectedPackage
-        {
-            get { return _selectedPackage; }
-            set
-            {
-                _selectedPackage = value;
-                OnPropertyChanged("SelectedPackage");
-            }
-        }
-
-        private LotePackage _newLotePackage;
-        public LotePackage NewLotePackage
-        {
-            get { return _newLotePackage; }
-            set
-            {
-                _newLotePackage = value;
-                OnPropertyChanged("NewLotePackage");
+                OnPropertyChanged(nameof(Lotes));
             }
         }
 
@@ -143,40 +87,29 @@ namespace CifarInventario.ViewModels
             set
             {
                 _selectedLote = value;
-                OnPropertyChanged("SelectedLote");
+                OnPropertyChanged(nameof(SelectedLote));
             }
         }
 
-        private LoteSalida _selectedInactive;
-        public LoteSalida SelectedInactive
+        private LoteSalida _newLote;
+        public LoteSalida NewLote
         {
-            get { return _selectedInactive; }
+            get { return _newLote; }
             set
             {
-                _selectedInactive = value;
-                OnPropertyChanged("SelectedInactive");
+                _newLote = value;
+                OnPropertyChanged(nameof(NewLote));
             }
         }
 
-        private ObservableCollection<LotePackageDetalle> _detallesPaquete;
-        public ObservableCollection<LotePackageDetalle> DetallePaquete
+        private ObservableCollection<ProductoTeminadoParaLista> _ptList;
+        public ObservableCollection<ProductoTeminadoParaLista> PTList
         {
-            get { return _detallesPaquete; }
+            get { return _ptList; }
             set
             {
-                _detallesPaquete = value;
-                OnPropertyChanged("DetallePquete");
-            }
-        }
-
-        private LotePackageDetalle _selectedDetalle;
-        public LotePackageDetalle SelectedDetalle
-        {
-            get { return _selectedDetalle; }
-            set
-            {
-                _selectedDetalle = value;
-                OnPropertyChanged("SelectedDetalle");
+                _ptList = value;
+                OnPropertyChanged(nameof(PTList));
             }
         }
 
@@ -187,7 +120,40 @@ namespace CifarInventario.ViewModels
             set
             {
                 _listadoMP = value;
-                OnPropertyChanged("ListadoMP");
+                OnPropertyChanged(nameof(ListadoMP));
+            }
+        }
+
+        private ObservableCollection<LoteSalida> _lotesInactive;
+        public ObservableCollection<LoteSalida> LotesInactive
+        {
+            get { return _lotesInactive; }
+            set
+            {
+                _lotesInactive = value;
+                OnPropertyChanged(nameof(LotesInactive));
+            }
+        }
+
+        private LoteSalida _selectedInactive;
+        public LoteSalida SelectedInactive
+        {
+            get { return _selectedInactive; }
+            set
+            {
+                _selectedInactive = value;
+                OnPropertyChanged(nameof(SelectedInactive));
+            }
+        }
+
+        private emptyObject _placeholder;
+        public emptyObject PlaceHolder
+        {
+            get { return _placeholder; }
+            set
+            {
+                _placeholder = value;
+                OnPropertyChanged(nameof(PlaceHolder));
             }
         }
 
@@ -198,28 +164,86 @@ namespace CifarInventario.ViewModels
             set
             {
                 _listadoLotes = value;
-                OnPropertyChanged("ListadoLotes");
+                OnPropertyChanged(nameof(ListadoLotes));
             }
         }
 
-        private LotePackageDetalle _newLotePackageDetalle;
-        public LotePackageDetalle NewLotePackageDetalle
+
+        //This area exclusively for the creation of new PT Lotes
+
+
+        private LotePT _newLotePT;
+        public LotePT NewLotePT
         {
-            get { return _newLotePackageDetalle; }
+            get { return _newLotePT; }
             set
             {
-                _newLotePackageDetalle = value;
-                OnPropertyChanged("NewLotePackageDetalle");
+                _newLotePT = value;
+                OnPropertyChanged(nameof(NewLotePT));
+            }
+
+        }
+
+        private ObservableCollection<LotePT> _lotesPT;
+        public ObservableCollection<LotePT> LotesPT
+        {
+            get { return _lotesPT; }
+            set
+            {
+                _lotesPT = value;
+                OnPropertyChanged(nameof(LotesPT));
             }
         }
 
-        public LoteSalida EmptyAmount { get; set; }
+        private LotePT _selectedLotePT;
+        public LotePT SelectedLotePT
+        {
+            get { return _selectedLotePT; }
+            set
+            {
+                _selectedLotePT = value;
+                OnPropertyChanged(nameof(SelectedLotePT));
+            }
+        }
 
-        public LoteEntrada EmptyMPLote { get; set; }
+        private LotePTDetalle _newLotePTNewDetalle;
+        public LotePTDetalle NewLotePTNewDetalle
+        {
+            get { return _newLotePTNewDetalle; }
+            set
+            {
+                _newLotePTNewDetalle = value;
+                OnPropertyChanged(nameof(NewLotePTNewDetalle));
+            }
 
-        public formulaProduct EmptyProduct { get; set; }
+        }
+
+        private LotePTDetalle _newLoteSelectedPTNewDetalle;
+        public LotePTDetalle NewLotePTSelectedNewDetalle
+        {
+            get { return _newLoteSelectedPTNewDetalle; }
+            set
+            {
+                _newLoteSelectedPTNewDetalle = value;
+                OnPropertyChanged(nameof(NewLotePTSelectedNewDetalle));
+            }
+
+        }
 
 
+        private ObservableCollection<LotePTDetalle> _newLotePTDetalles;
+        public ObservableCollection<LotePTDetalle> NewLotePTDetalles
+        {
+            get { return _newLotePTDetalles; }
+            set
+            {
+                _newLotePTDetalles = value;
+                OnPropertyChanged(nameof(NewLotePTDetalles));
+            }
+        }
+
+
+        //single use double for the purpose of processing amount
         private double _newLoteamount;
         public double NewLoteAmount
         {
@@ -232,165 +256,230 @@ namespace CifarInventario.ViewModels
             }
         }
 
-        /*  private LoteSalida _selectedTransformacion;
-
-          public LoteSalida SelectedTransformacion
-          {
-              get { return _selectedTransformacion; }
-              set
-              {
-                  _selectedTransformacion = value;
-                  OnPropertyChanged("SelectedTransformacion");
-              }
-          }*/
-
-
-        #endregion
 
 
 
 
         public ICommand UpdateProductList => new DelegateCommand(UpdateFinishedProductList);
+        public ICommand openAmountSelectionModal => new DelegateCommand(OpenAmountSelectionModal);
+        public ICommand resetSelection => new DelegateCommand(ResetSelection);
+        public ICommand generateLotes => new DelegateCommand(GenerarLotesMP);   
+        public ICommand eliminarDetalle => new DelegateCommand(EliminarDetalle);
+        public ICommand openDesempaqueModal => new DelegateCommand(OpenDesempaqueModal);
+        public ICommand openEditarModal => new DelegateCommand(OpenEditarModal);
 
-        public ICommand ActiveLote => new DelegateCommand(SetLoteActive);
-
-        public ICommand InactiveLote => new DelegateCommand(SetLoteInactive);
-
-        public ICommand openPackageModal => new DelegateCommand(OpenPackageModal);
-
-        public ICommand openDetallePackageModal => new DelegateCommand(OpenDetallePackageModal);
-
-        public ICommand loadPaquetes => new DelegateCommand(LoadPaquetes);
-
-        public ICommand deleteProcedimientoDetalle => new DelegateCommand(EliminarPtEmpaqueDetalle);
-
-        public ICommand openDeleteModal => new DelegateCommand(OpenDeleteModal);
-
-        public EditDataGridPackageModal deleteModal { get; set; }
-        public CreatePTFromLoteCommand createPackageCommand { get; set; }
-        public GenerateLotesFromMpCommand generateLotesMp { get; set; }
+        public ProcesarCantidadAmountCommand procesarCantidadAmountCommand { get; set; }
+        public CreatePTFromLoteCommand createPTFromLoteCommand { get; set; }
         public AgregarDetalleEmpaque agregarDetalleEmpaque { get; set; }
-        public DeleteDetalleCommand deleteDetalleCommand { get; set; }
+        public DesmpaqueCommand desempaqueCommand { get; set; }
+        public EditarLoteSalCommand editarLoteSalCommand { get; set; }
 
 
-        public void LoadPaquetes(object parameter)
+        public void OpenDesempaqueModal(object parameter)
         {
-            if(SelectedLote != null)
+            PlaceHolder = new emptyObject();
+            desempaqueModal = new EditPackageModal(this);
+            desempaqueCommand = new DesmpaqueCommand(this);
+            desempaqueModal.ShowDialog();
+        }
+
+
+        public void RegresarCantidades()
+        {
+
+            if(SelectedLotePT.Existencia < PlaceHolder.EmptyCantidad)
             {
-                LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
+                MessageBox.Show("La cantidad a desempacar no puede ser mayor a la cantidad existente");
             }
             else
             {
-                LotesPaquete = new ObservableCollection<LotePackage>();
+                NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
+
+
+                foreach (LotePTDetalle element in NewLotePTDetalles)
+                {
+                    InventoryQueries.updateLoteEntradaAmount(element.CodigoLoteMP, PlaceHolder.EmptyCantidad, element.CodigoMP);
+                }
+
+                ProductQueries.AdjustExistingLote(SelectedLotePT.CodigoCorrelativo, PlaceHolder, SelectedLotePT.CodigoPT);
+                InventoryQueries.updateLoteSalidaAmount(PlaceHolder.EmptyAmount, SelectedLote.CodLote);
+
+                MessageBox.Show("Producto Desempacado");
+                desempaqueModal.Close();
             }
-        }
-
-        public void OpenDetallePackageModal(object parameter)
-        {
-            DetallePaquete = new ObservableCollection<LotePackageDetalle>(InventoryQueries.getMPFromPTLoteDetalles(SelectedLote.CodLote,SelectedPackage.CodPT));
 
 
-// System.Windows.MessageBox.Show(SelectedPackage.CodPT + " " + SelectedLote.CodLote);
 
-
-            var testView = new DataGridPackageModal(this);
-
-
-            //MessageBox.Show(DetallePaquete[0].NombreEmpaque);
-
-            testView.ShowDialog();
-        }
-
-        public void OpenPackageModal(object paramater)
-        {
             
-            SelectedPT = PTList[0];
-            loteModal = new LotePaqueteModal(this);
-
-
-
-            loteModal.ShowDialog();
         }
 
-        public void CreateProductoTerminado()
+        public void OpenLoteCreationModal()
         {
-            NewLotePackage.CodPT = SelectedPT.CodPT;
-            NewLotePackage.FechaVencimiento = SelectedLote.FechaVencimiento;
-            NewLotePackage.IdLote = SelectedLote.CodLote;
+
+            
+            
+            ListadoMP = new ObservableCollection<formulaProduct>(ProductQueries.GetAllContainerMPFromAmount(int.Parse(NewLotePT.CantidadOriginal)));
+            createPTFromLoteCommand = new CreatePTFromLoteCommand(this);
+            CanExecuteAgregar = false;
 
 
-            if(EmptyAmount.CantidadActual > SelectedLote.CantidadActual)
+            if (ListadoMP.Count == 0)
             {
-                MessageBox.Show("La cantidad a procesar no puede ser mayor a la cantidad en existencia del lote.");
+                MessageBox.Show("No hay suficientes empaques para esta cantidad.");
             }
             else
             {
-                ProductQueries.CreateProductoTerminado(NewLotePackage, -EmptyAmount.CantidadActual);
-                SelectedLote.CantidadActual -= EmptyAmount.CantidadActual;
+                agregarDetalleEmpaque = new AgregarDetalleEmpaque(this);
+                NewLotePTDetalles = new ObservableCollection<LotePTDetalle>();
+                MpListEnabled = true;
+                LoteListEnabled = false;
 
-                //Lotes
+
+                loteModal = new CreatePTLoteModal(this);
+
+               // EmptyMPLote = null;
+                EmptyProduct = ListadoMP[0];
+                PTList = new ObservableCollection<ProductoTeminadoParaLista>(ProductQueries.GetPTSimp());
+                loteModal.ShowDialog();
             }
 
-            loteModal.Close();
+
+
+            
         }
-        
+
+        public void OpenAmountSelectionModal(object parameter)
+        {
+            NewLotePT = new LotePT();
+            PlaceHolder = new emptyObject();
+            procesarCantidadAmountCommand = new ProcesarCantidadAmountCommand(this);
+
+            amountModal = new AmountsForPTModal(this);
+            amountModal.ShowDialog();
+        }
+
+        public void VaciarLote(object parameter)
+        {
+
+            if (int.Parse(SelectedLotePT.CantidadOriginal) > SelectedLotePT.Existencia)
+            {
+                MessageBox.Show("Este lote tiene productos vendidos por lo que no se puede vaciar");
+            }
+            else
+            {
+                NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
+
+                foreach (LotePTDetalle element in NewLotePTDetalles)
+                {
+                    InventoryQueries.updateLoteEntradaAmount(element.CodigoLoteMP, int.Parse(SelectedLotePT.CantidadOriginal), element.CodigoMP);
+                }
+
+                ProductQueries.removeDetallePtEmpaqueLote(SelectedLotePT.CodigoCorrelativo);
+
+                ProductQueries.AdjustExistingLote(SelectedLotePT.CodigoCorrelativo, PlaceHolder, SelectedLotePT.CodigoPT);
+                InventoryQueries.updateLoteSalidaAmount(PlaceHolder.EmptyAmount, SelectedLote.CodLote);
+
+                MessageBox.Show("Producto Eliminado");
+            }
+        }
+
         public void UpdateFinishedProductList(object parameter)
         {
             if (SelectedLote != null)
             {
-                LotesPaquete = new ObservableCollection<LotePackage>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
+                LotesPT = new ObservableCollection<LotePT>(InventoryQueries.getPTfromLote(SelectedLote.CodLote));
             }
             else
             {
-                LotesPaquete = new ObservableCollection<LotePackage>();
+                LotesPT = new ObservableCollection<LotePT>();
             }
         }
 
-        public void SetLoteActive(object parameter)
+        public void GenerarLotesMP(object parameter)
         {
-            InventoryQueries.SetLoteSalidaActive(SelectedInactive.CodLote);
 
-            Lotes.Add(SelectedInactive);
-            LotesInactive.Remove(SelectedInactive);
+            ListadoLotes = new ObservableCollection<LoteEntrada>(InventoryQueries.getLotesForMP(EmptyProduct.Codigo, int.Parse(NewLotePT.CantidadOriginal)));
 
+            if (ListadoLotes.Count == 0)
+            {
+
+                MessageBox.Show("No hay un lote individual con esa cantidad");
+            }
+            else
+            {
+                //EmptyMPLote = ListadoLotes[0];
+                LoteListEnabled = true;
+                MpListEnabled = false;
+
+            }
 
         }
 
-        public void SetLoteInactive(object parameter)
+        public void EliminarDetalle(object parameter)
         {
-           
-            InventoryQueries.SetLoteSalidaInactive(SelectedLote.CodLote);
+            NewLotePTDetalles.Remove(NewLotePTSelectedNewDetalle);
+        }
 
-            LotesInactive.Add(SelectedLote);
-            Lotes.Remove(SelectedLote);
+        public void ResetSelection(object parameter)
+        {
+            MpListEnabled = true;
+            LoteListEnabled = false;
+        }
+        
+        public void OpenEditarModal(object parameter)
+        {
+            NewLote = new LoteSalida(SelectedLote);
+            editarLoteSalCommand = new EditarLoteSalCommand(this);
+            var temp = new EditLoteSalModal(this);
+            temp.ShowDialog();
+
+        }
+
+        public void ProcesarCantidades()
+        {
+
+
+            if(PlaceHolder.EmptyAmount > SelectedLote.CantidadActual)
+            {
+                MessageBox.Show("La cantidad a procesar no puede ser mayor a la cantidad actual");
+            }
+            else
+            {
+                OpenLoteCreationModal();
+            }
         }
 
         public void AgregarDetalleEmpaque()
         {
 
-            
-            if(EmptyMPLote.CodLote == "N/A")
+            MessageBox.Show(EmptyMPLote.CodLote);
+
+
+            if (EmptyMPLote.CodLote == "N/A")
             {
                 MessageBox.Show("No hay Lotes de Entrada disponible para este MP");
             }
             else
             {
 
-                if(InventoryQueries.EmpaqueAlreadyInPT(EmptyMPLote.CodInterno, SelectedLote.CodLote, SelectedPackage.CodPT))
+                if (NewLotePTDetalles.Any(p => p.NombreEmpaque == EmptyProduct.Nombre))
                 {
                     MessageBox.Show("Este empaque ya esta utilizado en el Producto Terminado porfavor utilizar un lote diferent o volver a cear la entrada.");
                 }
                 else
                 {
-                    NewLotePackageDetalle.CodLoteEntrada = EmptyMPLote.CodInterno;
-                    NewLotePackageDetalle.CodLoteSalida = SelectedLote.CodLote;
-                    NewLotePackageDetalle.CodPT = SelectedPackage.CodPT;
-                    NewLotePackageDetalle.NombreEmpaque = EmptyProduct.Nombre;
-                    ProductQueries.CreateProductoTerminadoDetalle(NewLotePackageDetalle, EmptyMPLote.CodMP);
-                    LotePackageDetalle test = new LotePackageDetalle();
-                    test = NewLotePackageDetalle;
-                    DetallePaquete.Add(test);
 
+                    NewLotePTNewDetalle = new LotePTDetalle();
+
+                    NewLotePTNewDetalle.CodigoLoteMP = EmptyMPLote.CodInterno;
+                    NewLotePTNewDetalle.NombreEmpaque = EmptyProduct.Nombre;
+                    NewLotePTNewDetalle.CodigoMP = EmptyProduct.Codigo;
+
+                    NewLotePTDetalles.Add(NewLotePTNewDetalle);
+
+                    CanExecuteAgregar = false;
+                    MpListEnabled = true;
+                    LoteListEnabled = false;
 
                     MessageBox.Show("Empaque agregado a Producto Terminado");
                 }
@@ -398,48 +487,49 @@ namespace CifarInventario.ViewModels
             }
         }
 
-        public void BuscarLotes()
+        public void CreateProductoTerminado()
         {
+
+            NewLotePT.CodigoLoteSalida = SelectedLote.CodLote;
+            NewLotePT.CodigoPT = SelectedPT.CodPT; 
+            InventoryQueries.updateLoteSalidaAmount(-PlaceHolder.EmptyAmount, SelectedLote.CodLote);
+
+
+           
+
+             ProductQueries.CreateProductoTerminado(NewLotePT, int.Parse(NewLotePT.CantidadOriginal));
+
+
+            foreach (var element in NewLotePTDetalles)
+            {
+                element.CodigoLotePT = NewLotePT.CodigoCorrelativo;
+                ProductQueries.CreateProductoTerminadoDetalle(element, int.Parse(NewLotePT.CantidadOriginal), element.CodigoMP);
+            }
+
             
-            ListadoLotes = new ObservableCollection<LoteEntrada>(InventoryQueries.getLotesForMP(EmptyProduct.Codigo,NewLotePackageDetalle.Cantidad));
-            EmptyMPLote = ListadoLotes[0];
 
+            MessageBox.Show("Lote Producto Terminado Creado");
+
+            loteModal.Close();
+            amountModal.Close();
         }
 
-        public void EliminarPtEmpaqueDetalle(object parameter)
+        public void EditarLoteSalida()
         {
-            ProductQueries.removeDetallePtEmpaqueLote(SelectedLote.CodLote,SelectedDetalle.CodPT,SelectedDetalle.CodLoteEntrada,SelectedDetalle.Cantidad,SelectedDetalle.CodMp);
-            DetallePaquete.Remove(SelectedDetalle);
+            InventoryQueries.updateLoteSalida(NewLote);
+            MessageBox.Show("Informacion de Lote Actualizada.");
 
-            MessageBox.Show("Detalle Eliminado");
+            
         }
 
-        public void OpenDeleteModal(object paramter)
+
+        public void updateLoteSalidaInstance()
         {
-            DetallePaquete = new ObservableCollection<LotePackageDetalle>(InventoryQueries.getMPFromPTLoteDetalles(SelectedLote.CodLote, SelectedPackage.CodPT));
-
-            if(DetallePaquete.Count > 0)
-            {
-                MessageBox.Show("Este Producto Terminado aun tiene empaques utilizados por favor eliminalos antes de poder eliminar este producto terminado.");
-            }
-            else
-            {
-                deleteModal = new EditDataGridPackageModal(this);
-                deleteModal.ShowDialog();
-            }
+            SelectedLote.FechaVencimiento = NewLote.FechaVencimiento;
+            SelectedLote.FechaCreacion = NewLote.FechaCreacion;
+            SelectedLote.CantidadActual = NewLote.CantidadActual;
+            SelectedLote.CantidadCreacion = NewLote.CantidadCreacion;
         }
-
-        public void EliminarLotePackage()
-        {
-
-            ProductQueries.deleteProductoTerminadoLote(SelectedPackage.CodPT, SelectedLote.CodLote, NewLoteAmount, SelectedPackage.Existencia);
-
-
-
-            deleteModal.Close();
-        }
-
-
 
 
 

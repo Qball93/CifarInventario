@@ -26,8 +26,8 @@ namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 
         public bool CanExecute(object parameter)
         {
-            //return true;
-            return !VM.EmptyAmount.HasErrors && !VM.NewLotePackage.HasErrors && VM.NewLotePackage.existenciaCheck;
+            return !VM.NewLotePT.HasErrors && VM.NewLotePT.CodigoCheck && (VM.SelectedPT != null);
+            //return !VM.EmptyAmount.HasErrors && !VM.NewLotePackage.HasErrors && VM.NewLotePackage.existenciaCheck;
         }
 
         public void Execute(object parameter)

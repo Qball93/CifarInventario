@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace CifarInventario.Models
 {
+
     public class LoteEntrada :Validators, INotifyPropertyChanged
     {
         private string _codLote;
@@ -69,7 +70,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(CodInterno));
             }
         }
-
         public double ConversionUnitaria
         {
             get { return _conversionUnitaria; }
@@ -79,7 +79,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(ConversionUnitaria));
             }
         }
-
         public DateTime FechaEntrada
         {
             get { return _fechaEntrada; }
@@ -92,7 +91,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(FechaEntrada));
             }
         }
-
         public DateTime FechaVencimiento
         {
             get { return _fechaVencimiento; }
@@ -102,7 +100,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(FechaVencimiento));
             }
         }
-
         public DateTime FechaFabricacion
         {
             get { return _fechaFabricacion; }
@@ -112,7 +109,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(FechaFabricacion));
             }
         }
-
         public string Procedencia
         {
             get { return _procedencia; }
@@ -125,7 +121,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(Procedencia));
             }
         }
-
         public string NombreFabricante
         {
             get { return _nombreFabricante; }
@@ -137,7 +132,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(NombreFabricante));
             }
         }
-
         public string NombreProveedor
         {
             get { return _nombreProveedor; }
@@ -147,7 +141,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(NombreProveedor));
             }
         }
-
         public string CodLote
         {
             get { return _codLote; }
@@ -161,7 +154,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(CodLote));
             }
         }
-
         public string Unidad
         {
             get { return _unidad; }
@@ -171,7 +163,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(Unidad));
             }
         }
-
         public double CantidadActual
         {
             get { return _cantidadActual; }
@@ -184,7 +175,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(CantidadActual));
             }
         }
-
         public double CantidadOriginal
         {
             get { return _cantidadOriginal; }
@@ -198,7 +188,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(CantidadOriginal));
             }
         }
-
         public double CantidadExacta
         {
             get { return _cantidadExacta; }
@@ -208,7 +197,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(CantidadExacta));
             }
         }
-
         public string CodMP
         {
             get { return _codMP; }
@@ -218,7 +206,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged("CodMP");
             }
         }
-
         public string CertificadoAnalysis
         {
             get { return _certificadoAnalysis; }
@@ -228,7 +215,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(CertificadoAnalysis));
             }
         }
-
         public string NombreMP
         {
             get { return _nombreMP; }
@@ -238,7 +224,6 @@ namespace CifarInventario.Models
                 OnPropertyChanged(nameof(NombreMP));
             }
         }
-
         public string CodProveedor
         {
             get { return _codProveedor; }
@@ -511,4 +496,221 @@ namespace CifarInventario.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+
+    public class LotePTDetalle : Validators, INotifyPropertyChanged
+    {
+
+        
+
+        private string _codigoLotePT;
+        public string CodigoLotePT
+        {
+            get { return _codigoLotePT; }
+            set
+            {
+                _codigoLotePT = value;
+                OnPropertyChanged(nameof(CodigoLotePT));
+            }
+        }
+
+
+        private string _codigoLoteMP;
+        public string CodigoLoteMP
+        {
+            get { return _codigoLoteMP; }
+            set
+            {
+                _codigoLoteMP = value;
+                OnPropertyChanged(nameof(CodigoLoteMP));
+            }
+        }
+
+        private string _codigoMP;
+        public string CodigoMP
+        {
+            get { return _codigoMP; }
+            set
+            {
+                _codigoMP = value;
+                OnPropertyChanged(nameof(CodigoMP));
+            }
+        }
+
+        private string _nombreEmpaqe;
+        public string NombreEmpaque
+        {
+            get { return _nombreEmpaqe; }
+            set
+            {
+                _nombreEmpaqe = value;
+                OnPropertyChanged(nameof(NombreEmpaque));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public class LotePT : Validators, INotifyPropertyChanged
+    {
+
+        public bool CodigoCheck, CantidadCheck = false;
+
+
+        private List<LotePTDetalle> _detalles;
+        public List<LotePTDetalle> Detalles
+        {
+            get { return _detalles; }
+            set
+            {
+                _detalles = value;
+                OnPropertyChanged(nameof(Detalles));
+            }
+        }
+
+        private string _codigoLoteSalida;
+        public string CodigoLoteSalida
+        {
+            get { return _codigoLoteSalida; }
+            set
+            {
+                _codigoLoteSalida = value;
+                OnPropertyChanged(nameof(CodigoLoteSalida));
+            }
+        }
+
+        private string _codigoPT;
+        public string CodigoPT
+        {
+            get { return _codigoPT; }
+            set
+            {
+                _codigoPT = value;
+                OnPropertyChanged(nameof(CodigoPT));
+            }
+        }
+
+        
+
+        private string _codigoCorrelativo;
+        public string CodigoCorrelativo
+        {
+            get { return _codigoCorrelativo; }
+            set
+            {
+                _codigoCorrelativo = value;
+                CodigoCheck = true;
+                ClearErrors(nameof(CodigoCorrelativo));
+                isAlphaNumeric(value, nameof(CodigoCorrelativo));
+                IsEmptyString(value, nameof(CodigoCorrelativo));
+                OnPropertyChanged(nameof(CodigoCorrelativo));
+            }
+        }
+
+        private string _cantidadOriginal;
+        public string CantidadOriginal
+        {
+            get { return _cantidadOriginal; }
+            set
+            {
+                
+                _cantidadOriginal = value;
+                CantidadCheck = true;
+                ClearErrors(nameof(CantidadOriginal));
+                IsEmptyString(value.ToString(), nameof(CantidadOriginal));
+                isStepNumber(value.ToString(), nameof(CantidadOriginal));
+                OnPropertyChanged(nameof(CantidadOriginal));
+            }
+        }
+
+        private int _existencia;
+        public int Existencia
+        {
+            get { return _existencia; }
+            set
+            {
+                _existencia = value;
+                OnPropertyChanged(nameof(Existencia));
+            }
+        }
+
+        private string _nombrePT;
+        public string NombrePT
+        {
+            get { return _nombrePT; }
+            set
+            {
+                _nombrePT = value;
+                OnPropertyChanged(nameof(NombrePT));
+            }
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+
+    public class emptyObject : Validators, INotifyPropertyChanged
+    {
+        public emptyObject()
+        {
+            EmptyAmount = 0.00;
+        }
+        
+        
+        public bool AmountCheck, CantidadCheck = false;
+
+
+
+
+        private int _emptyCantidad;
+        public int EmptyCantidad
+        {
+            get { return _emptyCantidad; }
+            set
+            {
+                _emptyCantidad = value;
+                CantidadCheck = true;
+                ClearErrors(nameof(EmptyCantidad));
+                IsEmptyString(value.ToString(), nameof(EmptyCantidad));
+                isDecimal(value.ToString(), nameof(EmptyCantidad));
+                OnPropertyChanged(nameof(EmptyCantidad));
+            }
+        }
+
+
+        private double _emptyAmount;
+        public double EmptyAmount
+        {
+            get { return _emptyAmount; }
+            set
+            {
+                _emptyAmount = value;
+                AmountCheck = true;
+                ClearErrors(nameof(EmptyAmount));
+                IsEmptyString(value.ToString(), nameof(EmptyAmount));
+                isDecimal(value.ToString(), nameof(EmptyAmount));
+                OnPropertyChanged(nameof(EmptyAmount));
+            }
+        }
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+    
 }

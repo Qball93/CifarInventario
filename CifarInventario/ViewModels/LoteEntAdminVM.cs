@@ -68,7 +68,6 @@ namespace CifarInventario.ViewModels
                 SelectedLote.CantidadActual = 0;
                 SelectedLote.CantidadExacta = 0;
                 SelectedLote.CantidadOriginal = 0;
-                MessageBox.Show(SelectedLote.CodInterno);
                 InventoryQueries.emptyLote(SelectedLote.CodInterno);
             }
         }

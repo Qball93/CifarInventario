@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using System.Windows.Input;
 
 namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 {
-    public class DeleteDetalleCommand: ICommand
+    public class ProcesarCantidadAmountCommand : ICommand
     {
-
         public LotesSalidaVM VM { get; set; }
 
 
@@ -19,7 +19,7 @@ namespace CifarInventario.ViewModels.Commands.LoteSalCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public DeleteDetalleCommand(LotesSalidaVM vm)
+        public ProcesarCantidadAmountCommand(LotesSalidaVM vm)
         {
             VM = vm;
         }
@@ -27,13 +27,13 @@ namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 
         public bool CanExecute(object parameter)
         {
-            return true;
-            //return !VM.HasErrors;
+            //return true;
+            return !VM.NewLotePT.HasErrors && VM.NewLotePT.CantidadCheck  && !VM.PlaceHolder.HasErrors && VM.PlaceHolder.AmountCheck;
         }
 
         public void Execute(object parameter)
         {
-            //VM.AgregarDetalleEmpaque();
+            VM.ProcesarCantidades();
         }
     }
 }

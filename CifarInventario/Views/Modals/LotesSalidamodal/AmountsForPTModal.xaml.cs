@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CifarInventario.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +11,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CifarInventario.ViewModels;
 using System.Windows.Shapes;
 
 namespace CifarInventario.Views.Modals.LotesSalidamodal
 {
     /// <summary>
-    /// Interaction logic for EditDataGridPackageModal.xaml
+    /// Interaction logic for AmountsForPTModal.xaml
     /// </summary>
-    public partial class EditDataGridPackageModal : Window
+    public partial class AmountsForPTModal : Window
     {
-        public EditDataGridPackageModal(LotesSalidaVM VM)
+        public AmountsForPTModal(LotesSalidaVM VM)
         {
             InitializeComponent();
 

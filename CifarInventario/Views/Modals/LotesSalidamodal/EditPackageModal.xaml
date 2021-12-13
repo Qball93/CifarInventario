@@ -4,9 +4,103 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CifarInventario.Views.Modals.LotesSalidamodal"
-        mc:Ignorable="d"
-        Title="EditPackageModal" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        BorderThickness="0"
+        MouseDown="Window_MouseDown"
+        WindowStyle="None"
+        Title="EditDataGridPackageModal" Height="220" Width="400">
+    <Grid Background="{StaticResource GridBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+
+
+        <DockPanel Grid.Row="0" Background="{StaticResource MainThemeBrush}" >
+            <Label Content="Unidades de PT a Regresar" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
+            <Button Height="30" Width="30" Background="{StaticResource MainThemeBrush}" FontSize="24"
+                    HorizontalAlignment="Right" BorderThickness="0,0,0,0" Click="Button_Click">
+                <fa:IconBlock Icon="Times" Foreground="White"/>
+            </Button>
+        </DockPanel>
+
+
+
+
+
+        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="1">
+
+            <Label
+                Content="Cantidad a Desempacar"
+                   VerticalAlignment="Center"
+                           Width="200"
+                   Margin="0,0,0,0"
+                   FontSize="16">
+
+            </Label>
+            <TextBox
+                    Width="80"
+                    Height="30"
+                    FontSize="16"
+                    Margin="0,0,20,0"
+                    ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
+                    RelativeSource={x:Static RelativeSource.Self}}" 
+                    Text="{Binding PlaceHolder.EmptyCantidad,
+                    Mode=TwoWay,ValidatesOnDataErrors=True,
+                    UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
+
+        </DockPanel>
+
+        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="2">
+
+            <Label
+                Content="Cantidad Lote a Regresar"
+                   VerticalAlignment="Center"
+                           Width="200"
+                   Margin="0,0,0,0"
+                   FontSize="16">
+
+            </Label>
+            <TextBox
+                    Width="80"
+                    Height="30"
+                    FontSize="16"
+                    Margin="0,0,20,0"
+                    ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
+                    RelativeSource={x:Static RelativeSource.Self}}" 
+                    Text="{Binding PlaceHolder.EmptyAmount,
+                    Mode=TwoWay,ValidatesOnDataErrors=True,
+                      StringFormat=N2,
+                    UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
+
+        </DockPanel>
+
+
+
+
+
+
+        <DockPanel Margin="40,0,40,0" Height="60" DockPanel.Dock="Bottom" Grid.Row="3">
+
+
+
+
+
+
+            <Button HorizontalAlignment="Right"
+                    Content=" Actualizar Cantidad "
+                    FontSize="16" Margin="0,0,50,0"
+                    Height="40" 
+                    Command="{Binding desempaqueCommand}"
+                    Foreground="White" Background="{StaticResource MainThemeBrush}"></Button>
+        </DockPanel>
+
+
+
     </Grid>
 </Window>
