@@ -11,12 +11,12 @@
         Title="Login" Height="422.7" Width="725.982"
         MouseDown="Window_MouseDown"
         WindowStyle="None" ResizeMode="NoResize" BorderThickness="0">
-    <Window.Resources>
-        <vm:LoginVM x:Key="vm"/>
-    </Window.Resources>
+    <Window.DataContext>
+        <vm:LoginVM/>
+    </Window.DataContext>
 
 
-    <Grid Margin="0,0,-0.4,0.4" DataContext="{StaticResource vm}">
+    <Grid Margin="0,0,-0.4,0.4">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="310*"/>
             <ColumnDefinition Width="483*"/>

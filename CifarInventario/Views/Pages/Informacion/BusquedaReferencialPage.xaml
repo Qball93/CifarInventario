@@ -1,0 +1,282 @@
+﻿<Page x:Class="CifarInventario.Views.Pages.Informacion.BusquedaReferencial"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:CifarInventario.Views.Pages.Informacion"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+      xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
+      xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+      xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
+      mc:Ignorable="d" 
+      Height="700" Width="1000"
+      Title="Busqueda Referencial">
+
+    <Page.Resources>
+        <converters:BoolToActive x:Key="boolToActive"/>
+
+        <Style TargetType="DataGridCell">
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+        </Style>
+
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid>
+                            <Border 
+                                        Name="Border"
+                                        Margin="0,0,0,0" 
+                                        Background="{StaticResource MainThemeBrush}"
+                                        BorderBrush="{StaticResource SolidBorderBrush}"
+                                        BorderThickness="0,0,0,0">
+                                <ContentPresenter x:Name="ContentSite"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"
+                                          ContentSource="Header"
+                                          Margin="12,5,12,5"
+                                          RecognizesAccessKey="True"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="white" />
+                                <Setter TargetName="Border" Property="Margin" Value="0,0,0,-2"/>
+                                <Setter Property="Foreground" Value="{StaticResource MainThemeBrush}"/>
+                                <Setter TargetName="Border" Property="CornerRadius" Value="6,6,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="False">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource MainThemeBrush}" />
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+    <Page.DataContext>
+        <vm:ReferenciasVM/>
+    </Page.DataContext>
+    <Grid>
+
+        <TabControl Margin="-2,-1.9999999,0,0">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Background" Value="DarkGray"/>
+                </Style>
+            </TabControl.Resources>
+
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="  Busqueda Factura "/>
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Background="{StaticResource GridBackgroundBrush}">
+
+                    <TextBlock Margin="92,28,148,580" Text="Busqueda Factura " FontSize="40" FontWeight="Bold" Foreground="Black"/>
+
+
+
+
+
+
+                    <DataGrid   Margin="92,93,578,175"
+                                Height="400"
+                                ItemsSource="{Binding Path=FacturaResults}"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                FontSize="16">
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGrid">
+                                <Setter Property="RowHeaderWidth" Value="0" />
+                                <Setter Property="BorderBrush" Value="black"/>
+                                <Setter Property="AlternationCount" Value="2"/>
+                                <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                            </Style>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="black"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Header=" Id Factura " Width="*" Binding="{Binding IdFactura}"></DataGridTextColumn>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <!--Button HorizontalAlignment="Left" Margin="569,580,0,0" Command="{Binding newFormulaModal}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="2" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="plus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Agregar Formula"/>
+                        </StackPanel>
+                    </-->
+
+                    <Button Margin="529,0,166,284"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding getFacturasCommand}"
+                            FontSize="16"
+                            Height="50"
+                            Style="{StaticResource blueButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="Search" Foreground="White"/>
+                            <TextBlock Foreground="White" FontSize="16" Text=" Busqueda de Facturas "/>
+                        </StackPanel>
+                    </Button>
+                    <Label Content="Tipo de Busqueda" HorizontalAlignment="Left" Margin="529,147,0,0" FontSize="16"
+                           VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left"
+                              Margin="710,151,0,0" 
+                              ItemsSource="{Binding Tipos}"
+                              SelectedValue="{Binding SelectedTipo}"
+                              SelectedIndex="1"
+                              VerticalAlignment="Top" 
+                              FontSize="16"  Width="120"/>
+                    <Label Content="Codigo Lote" HorizontalAlignment="Left" Margin="529,216,0,0"  FontSize="16" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left"
+                             Margin="710,224,0,0"
+                             ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
+                             Text="{Binding PlaceHolder.EmptyWord,
+                             Mode=TwoWay,
+                             ValidatesOnDataErrors=True,
+                             UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="16"
+                             TextWrapping="Wrap"
+                             VerticalAlignment="Top" Width="120"/>
+
+                </Grid>
+
+            </TabItem>
+
+
+            <TabItem>
+                <TabItem.Header>
+                    <Grid Background="Transparent">
+                        <TextBlock Text="Busqueda MP en Lote Produccion"/>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{Binding UpdateProductList}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Grid>
+                </TabItem.Header>
+
+                <Grid Background="{StaticResource GridBackgroundBrush}">
+
+                    <TextBlock Margin="92,28,148,580" Text="Busqueda Lote Salida  " FontSize="40" FontWeight="Bold" Foreground="Black"/>
+
+
+
+
+
+
+                    <DataGrid   Margin="92,93,472,175"
+                                Height="400"
+                                ItemsSource="{Binding Path=LotesSalida}"
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False"
+                                FontSize="16" SelectionChanged="DataGrid_SelectionChanged">
+
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGrid">
+                                <Setter Property="RowHeaderWidth" Value="0" />
+                                <Setter Property="BorderBrush" Value="black"/>
+                                <Setter Property="AlternationCount" Value="2"/>
+                                <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                            </Style>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="black"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn  Header=" Cod Lote Salida " Width="*" Binding="{Binding CodigoLoteMP}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <!--Button HorizontalAlignment="Left" Margin="569,580,0,0" Command="{Binding newFormulaModal}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="2" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="plus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Agregar Formula"/>
+                        </StackPanel>
+                    </-->
+
+                    <Button Margin="735,0,83,175"
+                            VerticalAlignment="Bottom"
+                            Command="{Binding getLotesSalCommand}"
+                            FontSize="16"
+                            Height="50"
+                            Style="{StaticResource blueButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="Search" Foreground="White"/>
+                            <TextBlock Foreground="White" FontSize="16" Text=" Buscar Lotes Salida "/>
+                        </StackPanel>
+                    </Button>
+                    <Label Content="Nombre MP" HorizontalAlignment="Left" Margin="585,291,0,0" FontSize="16"
+                           VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left"
+                              Margin="723,295,0,0"
+                              ItemsSource="{Binding Productos}"
+                              DisplayMemberPath="Nombre"
+                              SelectedValue="{Binding SelectedProduct}"
+                              SelectedIndex="1"
+                              VerticalAlignment="Top" 
+                              FontSize="16"  Width="190">
+                    </ComboBox>
+                    <Label Content="Codigo Lote MP" HorizontalAlignment="Left" Margin="585,352,0,0"  FontSize="16" VerticalAlignment="Top"/>
+                    <ComboBox HorizontalAlignment="Left"
+                              Margin="723,354,0,0" 
+                              ItemsSource="{Binding Lotes}"
+                              SelectedValue="{Binding SelectedLote}"
+                              IsEnabled="{Binding IsEnabledLotes}"
+                              DisplayMemberPath="CodInterno"
+                              SelectedIndex="1"
+                              VerticalAlignment="Top" 
+                              FontSize="16"  Width="190"/>
+                    <Button Content="Nueva Busqueda"
+                            HorizontalAlignment="Left"
+                            Margin="571,443,0,0"
+                            Style="{StaticResource blueButton}"
+                            VerticalAlignment="Top"
+                            Foreground="White"
+                            Height="50"
+                            FontSize="16"
+                            Width="148"/>
+                    <Button Content="Generar Lotes"
+                            HorizontalAlignment="Left"
+                            Margin="813,210,0,0"
+                            Style="{StaticResource blueButton}"
+                            Command="{Binding generarLotes}"
+                            Foreground="White"
+                            VerticalAlignment="Top"
+                            Height="42"
+                            Width="100"/>
+
+                </Grid>
+
+            </TabItem>
+
+
+
+
+
+        </TabControl>
+
+
+    </Grid>
+</Page>
+

@@ -45,6 +45,24 @@
         </Setter>
     </Style>
 
+    <Style x:Key="infoButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        Name="Border"
+                        CornerRadius="4"
+                        Padding="5"
+                        BorderBrush="White"
+                        Background="DarkBlue"
+                        BorderThickness="1">
+                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="removeButton" TargetType="Button">
         <Setter Property="Template">
             <Setter.Value>

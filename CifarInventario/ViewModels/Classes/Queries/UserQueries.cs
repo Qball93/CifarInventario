@@ -187,6 +187,52 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         public static void AsignarEmpleadoAUsuario() { }
 
+        public static int GetUserId(string userName)
+        {
+            int  temp = 0;
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+
+
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"select * from usuarios " +
+                    "WHERE usuario = @UserName";
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@UserName",userName)
+                    });
+
+                    dr = cmd.ExecuteReader();
+
+
+                    if (dr.Read())
+                    {
+                        temp = int.Parse(dr["id_rol"].ToString());
+                    }
+
+                    dr.Close();
+                    cn.Close();
+
+                }
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al conseguir id de usuario.  " + ex);
+            }
+
+
+
+
+            return temp;
+        }
 
         public static Preguntas getPregunta(string userName)
         {

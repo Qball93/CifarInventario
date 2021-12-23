@@ -267,6 +267,8 @@ namespace CifarInventario.ViewModels
         public ICommand eliminarDetalle => new DelegateCommand(EliminarDetalle);
         public ICommand openDesempaqueModal => new DelegateCommand(OpenDesempaqueModal);
         public ICommand openEditarModal => new DelegateCommand(OpenEditarModal);
+       // public ICommand vaciarLote => new DelegateCommand(VaciarLote);
+        public ICommand openInfoPaqueteModal => new DelegateCommand(OpenInfoPaquetesModal);
 
         public ProcesarCantidadAmountCommand procesarCantidadAmountCommand { get; set; }
         public CreatePTFromLoteCommand createPTFromLoteCommand { get; set; }
@@ -278,11 +280,11 @@ namespace CifarInventario.ViewModels
         public void OpenDesempaqueModal(object parameter)
         {
             PlaceHolder = new emptyObject();
+            PlaceHolder.EmptyWord = "empty";
             desempaqueModal = new EditPackageModal(this);
             desempaqueCommand = new DesmpaqueCommand(this);
             desempaqueModal.ShowDialog();
         }
-
 
         public void RegresarCantidades()
         {
@@ -304,7 +306,13 @@ namespace CifarInventario.ViewModels
                 ProductQueries.AdjustExistingLote(SelectedLotePT.CodigoCorrelativo, PlaceHolder, SelectedLotePT.CodigoPT);
                 InventoryQueries.updateLoteSalidaAmount(PlaceHolder.EmptyAmount, SelectedLote.CodLote);
 
+                string temp = createRegistro();
+                InventoryQueries.CreateReempqueRegistro(temp, SelectedLotePT);
+
                 MessageBox.Show("Producto Desempacado");
+
+                SelectedLotePT.CantidadOriginal = (int.Parse(SelectedLotePT.CantidadOriginal) - PlaceHolder.EmptyCantidad).ToString();
+                SelectedLotePT.Existencia -= PlaceHolder.EmptyCantidad;
                 desempaqueModal.Close();
             }
 
@@ -348,17 +356,25 @@ namespace CifarInventario.ViewModels
             
         }
 
+        public void OpenInfoPaquetesModal(object parameter) 
+        {
+            NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
+            var temp = new DataGridInfoModal(this);
+            temp.ShowDialog();
+        }
+
         public void OpenAmountSelectionModal(object parameter)
         {
             NewLotePT = new LotePT();
             PlaceHolder = new emptyObject();
+            PlaceHolder.EmptyWord = "empty";
             procesarCantidadAmountCommand = new ProcesarCantidadAmountCommand(this);
 
             amountModal = new AmountsForPTModal(this);
             amountModal.ShowDialog();
         }
 
-        public void VaciarLote(object parameter)
+      /*  public void VaciarLote(object parameter)
         {
 
             if (int.Parse(SelectedLotePT.CantidadOriginal) > SelectedLotePT.Existencia)
@@ -367,20 +383,43 @@ namespace CifarInventario.ViewModels
             }
             else
             {
-                NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
 
-                foreach (LotePTDetalle element in NewLotePTDetalles)
+
+
+                MessageBoxResult result = MessageBox.Show("Eliminar este producto terminado?", "Vaciar Lote", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
                 {
-                    InventoryQueries.updateLoteEntradaAmount(element.CodigoLoteMP, int.Parse(SelectedLotePT.CantidadOriginal), element.CodigoMP);
+                    NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
+
+                    foreach (LotePTDetalle element in NewLotePTDetalles)
+                    {
+                        InventoryQueries.updateLoteEntradaAmount(element.CodigoLoteMP, int.Parse(SelectedLotePT.CantidadOriginal), element.CodigoMP);
+                    }
+
+                    ProductQueries.removeDetallePtEmpaqueLote(SelectedLotePT.CodigoCorrelativo);
+
+                    ProductQueries.AdjustExistingLote(SelectedLotePT.CodigoCorrelativo, PlaceHolder, SelectedLotePT.CodigoPT);
+                    InventoryQueries.updateLoteSalidaAmount(PlaceHolder.EmptyAmount, SelectedLote.CodLote);
+
+                    MessageBox.Show("Producto Eliminado");
                 }
-
-                ProductQueries.removeDetallePtEmpaqueLote(SelectedLotePT.CodigoCorrelativo);
-
-                ProductQueries.AdjustExistingLote(SelectedLotePT.CodigoCorrelativo, PlaceHolder, SelectedLotePT.CodigoPT);
-                InventoryQueries.updateLoteSalidaAmount(PlaceHolder.EmptyAmount, SelectedLote.CodLote);
-
-                MessageBox.Show("Producto Eliminado");
+                
             }
+        }*/
+        public string createRegistro()
+        {
+            string registro = " Reempaque de lote: " + SelectedLotePT.CodigoCorrelativo + " \n Cantidad de unidades: " + PlaceHolder.EmptyCantidad +
+            "\n Cantidad en Lote a Regresar:  " +  PlaceHolder.EmptyAmount + " \n Empaques Utilizados: ";
+
+
+            foreach (LotePTDetalle element in NewLotePTDetalles)
+            {
+                registro += "\n " + element.NombreEmpaque + ", Codigo Lote: " + element.CodigoLoteMP;
+
+            }
+
+
+            return registro;
         }
 
         public void UpdateFinishedProductList(object parameter)
@@ -452,7 +491,7 @@ namespace CifarInventario.ViewModels
         public void AgregarDetalleEmpaque()
         {
 
-            MessageBox.Show(EmptyMPLote.CodLote);
+
 
 
             if (EmptyMPLote.CodLote == "N/A")
@@ -510,6 +549,8 @@ namespace CifarInventario.ViewModels
 
             MessageBox.Show("Lote Producto Terminado Creado");
 
+            SelectedLote.CantidadActual -= PlaceHolder.EmptyAmount;
+
             loteModal.Close();
             amountModal.Close();
         }
@@ -521,7 +562,6 @@ namespace CifarInventario.ViewModels
 
             
         }
-
 
         public void updateLoteSalidaInstance()
         {

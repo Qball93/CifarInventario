@@ -1118,7 +1118,39 @@ namespace CifarInventario.ViewModels.Classes.Queries
         }
 
 
+        public static void CreateReempqueRegistro(string accion, LotePT lote)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO registro_reempaque ([fecha_evento],[accion_realizada],[tipo_evento],[lote_relevante]) " +
+                        "VALUES (@fecha,@accion,@tipo,@loteRelevant) ";
 
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@fecha",DateTime.Now.ToShortDateString()),
+                        new OleDbParameter("@accion",accion),
+                        new OleDbParameter("@tipo","Reempaque"),
+                        new OleDbParameter("@loteRelevant",lote.CodigoCorrelativo)
+                    });
+
+                    cmd.ExecuteNonQuery();
+
+
+                }
+
+                cn.Close();
+
+                
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al crear Registro  " + ex);
+            }
+        }
 
         public static void reEntryLote(string codLote, double CurrentDisplayAmount, double OriginalDisplayAmount, double formAmount)
         {
@@ -1148,6 +1180,49 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 System.Windows.MessageBox.Show("Error al ReIngersar Lote "+ ex);
             }
+        }
+
+
+       
+
+        public static List<LotePTDetalle> getLoteSalFromMpLote(string codLote)
+        {
+            var pt = new List<LotePTDetalle>();
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("select id_lote_salida FROM " +
+                    "lote_salida_detalles INNER JOIN lote_entrada ON lote_salida_detalles.id_lote_entrada = lote_entrada.codigo_lote_interno " +
+                    "where lote_entrada.codigo_lote_interno = '" + codLote + "' ; ", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    LotePTDetalle temp = new LotePTDetalle();
+
+                    temp.CodigoLoteMP = dr["id_lote_salida"].ToString();
+
+
+                    pt.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar Lotes de Producto Terminados. " + ex.ToString());
+            }
+
+            return pt;
         }
 
     }

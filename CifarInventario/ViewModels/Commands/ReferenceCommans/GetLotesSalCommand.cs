@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace CifarInventario.ViewModels.Commands.UserCommands
+namespace CifarInventario.ViewModels.Commands.ReferenceCommans
 {
-    public class ObtainUserQuestion : ICommand
+    public class GetLotesSalCommand : ICommand
     {
-        public RecuperacionVM VM { get; set; }
+        public ReferenciasVM VM { get; set; }
 
 
         public event EventHandler CanExecuteChanged
@@ -18,20 +18,27 @@ namespace CifarInventario.ViewModels.Commands.UserCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public ObtainUserQuestion(RecuperacionVM vm)
+        public GetLotesSalCommand(ReferenciasVM vm)
         {
             VM = vm;
         }
 
+
         public bool CanExecute(object parameter)
         {
-            return !VM.HasErrors && VM.UserCheck;
-            // return !VM.NewUser.HasErrors && VM.NewUser.UserCheck;
+
+            //return !VM.EmptyAmount.HasErrors && !VM.NewLotePackage.HasErrors && VM.NewLotePackage.existenciaCheck;
+
+            return VM.Lotes.Count > 0;
         }
 
         public void Execute(object parameter)
         {
-            VM.ObtainPregunta();
+
+
+            VM.buscarLoteSalPorMp();
+
+
         }
     }
 }

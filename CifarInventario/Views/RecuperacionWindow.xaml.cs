@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using CifarInventario.ViewModels;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -19,10 +20,22 @@ namespace CifarInventario.Views
     /// </summary>
     public partial class RecuperacionWindow : Window
     {
+        
+
+
+
+
         public RecuperacionWindow()
         {
             InitializeComponent();
+
+            Loaded += MainWindow_Loaded;
+            
+            
+
         }
+
+        
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -44,6 +57,19 @@ namespace CifarInventario.Views
             Login newLogin = new Login();
             newLogin.Show();
             this.Close();
+        }
+
+
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(DataContext is ICloseWindows vm)
+            {
+                vm.Close += () =>
+                {
+                    this.Close();
+                };
+            }
         }
     }
 }

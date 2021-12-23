@@ -6,6 +6,7 @@ using System.Linq;
 using CifarInventario.ViewModels.Classes.Queries;
 using System.Text;
 using System.Threading.Tasks;
+using CifarInventario.Views;
 using System.Windows;
 using CifarInventario.Views.Modals.LotesEntModals;
 using System.Windows.Input;
@@ -16,21 +17,37 @@ using CifarInventario.ViewModels.Classes;
 
 namespace CifarInventario.ViewModels
 {
-    public class RecuperacionVM: Validators, INotifyPropertyChanged
+    public class RecuperacionVM: Validators, INotifyPropertyChanged, ICloseWindows
     {
         public RecuperacionVM()
         {
-            userCheck = false;
-            userExists = false;
+            UserCheck = false;
+            UserExists = false;
             obtainQuestion = new ObtainUserQuestion(this);
             updatePassword = new UpdateSelfPasswords(this);
             validate = new ValidateQuestionCommand(this);
+            NewPregunta = new Preguntas();
+
         }
 
-        public bool userCheck { get; set; }
-        public bool passOneCheck { get; set; }
+
+
+        public event EventHandler OnRequestClose;
+        public bool UserCheck { get; set; }
+        public bool PassOneCheck { get; set; }
         public bool passTwoCheck { get; set; }
-        public bool userExists { get; set; }
+
+        private bool _userExists;
+        public bool UserExists
+        {
+            get { return _userExists; }
+            set
+            {
+                _userExists = value;
+                OnPropertyChanged(nameof(UserExists));
+            }
+        }
+
 
         private Preguntas _newPregunta;
         public Preguntas NewPregunta
@@ -61,7 +78,7 @@ namespace CifarInventario.ViewModels
             set
             {
                 _newPasswordOne = value;
-                passOneCheck = true;
+                PassOneCheck = true;
                 ClearErrors(nameof(NewPasswordOne));
                 IsEmptyString(value, nameof(NewPasswordOne));
                 isAlphaNumeric(value, nameof(NewPasswordOne));
@@ -92,7 +109,7 @@ namespace CifarInventario.ViewModels
             set
             {
                 _userName = value;
-                userCheck = true;
+                UserCheck = true;
                 IsEmptyString(value, nameof(UserName));
                 isAlphaNumeric(value, nameof(UserName));
                 OnPropertyChanged(nameof(UserName));
@@ -100,9 +117,9 @@ namespace CifarInventario.ViewModels
         }
 
 
-        public ObtainUserQuestion obtainQuestion;
-        public UpdateSelfPasswords updatePassword;
-        public ValidateQuestionCommand validate;
+        public ObtainUserQuestion obtainQuestion { get; set; }
+        public UpdateSelfPasswords updatePassword { get; set; }
+        public ValidateQuestionCommand validate { get; set; }
 
         public void ObtainPregunta()
         {
@@ -115,7 +132,7 @@ namespace CifarInventario.ViewModels
             }
             else
             {
-                userExists = true;
+                UserExists = true;
             }
         }
 
@@ -126,6 +143,13 @@ namespace CifarInventario.ViewModels
 
             if(NewPregunta.Respuesta == OriginalPregunta.Respuesta)
             {
+
+                //System.Windows.MessageBox.Show(UserQueries.GetUserId(UserName).ToString());
+                Globals.setId(UserQueries.GetUserId(UserName));
+                NavigationMenu newWindow = new NavigationMenu();
+                CloseWindow();
+                newWindow.Show();
+
 
             }
             else
@@ -151,5 +175,24 @@ namespace CifarInventario.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+        
+
+
+        void CloseWindow()
+        {
+            Close?.Invoke();
+        }
+
+        public Action Close { get; set; }
+
+        
+    }
+
+
+    interface ICloseWindows
+    {
+        Action Close { get; set; }
     }
 }

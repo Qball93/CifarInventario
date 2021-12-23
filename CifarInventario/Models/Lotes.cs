@@ -557,9 +557,7 @@ namespace CifarInventario.Models
 
     public class LotePT : Validators, INotifyPropertyChanged
     {
-
         public bool CodigoCheck, CantidadCheck = false;
-
 
         private List<LotePTDetalle> _detalles;
         public List<LotePTDetalle> Detalles
@@ -592,9 +590,7 @@ namespace CifarInventario.Models
                 _codigoPT = value;
                 OnPropertyChanged(nameof(CodigoPT));
             }
-        }
-
-        
+        }    
 
         private string _codigoCorrelativo;
         public string CodigoCorrelativo
@@ -649,6 +645,76 @@ namespace CifarInventario.Models
             }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+
+    public class Registro: Validators, INotifyPropertyChanged
+    {
+
+
+        private DateTime _fechaEvento;
+        public DateTime FechaEvento
+        {
+            get { return _fechaEvento; }
+            set
+            {
+                _fechaEvento = value;
+                OnPropertyChanged(nameof(FechaEvento));
+            }
+        }
+
+        private string _accion;
+        public string Accion
+        {
+            get { return _accion; }
+            set
+            {
+                _accion = value;
+                OnPropertyChanged(nameof(Accion));
+            }
+        }
+
+        private string _loteRelevante;
+        public string LoteRelevante
+        {
+            get { return _loteRelevante;  }
+            set
+            {
+                _loteRelevante = value;
+                OnPropertyChanged(nameof(LoteRelevante));
+            }
+        }
+
+        private string _tipoEvento;
+        public string TipoEvento
+        {
+            get { return _tipoEvento; }
+            set
+            {
+                _tipoEvento = value;
+                OnPropertyChanged(nameof(TipoEvento));
+            }
+        }
+
+
+        private int _cantidad;
+        public int Cantidad
+        {
+            get { return _cantidad; }
+            set
+            {
+                _cantidad = value;
+                OnPropertyChanged(nameof(Cantidad));
+            }
+        }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -664,12 +730,27 @@ namespace CifarInventario.Models
         public emptyObject()
         {
             EmptyAmount = 0.00;
+            
         }
         
         
-        public bool AmountCheck, CantidadCheck = false;
+        public bool AmountCheck, CantidadCheck, WordCheck = false;
 
 
+        private string _emptyWord;
+        public string EmptyWord
+        {
+            get { return _emptyWord; }
+            set
+            {
+                _emptyWord = value;
+                WordCheck = true;
+                ClearErrors(nameof(EmptyWord));
+                IsEmptyString(value, nameof(EmptyWord));
+                isAlphaNumeric(value, nameof(EmptyWord));
+                OnPropertyChanged(nameof(EmptyWord));
+            }
+        }
 
 
         private int _emptyCantidad;

@@ -647,7 +647,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             cn = DBConnection.MainConnection();
             try
             {
-                cmd = new OleDbCommand("UPDATE producto_terminado " +
+                cmd = new OleDbCommand("UPDATE lotes_producto_terminado " +
                     "SET existencia =  (existencia + " + amountChanged + " ) " +
                     "where cod_pt = '" + codPT + "'  and id_lote = '" + idLote  + "'  ; ", cn);
                 cmd.ExecuteNonQuery();
@@ -680,14 +680,17 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
-        public static void updateProductoTermnadoRemoveAmount(string codPT, int amountChanged, string idLote)
+        public static void updateProductoTermnadoRemoveAmount(string idLote, int amountChanged)
         {
             cn = DBConnection.MainConnection();
             try
             {
-                cmd = new OleDbCommand("UPDATE producto_terminado " +
-                    "SET existencia =  (existencia + " + amountChanged + " ) , salida = (salida + " + amountChanged + " ) " +
-                    "where cod_pt = '" + codPT + "'  and id_lote = '" + idLote + "'  ; ", cn);
+               //System.Windows.MessageBox.Show(idLote + "   " + amountChanged);
+
+
+                cmd = new OleDbCommand("UPDATE lotes_producto_terminado " +
+                    "SET existencia =  (existencia - " + amountChanged + " )  " +
+                    "where Codigo_Correlativo = '" + idLote + "'  ; ", cn);
                 cmd.ExecuteNonQuery();
 
                 cn.Close();
@@ -695,7 +698,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the producto Terminado  " + ex);
+                System.Windows.MessageBox.Show("Error al actualizar existed de lote de producto terminado  " + ex);
             }
         }
 
@@ -1025,7 +1028,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT id_lote FROM producto_terminado where cod_pt = '" + codProduct + "' and existencia >= " + cantidad + ";", cn);
+                cmd = new OleDbCommand("SELECT Codigo_Correlativo FROM lotes_producto_terminado where cod_pt = '" + codProduct + "' and existencia >= " + cantidad + ";", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -1038,7 +1041,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     while (dr.Read())
                     {
 
-                        temp = dr["id_lote"].ToString();
+                        temp = dr["Codigo_Correlativo"].ToString();
 
                         //System.Windows.MessageBox.Show("this is temp " + temp);
 
@@ -1090,6 +1093,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 System.Windows.MessageBox.Show("Error al actualizar Existencia - " + ex);
             }
         }
+
+        
 
         public static List<LotePTDetalle> getDetallesFromPTLote(string CodLote)
         {

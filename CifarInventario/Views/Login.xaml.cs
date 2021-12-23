@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CifarInventario.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace CifarInventario.Views
         public Login()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -58,6 +60,18 @@ namespace CifarInventario.Views
             RecuperacionWindow newWindow = new RecuperacionWindow();
             newWindow.Show();
             this.Close();
+        }
+
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ICloseWindows vm)
+            {
+                vm.Close += () =>
+                {
+                    this.Close();
+                };
+            }
         }
     }
 }

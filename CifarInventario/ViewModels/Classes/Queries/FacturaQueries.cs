@@ -134,7 +134,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO factura_detalle ([id_factura],[id_producto],[id_lote_salida],[cantidad],[precio]) " +
+                    cmd.CommandText = @"INSERT INTO factura_detalle ([id_factura],[id_producto],[id_lote_pt],[cantidad],[precio]) " +
                         "VALUES (@idFactura,@idProducto,@idLote,@cantidad,@precio) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
@@ -161,7 +161,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al crear Factura " + ex);
+                System.Windows.MessageBox.Show("Error al crear Detalle Factura " + ex);
             }
         }
 
@@ -245,9 +245,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     DetalleFactura temp = new DetalleFactura();
 
                     temp.IdFactura = dr["id_factura"].ToString();
-                    temp.Producto.ID = dr["id_producto"].ToString();
-                    temp.Producto.Name = dr["nombre_producto_terminado"].ToString();
-                    temp.LoteCod = dr["id_lote_salida"].ToString();
+                    temp.Producto.ID = dr["id_producto_terminado"].ToString();
+                    temp.Producto.Name = dr["nombre_producto"].ToString();
+                    temp.LoteCod = dr["id_lote_pt"].ToString();
                     temp.Cantidad = int.Parse(dr["cantidad"].ToString());
                     temp.Precio = double.Parse(dr["factura_Detalle.precio"].ToString());
 
@@ -439,6 +439,104 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return vendedores;
         }
+
+        public static List<Factura> GetFacturasFromLotePt(string loteCod)
+        {
+            var facturas = new List<Factura>();
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT factura_detalle.cantidad, factura.ID from factura_detalle INNER JOIN factura on factura_detalle.id_factura = factura.ID " +
+                            " Where factura_detalle.id_lote_pt =   '" + loteCod + "' " +
+                            "; ", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    Factura fact = new Factura();
+
+                    fact.IdFactura = dr["ID"].ToString();
+                    fact.Cliente.ID = dr["id_cliente"].ToString();
+                    fact.Cliente.Name = dr["nombre_commercial"].ToString();
+                    fact.Empleado.ID = dr["id_empleado"].ToString();
+                    fact.Empleado.Name = dr["emp_name"].ToString();
+                    fact.Direccion = dr["direccion"].ToString();
+                    fact.RTN = dr["RTN"].ToString();
+                    fact.Pendiente = double.Parse(dr["pendiente"].ToString());
+                    fact.Imp = double.Parse(dr["impuesto"].ToString());
+                    fact.EsAbonado = bool.Parse(dr["abonado"].ToString());
+                    fact.Emission = DateTime.Parse(dr["fechaEmision"].ToString());
+                    fact.Sub = double.Parse(dr["subtotal"].ToString());
+                    fact.Total = double.Parse(dr["total"].ToString());
+                    fact.Descuento = double.Parse(dr["descuento"].ToString());
+                    fact.Vendedor = dr["vendedor"].ToString();
+                    fact.Zona = dr["zona"].ToString();
+
+
+                    facturas.Add(fact);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar listado de facturas. " + ex.ToString());
+            }
+
+
+            return facturas;
+        }
+
+        public static List<Factura> GetFacturasFromLoteSal(string loteSal)
+        {
+            var facturas = new List<Factura>();
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("Select id_factura,cantidad FROM factura_detalle INNER JOIN lotes_producto_terminado ON factura_detalle.id_lote_pt = lotes_producto_terminado.Codigo_Correlativo " +
+                        "where lotes_producto_terminado.id_lote = '" + loteSal +  "' ; ", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    Factura fact = new Factura();
+
+                    fact.IdFactura = dr["id_factura"].ToString();
+
+
+                    facturas.Add(fact);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar listado de facturas. " + ex.ToString());
+            }
+
+
+            return facturas;
+        }
+
+
     }
 
     

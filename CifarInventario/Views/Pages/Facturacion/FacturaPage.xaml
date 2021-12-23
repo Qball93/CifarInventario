@@ -4,7 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-      xmlns:local="clr-namespace:CifarInventario.Views.Pages"
+      xmlns:local="clr-namespace:CifarInventario"
+      xmlns:control="http://filterdatagrid.control.com/2021"
       xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
@@ -12,6 +13,9 @@
       Height="700" Width="1000"
       Title="FacturaPage">
 
+
+
+    
     <Page.Resources>
         <converters:BoolToActive x:Key="boolToActive"/>
         <converters:BoolToTextSpanish x:Key="boolToSpanish"/>
@@ -19,6 +23,9 @@
         <Style TargetType="DataGridCell">
             <Setter Property="TextBlock.TextAlignment" Value="Center" />
         </Style>
+        
+        
+        
 
     </Page.Resources>
     <Page.DataContext>
@@ -30,7 +37,7 @@
 
         </TextBlock>
 
-        <DataGrid Margin="40,0,40,80"
+        <!--DataGrid Margin="40,0,40,80"
                   Height="400"
                   Name="dtPrime"
                   ItemsSource="{Binding Path=Facturas}"
@@ -88,7 +95,48 @@
 
             </DataGrid.Columns>
 
-        </DataGrid>
+        </DataGrid-->
+
+        <control:FilterDataGrid
+            x:Name="dtPrime"
+            Margin="40,0,40,80"
+            Height="400"
+            AutoGenerateColumns="True"
+            AutoGeneratingColumn="dataGrid1_AutoGeneratingColumn"
+            FilterLanguage="English"
+            SelectedItem="{Binding SelectedFactura}"
+            ItemsSource="{Binding Facturas, UpdateSourceTrigger=PropertyChanged}">
+
+            <control:FilterDataGrid.Columns>
+
+
+                <control:DataGridTemplateColumn Header=" Acciones" Width="*">
+                    <control:DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+                                <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openEditModal}" Style="{StaticResource editButton}" ToolTip="Editar Factura">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconBlock Icon="Edit" Foreground="White"/>
+                                    </StackPanel>
+                                </Button>
+                                <Button  Margin="5,0,0,0" Height="30" Width="30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openExportPdf}" Style="{StaticResource keyButton}" ToolTip="Imprimir Factura">
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconBlock Icon="Newspaper" Foreground="White"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                        </DataTemplate>
+                    </control:DataGridTemplateColumn.CellTemplate>
+                </control:DataGridTemplateColumn>
+
+
+
+
+            </control:FilterDataGrid.Columns>
+        </control:FilterDataGrid>
+
+
 
         <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNewFacturaModal}" Click="ButtonExport"   VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
             <StackPanel Orientation="Horizontal">

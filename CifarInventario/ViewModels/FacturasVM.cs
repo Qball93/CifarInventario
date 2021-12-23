@@ -2,11 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CifarInventario.Models;
-using System.Collections;
-using CifarInventario.Views;
 using CifarInventario.ViewModels.Classes;
 using System.Collections.ObjectModel;
 using CifarInventario.ViewModels.Classes.Queries;
@@ -33,6 +29,7 @@ namespace CifarInventario.ViewModels
         public FacturasVM()
         {
             Facturas = new ObservableCollection<Factura>(FacturaQueries.GetFacturaList());
+            testFactura = FacturaQueries.GetFacturaList();
             Productos = new ObservableCollection<ProductoTeminadoParaLista>(ProductQueries.GetPTSimp());
             Clientes = new ObservableCollection<IdName>(PersonaQueries.getClientes());
             Vendedores = new List<string>(FacturaQueries.getVendedores());
@@ -120,6 +117,8 @@ namespace CifarInventario.ViewModels
                 OnPropertyChanged("IsProductEnabled");
             }
         }
+
+        public List<Factura> testFactura { get; set; }
 
 
         private ObservableCollection<Factura> _facturas;
@@ -306,6 +305,7 @@ namespace CifarInventario.ViewModels
         }
 
         public EditFacturaModal editModal { get; set; }
+        public PrePrintModal openPrintModal { get; set; }
 
         public ICommand ResetFactura => new DelegateCommand(ResetNewFacturaModal);
         public ICommand ResetLotesCommand => new DelegateCommand(ResetLotes);
@@ -349,13 +349,15 @@ namespace CifarInventario.ViewModels
             SecondLine = "";
             ThirdLine = "";
 
-            var temp = new PrePrintModal(this);
+            openPrintModal = new PrePrintModal(this);
 
-            temp.ShowDialog();
+            openPrintModal.ShowDialog();
         }
 
         public void ExportFacturaPDF(object paramter)
         {
+
+
             string DEST = @"D:\Downloads\factura" + SelectedFactura.IdFactura + ".pdf";
 
             DetallesSelected = new ObservableCollection<DetalleFactura>(FacturaQueries.GetDetallesFactura(SelectedFactura.IdFactura));
@@ -372,12 +374,11 @@ namespace CifarInventario.ViewModels
 
             document.SetMargins(40, 40, 20, 20);
 
-            PdfFont italized = PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLDITALIC);
-            PdfFont normal = PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN);
+           // PdfFont italized = PdfFontFactory.CreateFont(StandardFonts.TIMES_BOLDITALIC);
+           // PdfFont normal = PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN);
 
 
 
-            string valor = "L.47.20";
             string descuento = "L.00.00";
             string valorTotal = "L.123.42";
 
@@ -388,15 +389,15 @@ namespace CifarInventario.ViewModels
             p.Add(char.MinValue + "                                " + SelectedFactura.Cliente.Name + "\n\n");
 
             p.SetFontSize(9);
-            p.SetFont(normal);
+            p.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
             document.Add(p);
 
-
+            
             Table details = new Table(UnitValue.CreatePercentArray(new float[] { 3.0f, 2.0f })).UseAllAvailableWidth();
 
             details.SetTextAlignment(TextAlignment.LEFT);
             details.SetFontSize(9);
-            details.SetFont(normal);
+            details.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
             details.AddCell(new Cell().Add(new Paragraph(char.MinValue + "                                   " + SelectedFactura.Direccion)).SetBorder(Border.NO_BORDER));
             details.AddCell(new Cell().Add(new Paragraph(SelectedFactura.RTN)).SetBorder(Border.NO_BORDER));
@@ -414,7 +415,7 @@ namespace CifarInventario.ViewModels
 
             table.SetTextAlignment(iText.Layout.Properties.TextAlignment.LEFT);
             table.SetFontSize(9);
-            table.SetFont(normal);
+            table.SetFont(PdfFontFactory.CreateFont(StandardFonts.TIMES_ROMAN));
 
 
             foreach (var element in DetallesSelected)
@@ -465,6 +466,13 @@ namespace CifarInventario.ViewModels
             document.Add(x);
 
             document.Close();
+
+            openPrintModal.Close();
+
+
+            System.Windows.MessageBox.Show("Documento Creado en  "   + DEST);
+
+
 
         }
 
@@ -546,9 +554,14 @@ namespace CifarInventario.ViewModels
 
                     foreach (var element in NewFacturaDetalles)
                     {
+
+                        //System.Windows.MessageBox.Show(element.Cantidad + " " + element.LoteCod + element.Producto.ID);
                         FacturaQueries.CreateDetalle(element, NewFactura.IdFactura);
-                        ProductQueries.updateProductoTerminadoAmount(element.Producto.ID, -element.Cantidad, element.LoteCod);
-                        ProductQueries.InventarioPTRemoveAmount(element.Producto.ID, element.Cantidad);
+
+
+
+                        ProductQueries.updateProductoTermnadoRemoveAmount(element.LoteCod, element.Cantidad );
+                        ProductQueries.InventarioPTSellAmount(element.Producto.ID, element.Cantidad);
                     }
 
                     System.Windows.MessageBox.Show("Factura Creada");
@@ -622,6 +635,9 @@ namespace CifarInventario.ViewModels
                 temp = NewFacturaNewDetalle;
                 NewFacturaDetalles.Add(temp);
                 ProductPairs.Add(tempPair);
+
+
+                //System.Windows.MessageBox.Show(temp.LoteCod + " " + temp.Producto.ID  + temp.Cantidad);
                 ResetLotes("");
             }
 

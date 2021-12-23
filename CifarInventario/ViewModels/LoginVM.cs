@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CifarInventario.ViewModels
 {
-    public class LoginVM : INotifyPropertyChanged
+    public class LoginVM : INotifyPropertyChanged, ICloseWindows
     {
 
         public LoginVM()
@@ -59,5 +59,17 @@ namespace CifarInventario.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+        void CloseWindow()
+        {
+            Close?.Invoke();
+        }
+
+        public Action Close { get; set; }
     }
+
+
+
+    
 }

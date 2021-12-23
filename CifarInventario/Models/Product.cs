@@ -324,7 +324,7 @@ namespace CifarInventario.Models
             set
             {
                 _unidadMuestra = value;
-                OnPropertyChanged("UnidadMuestra");
+                OnPropertyChanged(nameof(UnidadMuestra));
             }
         }
 
@@ -337,7 +337,7 @@ namespace CifarInventario.Models
             set
             {
                 _codigo = value;
-                OnPropertyChanged("Codigo");
+                OnPropertyChanged(nameof(Codigo));
             }
         }
 
@@ -348,7 +348,7 @@ namespace CifarInventario.Models
             set
             {
                 _nombre = value;
-                OnPropertyChanged("Nombre");
+                OnPropertyChanged(nameof(Nombre));
             }
         }
 
@@ -357,7 +357,7 @@ namespace CifarInventario.Models
             get { return _unidad; }
             set { 
                 _unidad = value;
-                OnPropertyChanged("Unidad");
+                OnPropertyChanged(nameof(Unidad));
 
             }
         }
@@ -368,7 +368,7 @@ namespace CifarInventario.Models
             set
             {
                 _conversionValue = value;
-                OnPropertyChanged("ConversionValue");
+                OnPropertyChanged(nameof(ConversionValue));
             }
         }
 
@@ -381,10 +381,10 @@ namespace CifarInventario.Models
             {
                 QuantityCheck = true;
                 _quantity = value;
-                ClearErrors("Quantity");
-                IsEmptyString(value, "Quantity");
-                isDecimal(value, "Quantity");
-                OnPropertyChanged("Quantity");
+                ClearErrors(nameof(Quantity));
+                IsEmptyString(value, nameof(Quantity));
+                isDecimal(value, nameof(Quantity));
+                OnPropertyChanged(nameof(Quantity));
             }
         }
 

@@ -70,7 +70,10 @@ namespace CifarInventario.ViewModels.Classes
 
 
 
-
+        public override string ToString()
+        {
+            return this.Name;
+        }
 
 
 

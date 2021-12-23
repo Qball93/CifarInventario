@@ -62,7 +62,7 @@ namespace CifarInventario.ViewModels
 
         public void EmptyLote(object parameter)
         {
-            MessageBoxResult result = MessageBox.Show("Vaciar este lote?", "Eliminar Detalle", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show("Vaciar este lote?", "Vaciar Lote", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 SelectedLote.CantidadActual = 0;

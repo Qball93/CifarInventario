@@ -1,0 +1,67 @@
+﻿<Window x:Class="CifarInventario.Views.Modals.LotesSalidamodal.DataGridInfoModal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CifarInventario.Views.Modals.LotesSalidamodal"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        BorderThickness="0"
+        MouseDown="Window_MouseDown"
+        WindowStyle="None"
+        Title="InfoPtModal" Height="360" Width="550">
+    <Grid Background="{StaticResource GridBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0" Background="{StaticResource MainThemeBrush}" >
+            <Label Content="Paquetes utilizados en Producto Terminado" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
+            <Button Height="30" Width="30" Background="{StaticResource MainThemeBrush}" FontSize="24"
+                    HorizontalAlignment="Right" BorderThickness="0,0,0,0" Click="Button_Click">
+                <fa:IconBlock Icon="Times" Foreground="White"/>
+            </Button>
+        </DockPanel>
+
+        <DockPanel Margin="40,0,40,0" Grid.Row="1">
+            <TextBlock Margin="40,28,201,587"  FontSize="40" FontWeight="Bold" Foreground="Black">
+                        <Run Text="{Binding SelectedLote.CodLote}"/>
+            </TextBlock>
+        </DockPanel>
+
+        
+
+        <DataGrid  Grid.Row="2"
+                   Margin="40,20,40,20"
+                   ItemsSource="{Binding Path=NewLotePTDetalles}" SelectedItem="{Binding NewLotePTSelectedNewDetalle}"
+                   AutoGenerateColumns="False"
+                   CanUserAddRows="False"
+                   FontSize="16">
+
+            <DataGrid.Resources>
+                <Style TargetType="DataGrid">
+                    <Setter Property="RowHeaderWidth" Value="0" />
+                    <Setter Property="BorderBrush" Value="black"/>
+                    <Setter Property="AlternationCount" Value="2"/>
+                    <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                </Style>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                    <Setter Property="BorderBrush" Value="black"/>
+                </Style>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header=" Nombre Empaque " Binding="{Binding NombreEmpaque}"></DataGridTextColumn>
+                <DataGridTextColumn Header=" Codigo Lote Empaque " Binding="{Binding CodigoLoteMP}"></DataGridTextColumn>
+                <DataGridTextColumn Header=" Codigo MP " Binding="{Binding CodigoMP}"></DataGridTextColumn>
+                
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</Window>

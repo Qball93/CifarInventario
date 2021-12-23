@@ -53,5 +53,23 @@ namespace CifarInventario.Views.Pages
         {
 
         }
+
+
+        private void dataGrid1_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            //...
+            
+            if(e.PropertyName == "Empleado" || e.PropertyName=="HasErrors" || e.PropertyName=="Imp" || e.PropertyName=="Sub" || e.PropertyName == "Descuento")
+            {
+                e.Cancel = true;
+            }
+
+            if(e.PropertyName == "EsAbonado")
+            {
+                e.Column.Header = "Es Abonado";
+            }
+
+
+        }
     }
 }

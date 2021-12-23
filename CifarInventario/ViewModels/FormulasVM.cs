@@ -231,7 +231,7 @@ namespace CifarInventario.ViewModels
             set
             {
                 _newFormulaInstructions = value;
-                OnPropertyChanged("NewFormulaInstructions");
+                OnPropertyChanged(nameof(NewFormulaInstructions));
             }
         }
 

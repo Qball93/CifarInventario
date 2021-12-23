@@ -11,10 +11,11 @@
         Title="Login" Height="422.7" Width="725.982"
         MouseDown="Window_MouseDown"
         WindowStyle="None" ResizeMode="NoResize" BorderThickness="0">
-    <Window.Resources>
-        <vm:RecuperacionVM x:Key="vm"/>
-    </Window.Resources>
-    <Grid Margin="0,0,-0.4,0.4" DataContext="{StaticResource vm}">
+    
+    <Window.DataContext>
+        <vm:RecuperacionVM/>
+    </Window.DataContext>
+    <Grid Margin="0,0,-0.4,0.4" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="310*"/>
             <ColumnDefinition Width="483*"/>
@@ -64,7 +65,7 @@
                 FontWeight="Bold"
                 Foreground="White"
                 Background="{StaticResource MainThemeBrush}" 
-                BorderThickness="0" Command="{Binding loginCommand}">
+                BorderThickness="0" Command="{Binding validate}">
         </Button>
 
 
@@ -90,6 +91,7 @@
             VerticalAlignment="Top"
             Background="{StaticResource MainThemeBrush}" 
             Foreground="White"
+            Command="{Binding obtainQuestion}"
             Height="30"
             FontWeight="Bold"
             Content="Obtener Pregunta"
@@ -113,7 +115,7 @@
                  VerticalAlignment="Top"
                  Width="271"
                  Grid.Column="1"
-                IsEnabled="{Binding userExists}"
+                 IsEnabled="{Binding UserExists}"
                  HorizontalAlignment="Left" 
                  FontSize="14" 
                  Text="{Binding NewPregunta.Respuesta , Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"

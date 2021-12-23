@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Grid.Row="0" Background="{StaticResource MainThemeBrush}" >
-            <Label Content="Creacion de Factura" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
+            <Label Content="Impresion de Factura" Foreground="White" VerticalAlignment="Center" FontSize="18"/>
             <Button Height="30" Width="30" Background="{StaticResource MainThemeBrush}" FontSize="24"
                     HorizontalAlignment="Right" BorderThickness="0,0,0,0" Click="Button_Click">
                 <fa:IconBlock Icon="Times" Foreground="White"/>

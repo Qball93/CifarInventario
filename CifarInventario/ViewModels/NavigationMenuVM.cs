@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CifarInventario.Models;
+using CifarInventario.ViewModels.Classes;
 using System.Text;
 using CifarInventario.ViewModels.Classes.Queries;
 using System.Threading.Tasks;
@@ -60,7 +61,7 @@ namespace CifarInventario.ViewModels
         {
             get
             {
-                return MenuQueries.getMenus(1);
+                return MenuQueries.getMenus(Globals.getId());
             }
         }
 
