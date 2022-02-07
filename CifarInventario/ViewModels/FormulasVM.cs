@@ -64,6 +64,8 @@ namespace CifarInventario.ViewModels
 
         public Formula TransformFormula {get; set;}
 
+        public ExtraInfoModal editModal { get; set; }
+
         private ObservableCollection<Formula> _transformations;
 
         public ObservableCollection<Formula> Transformations
@@ -75,7 +77,8 @@ namespace CifarInventario.ViewModels
                 OnPropertyChanged("Transformations");
             }
         }
-    
+
+        public int CurrentStep { get; set; }
 
 
         #region List Members
@@ -324,6 +327,8 @@ namespace CifarInventario.ViewModels
             NewFormulaSelectedProduct.Codigo = SelectedDetalle.CodFormula;
             NewFormulaSelectedProduct.Nombre = SelectedDetalle.Name;
 
+  
+
             var TestView = new EditDetalleModal(this);
             TestView.ShowDialog();
         }
@@ -381,9 +386,12 @@ namespace CifarInventario.ViewModels
 
         public void FormulaExtraInfoModal(object parameter)
         {
-            var test = new ExtraInfoModal(this);
 
-            test.ShowDialog();
+            NewFormula = new Formula(SelectedFormula);
+            editModal = new ExtraInfoModal(this);
+            tempCode = SelectedFormula.CodFormula;
+
+            editModal.ShowDialog();
         }
 
         public void FormulaProcedimientoModal(object parameter)
@@ -401,9 +409,9 @@ namespace CifarInventario.ViewModels
         public void AgregarProcediminetoDetalle()
         {
 
-            System.Windows.MessageBox.Show("this is the number " + NewFormulaNewInstruction.Step);
 
 
+/*
             if (NewFormulaNewInstruction.Step == 0)
             {
                 FormulaQueries.agregarProcedimiento(NewFormulaNewInstruction.Instruction, (NewFormulaInstructions.Count + 1), SelectedFormula.CodFormula);
@@ -422,19 +430,29 @@ namespace CifarInventario.ViewModels
                 System.Windows.MessageBox.Show("Porfavor ingrese un valor de orden no mayor al numero de instrucciones.");
             }
             else
-            {
-                FormulaQueries.agregarProcedimientoEnPosicion(NewFormulaNewInstruction.Instruction, NewFormulaNewInstruction.Step, SelectedFormula.CodFormula);
+            {*/
+               /* FormulaQueries.agregarProcedimientoEnPosicion(NewFormulaNewInstruction.Instruction, NewFormulaNewInstruction.Step, SelectedFormula.CodFormula);
                 ProcedimientoDetalle testvar = new ProcedimientoDetalle()
                 {
                     Instruction = NewFormulaNewInstruction.Instruction
                 };
                 NewFormulaInstructions.Insert((NewFormulaNewInstruction.Step - 1), testvar);
+               
+                System.Windows.MessageBox.Show("Instruccion agregada");-*/
+
+                FormulaQueries.agregarProcedimiento(NewFormulaNewInstruction.Instruction, NewFormulaNewInstruction.Step, SelectedFormula.CodFormula);
+
+            ProcedimientoDetalle testvar = new ProcedimientoDetalle()
+            {
+                Instruction = NewFormulaNewInstruction.Instruction,
+                Step = NewFormulaNewInstruction.Step
+            };
+
+                NewFormulaInstructions.Add(testvar);
 
                 System.Windows.MessageBox.Show("Instruccion agregada");
 
-            }
-
-            
+          // }
             
         }
 
@@ -477,9 +495,11 @@ namespace CifarInventario.ViewModels
         public void EditarFormula()
         {
 
-            if(SelectedFormula.CodFormula != tempCode)
+           
+
+            if(NewFormula.CodFormula != tempCode)
             {
-                if (FormulaQueries.isRepeatedFormula(SelectedFormula.CodFormula))
+                if (FormulaQueries.isRepeatedFormula(NewFormula.CodFormula))
                 {
                     System.Windows.MessageBox.Show("Codigo de Formula ya existe.");
                 }
@@ -488,16 +508,31 @@ namespace CifarInventario.ViewModels
 
 
                     //System.Windows.MessageBox.Show("This is form" + NewFormula.FormaFarm);
-                    FormulaQueries.editarFormula(SelectedFormula, tempCode);
-                    System.Windows.MessageBox.Show("Formula Maestra actualizada.");
+                    FormulaQueries.editarFormula(NewFormula, tempCode);
+                    System.Windows.MessageBox.Show("Informacion de Formula Actualizada");
+                    updateSelected();
+                    editModal.Close();
                 }
             }
             else
             {
-                FormulaQueries.editarFormula(SelectedFormula, tempCode);
+                FormulaQueries.editarFormula(NewFormula, tempCode);
+                System.Windows.MessageBox.Show("Informacion de Formula Actualizada");
+                updateSelected();
+                editModal.Close();
             }
 
-            System.Windows.MessageBox.Show("Informacion de Formula Actualizada");
+            
+        }
+
+
+        void updateSelected()
+        {
+            SelectedFormula.CodFormula = NewFormula.CodFormula;
+            SelectedFormula.NombreFormula = NewFormula.NombreFormula;
+            SelectedFormula.FormaFarm = NewFormula.FormaFarm;
+            SelectedFormula.Precauciones = NewFormula.Precauciones;
+            SelectedFormula.Cantidad = NewFormula.Cantidad;
         }
 
 
@@ -513,7 +548,8 @@ namespace CifarInventario.ViewModels
         public void NewFormulaModal(object parameter)
         {
             var TestView = new NewFormulaModal(this);
-
+            NewFormula = new Formula();
+            
             isTransform = false;
             NewFormulaDetalles = new ObservableCollection<DetalleFormula>();
             NewFormulaSelectedDetalle = new DetalleFormula();
@@ -554,6 +590,18 @@ namespace CifarInventario.ViewModels
                 //System.Windows.MessageBox.Show("This is form" + NewFormula.FormaFarm);
                 FormulaQueries.agregarFormula(NewFormulaDetalles.ToList(), NewFormula);
                 Formulas.Add(NewFormula);
+
+                if (NewFormulaInstructions.Count > 0)
+                {
+
+                    foreach(var element in NewFormulaInstructions)
+                    {
+                        CurrentStep++;
+                        FormulaQueries.agregarProcedimiento(element.Instruction, CurrentStep, NewFormula.CodFormula);
+                    }
+                    
+                }
+
                 System.Windows.MessageBox.Show("Formula Maestra creada.");
                 limpiar(1);
             }
@@ -561,6 +609,8 @@ namespace CifarInventario.ViewModels
 
         public void NewFormulaAddInstruction()
         {
+            
+
             var testDetalle = new ProcedimientoDetalle
             {
                 Instruction = NewFormulaNewInstruction.Instruction

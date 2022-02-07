@@ -147,6 +147,8 @@
                             Width="180"
                             SelectedIndex="1"
                             Margin="19,0,0,0"
+                            IsTextSearchEnabled="True"
+                            TextSearch.TextPath="Nombre"
                             FontSize="14"  
                             ToolTip="Nombre Proveedor">
                             <ComboBox.ItemTemplate>

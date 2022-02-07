@@ -448,7 +448,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT factura_detalle.cantidad, factura.ID from factura_detalle INNER JOIN factura on factura_detalle.id_factura = factura.ID " +
+                cmd = new OleDbCommand("SELECT Distinct(factura.ID) from factura_detalle INNER JOIN factura on factura_detalle.id_factura = factura.ID " +
                             " Where factura_detalle.id_lote_pt =   '" + loteCod + "' " +
                             "; ", cn);
                 dr = cmd.ExecuteReader();
@@ -462,22 +462,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     Factura fact = new Factura();
 
                     fact.IdFactura = dr["ID"].ToString();
-                    fact.Cliente.ID = dr["id_cliente"].ToString();
-                    fact.Cliente.Name = dr["nombre_commercial"].ToString();
-                    fact.Empleado.ID = dr["id_empleado"].ToString();
-                    fact.Empleado.Name = dr["emp_name"].ToString();
-                    fact.Direccion = dr["direccion"].ToString();
-                    fact.RTN = dr["RTN"].ToString();
-                    fact.Pendiente = double.Parse(dr["pendiente"].ToString());
-                    fact.Imp = double.Parse(dr["impuesto"].ToString());
-                    fact.EsAbonado = bool.Parse(dr["abonado"].ToString());
-                    fact.Emission = DateTime.Parse(dr["fechaEmision"].ToString());
-                    fact.Sub = double.Parse(dr["subtotal"].ToString());
-                    fact.Total = double.Parse(dr["total"].ToString());
-                    fact.Descuento = double.Parse(dr["descuento"].ToString());
-                    fact.Vendedor = dr["vendedor"].ToString();
-                    fact.Zona = dr["zona"].ToString();
-
 
                     facturas.Add(fact);
 
@@ -504,7 +488,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("Select id_factura,cantidad FROM factura_detalle INNER JOIN lotes_producto_terminado ON factura_detalle.id_lote_pt = lotes_producto_terminado.Codigo_Correlativo " +
+                cmd = new OleDbCommand("Select Distinct(id_factura) FROM factura_detalle INNER JOIN lotes_producto_terminado ON factura_detalle.id_lote_pt = lotes_producto_terminado.Codigo_Correlativo " +
                         "where lotes_producto_terminado.id_lote = '" + loteSal +  "' ; ", cn);
                 dr = cmd.ExecuteReader();
 

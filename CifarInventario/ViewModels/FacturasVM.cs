@@ -535,10 +535,10 @@ namespace CifarInventario.ViewModels
 
                     NewFactura.Empleado.ID = Globals.getId().ToString();
 
-                    foreach (var element in NewFacturaDetalles)
+                   /* foreach (var element in NewFacturaDetalles)
                     {
                         NewFactura.Sub += element.Total;
-                    }
+                    }*/
 
                     NewFactura.Total = NewFactura.Sub;
 
@@ -547,6 +547,9 @@ namespace CifarInventario.ViewModels
                     {
                         NewFactura.Pendiente = NewFactura.Total;
                     }
+
+
+                    NewFactura.Total -= NewFactura.Descuento;
 
                     //System.Windows.MessageBox.Show(NewFactura.IdFactura + " " + NewFactura.Empleado.ID + " " + NewFactura.Cliente.ID + " " + NewFactura.Sub + " " + NewFactura.Total + " " + NewFactura.EsAbonado.ToString() + " " + NewFactura.Pendiente + " " + NewFactura.Emission.ToShortDateString());
 
@@ -565,6 +568,8 @@ namespace CifarInventario.ViewModels
                     }
 
                     System.Windows.MessageBox.Show("Factura Creada");
+
+                    Facturas.Add(NewFactura);
                 }
                 else
                 {

@@ -118,7 +118,8 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn  Header=" Id "  Binding="{Binding CodLote}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Nombre Formula "  Binding="{Binding NombreFormula}"></DataGridTextColumn>
-                            <DataGridTextColumn  Header=" Cantidad "  Binding="{Binding CantidadActual}"></DataGridTextColumn>
+                            <DataGridTextColumn  Header=" Cantidad Actual "  Binding="{Binding CantidadActual}"></DataGridTextColumn>
+                            <DataGridTextColumn  Header=" Cantidad Original "  Binding="{Binding CantidadCreacion}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Unidad "  Binding="{Binding Unidad}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Fecha Creado " Binding="{Binding FechaCreacion, StringFormat=d}"/>
                             <DataGridTextColumn  Header=" Fecha Vencimiento  " Binding="{Binding FechaVencimiento, StringFormat=d}"/>
@@ -223,11 +224,11 @@
                                                     <fa:IconBlock Icon="Tape" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
-                                            <!--Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.vaciarLote}"  Style="{StaticResource removeButton}" ToolTip="Deshacer">
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDonateModal}"  Style="{StaticResource editButton}" ToolTip="Donar">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <fa:IconBlock Icon="Trash" Foreground="White"/>
+                                                    <fa:IconBlock Icon="gifts" Foreground="White"/>
                                                 </StackPanel>
-                                            </Button-->
+                                            </Button>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

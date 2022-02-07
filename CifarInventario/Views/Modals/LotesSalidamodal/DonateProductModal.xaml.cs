@@ -1,35 +1,29 @@
-﻿using System;
+﻿using CifarInventario.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using CifarInventario.Models;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using CifarInventario.ViewModels.Classes;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using CifarInventario.ViewModels;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views.Modals.FormulaModals
+namespace CifarInventario.Views.Modals.LotesSalidamodal
 {
     /// <summary>
-    /// Interaction logic for NewFormulaModal.xaml
+    /// Interaction logic for DonateProductModal.xaml
     /// </summary>
-    public partial class NewFormulaModal : Window
+    public partial class DonateProductModal : Window
     {
-        
-
-
-        public NewFormulaModal(FormulasVM vm)
+        public DonateProductModal(LotesSalidaVM VM)
         {
             InitializeComponent();
-
-            DataContext = vm;
+            DataContext = VM;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -42,10 +36,6 @@ namespace CifarInventario.Views.Modals.FormulaModals
             if (e.ChangedButton == MouseButton.Left)
                 this.DragMove();
         }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
+

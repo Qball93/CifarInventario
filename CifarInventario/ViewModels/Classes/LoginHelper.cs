@@ -24,7 +24,7 @@ namespace CifarInventario.ViewModels.Classes
             cn = DBConnection.MainConnection();
             try
             {
-                cmd = new OleDbCommand("SELECT usuarios.salt, usuarios.password, roles.nombre " +
+                cmd = new OleDbCommand("SELECT usuarios.id, usuarios.id_rol, usuarios.salt, usuarios.password, roles.nombre " +
                     "FROM usuarios INNER JOIN roles ON usuarios.id_rol = roles.id " +
                     "WHERE usuarios.usuario = '" + Username + "' ", cn);
                 dr = cmd.ExecuteReader();
@@ -37,6 +37,7 @@ namespace CifarInventario.ViewModels.Classes
                 {
                     loginUser.salt = dr["salt"].ToString();
                     loginUser.Password = dr["password"].ToString();
+                    userRole.Id = int.Parse(dr["id_rol"].ToString());
                     userRole.RoleName = dr["nombre"].ToString();
                 }
 

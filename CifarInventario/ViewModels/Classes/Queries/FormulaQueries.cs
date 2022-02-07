@@ -310,8 +310,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE formulas " +
-                    "SET id = '" + newFormula.CodFormula + "' ,nombre_formula = '" + newFormula.NombreFormula + "', forma_farm = '" + newFormula.FormaFarm + "' " +
-                    "WHERE id = " + oldCodigo + ";", cn);
+                    "SET id = '" + newFormula.CodFormula + "' , nombre_formula = '" + newFormula.NombreFormula + "', forma_farm = '" + newFormula.FormaFarm + "'," +
+                    "cantidad_creada = '" + newFormula.Cantidad + "', precauciones = '" + newFormula.Precauciones + "'    " +
+                    "WHERE id = '" + oldCodigo + "' ;", cn);
                 cmd.ExecuteNonQuery();
 
 

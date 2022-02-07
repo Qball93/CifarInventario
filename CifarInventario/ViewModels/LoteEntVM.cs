@@ -20,7 +20,9 @@ namespace CifarInventario.ViewModels
         {
             LotesActivos = new ObservableCollection<LoteEntrada>(InventoryQueries.GetLotesEntradaActivos());
             LotesPaquetes = new ObservableCollection<LoteEntrada>(InventoryQueries.GetAllContainerLotes());
-            MateriaPrima = new ObservableCollection<formulaProduct>(ProductQueries.GetAllMpSimplified());
+            LotesInactivos = new ObservableCollection<LoteEntrada>(InventoryQueries.GetLotesEntradaInActivos());
+            LotesPaquetesInactivos = new ObservableCollection<LoteEntrada>(InventoryQueries.GetAllContainerLotesInactivos());
+            MateriaPrima = new ObservableCollection<formulaProduct>(ProductQueries.GetAllMpSimplifiedNoWater());
             Proveedores = new ObservableCollection<DisplayProveedor>(PersonaQueries.GetDisplayProveedores());
             PaquetesMP = new ObservableCollection<formulaProduct>(ProductQueries.GetAllContainersMP());
             newLoteCommand = new NewLoteEntCommand(this);
@@ -36,7 +38,6 @@ namespace CifarInventario.ViewModels
 
 
         private ObservableCollection<LoteEntrada> _lotesPaquetes;
-
         public ObservableCollection<LoteEntrada> LotesPaquetes
         {
             get { return _lotesPaquetes; }
@@ -47,9 +48,19 @@ namespace CifarInventario.ViewModels
             }
         }
 
+        private ObservableCollection<LoteEntrada> _lotesPaquetesInactivos;
+        public ObservableCollection<LoteEntrada> LotesPaquetesInactivos
+        {
+            get { return _lotesPaquetesInactivos; }
+            set
+            {
+                _lotesPaquetesInactivos = value;
+                OnPropertyChanged(nameof(LotesPaquetesInactivos));
+            }
+        }
+
 
         private ObservableCollection<formulaProduct> _paquetesMP;
-
         public ObservableCollection<formulaProduct> PaquetesMP
         {
             get { return _paquetesMP; }
@@ -61,7 +72,6 @@ namespace CifarInventario.ViewModels
         }
 
         private LoteEntrada _newLote;
-
         public LoteEntrada NewLote
         {
             get { return _newLote; }
@@ -72,8 +82,19 @@ namespace CifarInventario.ViewModels
             }
         }
 
-        private ObservableCollection<LoteEntrada> _lotesActivos;
+        private ObservableCollection<LoteEntrada> _lotesInctivos;
+        public ObservableCollection<LoteEntrada> LotesInactivos
+        {
+            get { return _lotesInctivos; }
+            set
+            {
+                _lotesInctivos = value;
+                OnPropertyChanged(nameof(LotesInactivos));
 
+            }
+        }
+
+        private ObservableCollection<LoteEntrada> _lotesActivos;
         public ObservableCollection<LoteEntrada> LotesActivos
         {
             get { return _lotesActivos; }
@@ -86,7 +107,6 @@ namespace CifarInventario.ViewModels
         }
 
         private LoteEntrada _selectedLoteActivo;
-
         public LoteEntrada SelectedLoteActivo
         {
             get { return _selectedLoteActivo; }
@@ -98,7 +118,6 @@ namespace CifarInventario.ViewModels
         }
 
         private ObservableCollection<formulaProduct> _materiaPrima;
-
         public ObservableCollection<formulaProduct> MateriaPrima
         {
             get { return _materiaPrima; }
@@ -204,6 +223,8 @@ namespace CifarInventario.ViewModels
             NewLote.CodMP = SelectedMateriaPrima.Codigo;
             NewLote.CantidadActual = NewLote.CantidadOriginal;
             NewLote.CantidadExacta = NewLote.CantidadOriginal * SelectedMateriaPrima.ConversionValue;
+            NewLote.NombreMP = SelectedMateriaPrima.Nombre;
+            NewLote.NombreProveedor = SelectedProveedor.NombreProveedor;
 
             //System.Windows.MessageBox.Show(NewLote.CantidadExacta  + " " + SelectedMateriaPrima.conversionValue);
             

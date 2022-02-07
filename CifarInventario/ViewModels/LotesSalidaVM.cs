@@ -68,6 +68,7 @@ namespace CifarInventario.ViewModels
         public CreatePTLoteModal loteModal;
         public AmountsForPTModal amountModal;
         public EditPackageModal desempaqueModal;
+        public DonateProductModal donateModal;
 
         private ObservableCollection<LoteSalida> _lotes;
         public ObservableCollection<LoteSalida> Lotes
@@ -269,18 +270,30 @@ namespace CifarInventario.ViewModels
         public ICommand openEditarModal => new DelegateCommand(OpenEditarModal);
        // public ICommand vaciarLote => new DelegateCommand(VaciarLote);
         public ICommand openInfoPaqueteModal => new DelegateCommand(OpenInfoPaquetesModal);
+        public ICommand openDonateModal => new DelegateCommand(OpenDonateModal);
 
+        public DonateProductCommand donarProductoCommand { get; set; }
         public ProcesarCantidadAmountCommand procesarCantidadAmountCommand { get; set; }
         public CreatePTFromLoteCommand createPTFromLoteCommand { get; set; }
         public AgregarDetalleEmpaque agregarDetalleEmpaque { get; set; }
         public DesmpaqueCommand desempaqueCommand { get; set; }
         public EditarLoteSalCommand editarLoteSalCommand { get; set; }
+        
 
+
+        public void OpenDonateModal(object parameter)
+        {
+            PlaceHolder = new emptyObject();
+            donarProductoCommand = new DonateProductCommand(this);
+            PlaceHolder.EmptyWord = "";
+            PlaceHolder.EmptyAmount = 1.00;
+            donateModal = new DonateProductModal(this);
+            donateModal.ShowDialog();
+        }
 
         public void OpenDesempaqueModal(object parameter)
         {
             PlaceHolder = new emptyObject();
-            PlaceHolder.EmptyWord = "empty";
             desempaqueModal = new EditPackageModal(this);
             desempaqueCommand = new DesmpaqueCommand(this);
             desempaqueModal.ShowDialog();
@@ -374,38 +387,6 @@ namespace CifarInventario.ViewModels
             amountModal.ShowDialog();
         }
 
-      /*  public void VaciarLote(object parameter)
-        {
-
-            if (int.Parse(SelectedLotePT.CantidadOriginal) > SelectedLotePT.Existencia)
-            {
-                MessageBox.Show("Este lote tiene productos vendidos por lo que no se puede vaciar");
-            }
-            else
-            {
-
-
-
-                MessageBoxResult result = MessageBox.Show("Eliminar este producto terminado?", "Vaciar Lote", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {
-                    NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
-
-                    foreach (LotePTDetalle element in NewLotePTDetalles)
-                    {
-                        InventoryQueries.updateLoteEntradaAmount(element.CodigoLoteMP, int.Parse(SelectedLotePT.CantidadOriginal), element.CodigoMP);
-                    }
-
-                    ProductQueries.removeDetallePtEmpaqueLote(SelectedLotePT.CodigoCorrelativo);
-
-                    ProductQueries.AdjustExistingLote(SelectedLotePT.CodigoCorrelativo, PlaceHolder, SelectedLotePT.CodigoPT);
-                    InventoryQueries.updateLoteSalidaAmount(PlaceHolder.EmptyAmount, SelectedLote.CodLote);
-
-                    MessageBox.Show("Producto Eliminado");
-                }
-                
-            }
-        }*/
         public string createRegistro()
         {
             string registro = " Reempaque de lote: " + SelectedLotePT.CodigoCorrelativo + " \n Cantidad de unidades: " + PlaceHolder.EmptyCantidad +
@@ -569,6 +550,30 @@ namespace CifarInventario.ViewModels
             SelectedLote.FechaCreacion = NewLote.FechaCreacion;
             SelectedLote.CantidadActual = NewLote.CantidadActual;
             SelectedLote.CantidadCreacion = NewLote.CantidadCreacion;
+        }
+
+        public void donateCantidadLoteSal()
+        {
+            if (SelectedLotePT.Existencia < PlaceHolder.EmptyCantidad)
+            {
+                MessageBox.Show("La cantidad a donar no puede ser mayor a la cantidad existente");
+            }
+            else
+            {
+                NewLotePTDetalles = new ObservableCollection<LotePTDetalle>(ProductQueries.getDetallesFromPTLote(SelectedLotePT.CodigoCorrelativo));
+
+
+
+
+                InventoryQueries.CreateDonacionRegistro(PlaceHolder.EmptyWord, SelectedLotePT,PlaceHolder.EmptyCantidad);
+                ProductQueries.updateProductoTermnadoRemoveAmount(SelectedLotePT.CodigoCorrelativo,PlaceHolder.EmptyCantidad);
+                ProductQueries.InventarioPTSellAmount(SelectedLotePT.CodigoPT,PlaceHolder.EmptyCantidad);
+
+                MessageBox.Show("Cantidad Donada");
+
+                SelectedLotePT.Existencia -= PlaceHolder.EmptyCantidad;
+                donateModal.Close();
+            }
         }
 
 

@@ -65,6 +65,86 @@
                             <DataGridTextColumn Header="  Codigo Lote  " Width="Auto" Binding="{Binding CodLote}"/>
                             <DataGridTextColumn Header="  Unidad  " Width="Auto" Binding="{Binding Unidad}"/>
                             <DataGridTextColumn Header="  Fecha Entrada  " Width="Auto" Binding="{Binding FechaEntrada}"/>
+                            <DataGridTextColumn Header="  Fecha Creacion  " Width="Auto" Binding="{Binding FechaFabricacion}"/>
+                            <DataGridTextColumn Header="  Fecha Vencimiento  " Width="Auto" Binding="{Binding FechaVencimiento}"/>
+                            <DataGridTextColumn Header="  Nombre Proveedor  " Width="Auto" Binding="{Binding NombreProveedor}"/>
+                            <DataGridTextColumn Header="  Materia Prima  " Width="Auto" Binding="{Binding NombreMP}"/>
+                            <DataGridTextColumn Header="  Cantidad Actual  " Width="Auto" Binding="{Binding CantidadActual}"/>
+                            <DataGridTextColumn Header="  Cantidad Original  " Width="Auto" Binding="{Binding CantidadOriginal}"/>
+
+                            <DataGridTemplateColumn Header=" Acciones  " Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" Style="{StaticResource removeButton}" ToolTip="Inhabilitar Lote">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <fa:IconBlock Icon="Cross" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                    <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding newLoteModal}"  VerticalAlignment="Top" Height="40" Width="135" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="Plus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Ingresar Lote"/>
+                        </StackPanel>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
+
+            </TabItem>
+            
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="  Lotes Paquetes/Envases " />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Background="{StaticResource GridBackgroundBrush}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25*"/>
+                        <ColumnDefinition Width="971*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Margin="15,40,201,587" Text="Lotes de Paqueteria" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.Column="1">
+
+                    </TextBlock>
+
+                    <DataGrid Margin="15,117,40,157" Height="400" ItemsSource="{Binding Path=LotesPaquetes}" SelectedItem="{Binding SelectedLoteActivo}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16" Grid.Column="1">
+                        <DataGrid.Resources>
+
+                            <Style TargetType="DataGrid">
+                                <Setter Property="RowHeaderWidth" Value="0" />
+                                <Setter Property="BorderBrush" Value="black"/>
+                                <Setter Property="AlternationCount" Value="2"/>
+                                <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                            </Style>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="black"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="  Codigo Lote  " Width="Auto" Binding="{Binding CodLote}"/>
+                            <DataGridTextColumn Header="  Unidad  " Width="Auto" Binding="{Binding Unidad}"/>
+                            <DataGridTextColumn Header="  Fecha Entrada  " Width="Auto" Binding="{Binding FechaEntrada}"/>
                             <DataGridTextColumn Header="  Nombre Proveedor  " Width="Auto" Binding="{Binding NombreProveedor}"/>
                             <DataGridTextColumn Header="  Materia Prima  " Width="Auto" Binding="{Binding NombreMP}"/>
                             <DataGridTextColumn Header="  Cantidad Actual  " Width="Auto" Binding="{Binding CantidadActual}"/>
@@ -94,7 +174,81 @@
 
                     </DataGrid>
 
-                    <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding newLoteModal}"  VerticalAlignment="Top" Height="40" Width="105" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                    <Button HorizontalAlignment="Left" Margin="775,580,0,0" Command="{Binding newLotePaqueteModal}"  VerticalAlignment="Top" Height="40" Width="105" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="1" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="Plus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Ingresar Lote"/>
+                        </StackPanel>
+                    </Button>
+                    <Button HorizontalAlignment="Left" Margin="625,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="  Lote MP Invalidos " />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid Background="{StaticResource GridBackgroundBrush}">
+                    <TextBlock Margin="40,40,201,587" Text="Lotes De Materia Prima Invalidos" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+                    </TextBlock>
+
+                    <DataGrid Margin="40,100,40,140" Height="400" ItemsSource="{Binding Path=LotesInactivos}" SelectedItem="{Binding SelectedLoteActivo}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+                        <DataGrid.Resources>
+
+                            <Style TargetType="DataGrid">
+                                <Setter Property="RowHeaderWidth" Value="0" />
+                                <Setter Property="BorderBrush" Value="black"/>
+                                <Setter Property="AlternationCount" Value="2"/>
+                                <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                            </Style>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="black"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="  Codigo Lote  " Width="Auto" Binding="{Binding CodLote}"/>
+                            <DataGridTextColumn Header="  Unidad  " Width="Auto" Binding="{Binding Unidad}"/>
+                            <DataGridTextColumn Header="  Fecha Entrada  " Width="Auto" Binding="{Binding FechaEntrada}"/>
+                            <DataGridTextColumn Header="  Fecha Creacion  " Width="Auto" Binding="{Binding FechaFabricacion}"/>
+                            <DataGridTextColumn Header="  Fecha Vencimiento  " Width="Auto" Binding="{Binding FechaVencimiento}"/>
+                            <DataGridTextColumn Header="  Nombre Proveedor  " Width="Auto" Binding="{Binding NombreProveedor}"/>
+                            <DataGridTextColumn Header="  Materia Prima  " Width="Auto" Binding="{Binding NombreMP}"/>
+                            <DataGridTextColumn Header="  Cantidad Actual  " Width="Auto" Binding="{Binding CantidadActual}"/>
+                            <DataGridTextColumn Header="  Cantidad Original  " Width="Auto" Binding="{Binding CantidadOriginal}"/>
+
+                            <DataGridTemplateColumn Header=" Acciones  " Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}}" Style="{StaticResource removeButton}" ToolTip="Inhabilitar Lote">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <fa:IconBlock Icon="Cross" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                    <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding newLoteModal}"  VerticalAlignment="Top" Height="40" Width="135" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
                         <StackPanel Orientation="Horizontal">
                             <fa:IconBlock Icon="Plus" Foreground="White"/>
                             <TextBlock Foreground="white" Text="  Ingresar Lote"/>
@@ -110,10 +264,11 @@
                 </Grid>
 
             </TabItem>
+            
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="  Lotes Paquetes/Envases " />
+                        <TextBlock Text="  Lotes Paquetes/Envases Invalidos " />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid Background="{StaticResource GridBackgroundBrush}">
@@ -125,7 +280,7 @@
 
                     </TextBlock>
 
-                    <DataGrid Margin="15,117,40,157" Height="400" ItemsSource="{Binding Path=LotesPaquetes}" SelectedItem="{Binding SelectedLoteActivo}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16" Grid.Column="1">
+                    <DataGrid Margin="15,117,40,157" Height="400" ItemsSource="{Binding Path=LotesPaquetesInactivos}" SelectedItem="{Binding SelectedLoteActivo}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16" Grid.Column="1">
                         <DataGrid.Resources>
 
                             <Style TargetType="DataGrid">

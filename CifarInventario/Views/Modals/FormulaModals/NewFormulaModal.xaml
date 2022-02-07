@@ -128,8 +128,10 @@
                           Width="200"
                           SelectedIndex="1"
                           Margin="20,0,0,0"
+                          IsTextSearchEnabled="True"
+                          TextSearch.TextPath="Nombre"
                           FontSize="14"
-                          ToolTip="Elija MP para formula">
+                          ToolTip="Elija MP para formula" SelectionChanged="ComboBox_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>

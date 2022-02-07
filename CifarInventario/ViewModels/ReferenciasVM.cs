@@ -179,14 +179,17 @@ namespace CifarInventario.ViewModels
 
         public void GenerarLotes(object parameter)
         {
-            System.Windows.MessageBox.Show(SelectedProduct.Nombre);
             IsEnabledLotes = true;
             Lotes = new ObservableCollection<LoteEntrada>(InventoryQueries.getLotesForMP(SelectedProduct.Codigo, 0));
+
+            System.Windows.MessageBox.Show("Busqueda Terminada");
         }
 
         public void buscarLoteSalPorMp()
         {
             LotesSalida = new ObservableCollection<LotePTDetalle>(InventoryQueries.getLoteSalFromMpLote(SelectedLote.CodInterno));
+
+            System.Windows.MessageBox.Show("Busqueda Terminada");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

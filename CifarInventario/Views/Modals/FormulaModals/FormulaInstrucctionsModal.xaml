@@ -57,7 +57,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-
+                <DataGridTextColumn Header=" # " Binding="{Binding Step}"></DataGridTextColumn>
                 <DataGridTextColumn Header=" Instruccion " Binding="{Binding Instruction}"></DataGridTextColumn>
                 <DataGridTemplateColumn Header=" Acciones ">
                     <DataGridTemplateColumn.CellTemplate>

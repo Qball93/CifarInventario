@@ -76,8 +76,7 @@ namespace CifarInventario.ViewModels
         {
             if(SelectedLote.CantidadActual > SelectedLote.CantidadOriginal)
             {
-                SelectedLote.CantidadActual = 0;
-                SelectedLote.CantidadActual = 0;
+                
                 MessageBox.Show("Cantidad Actual no puede ser mayor a la cantidad de Entrada");
             }
             else

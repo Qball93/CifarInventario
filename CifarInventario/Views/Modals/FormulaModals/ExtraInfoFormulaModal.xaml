@@ -48,12 +48,12 @@
                     <DockPanel  DockPanel.Dock="Top" Height="50">
                         <Label Content="Codigo Formula" VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"/>
                         <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}" 
-                     Text="{Binding SelectedFormula.CodFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding NewFormula.CodFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,8,0" VerticalAlignment="Center" Width="100" HorizontalAlignment="Right" />
                     </DockPanel>
                     <DockPanel >
                         <Label Content="Forma Farmaceutica"    VerticalAlignment="Center" Margin="0,0,0,0" FontSize="14"/>
-                        <ComboBox   VerticalAlignment="Center" ItemsSource="{Binding FormasFarmaceuticas}"   SelectedItem="{Binding SelectedFormula.FormaFarm}" Width="100" SelectedIndex="1"
+                        <ComboBox   VerticalAlignment="Center" ItemsSource="{Binding FormasFarmaceuticas}"   SelectedItem="{Binding NewFormula.FormaFarm}" Width="100" SelectedIndex="1"
                              Margin="0,0,0,0" FontSize="14"  ToolTip="Forma Farmaceutica de formula">
 
                         </ComboBox>
@@ -65,12 +65,12 @@
                     <DockPanel DockPanel.Dock="Top" Height="50">
                         <Label Content="Nombre Formula" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
                         <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                     Text="{Binding SelectedFormula.NombreFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                     Text="{Binding NewFormula.NombreFormula, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,50,0" VerticalAlignment="Center" Width="150" HorizontalAlignment="Right" />
                     </DockPanel>
                     <DockPanel>
                         <Label Content="Unidad Base" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="14"/>
-                        <ComboBox VerticalAlignment="Center" ItemsSource="{Binding UnidadCreada}"  SelectedValue="{Binding SelectedFormula.Cantidad}" Width="100" SelectedIndex="0"
+                        <ComboBox VerticalAlignment="Center" ItemsSource="{Binding UnidadCreada}"  SelectedValue="{Binding NewFormula.Cantidad}" Width="100" SelectedIndex="0"
                             Margin="60,0,0,0" FontSize="14"  ToolTip="Unidad base de la formula">
 
                         </ComboBox>
@@ -85,7 +85,7 @@
             <Label FontSize="18" DockPanel.Dock="Left" Height="40" Width="150"  Content="Precauciones"></Label>
             <TextBox Margin="20,10,50,10" TextWrapping="Wrap" AcceptsReturn="True"
                        ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                       Text="{Binding SelectedFormula.Precauciones, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+                       Text="{Binding NewFormula.Precauciones, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                        Background="LightBlue" TextChanged="TextBox_TextChanged"
                        ></TextBox>
         </DockPanel>

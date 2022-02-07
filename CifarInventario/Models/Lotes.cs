@@ -730,6 +730,7 @@ namespace CifarInventario.Models
         public emptyObject()
         {
             EmptyAmount = 0.00;
+
             
         }
         
@@ -747,7 +748,6 @@ namespace CifarInventario.Models
                 WordCheck = true;
                 ClearErrors(nameof(EmptyWord));
                 IsEmptyString(value, nameof(EmptyWord));
-                isAlphaNumeric(value, nameof(EmptyWord));
                 OnPropertyChanged(nameof(EmptyWord));
             }
         }
@@ -763,7 +763,6 @@ namespace CifarInventario.Models
                 CantidadCheck = true;
                 ClearErrors(nameof(EmptyCantidad));
                 IsEmptyString(value.ToString(), nameof(EmptyCantidad));
-                isDecimal(value.ToString(), nameof(EmptyCantidad));
                 OnPropertyChanged(nameof(EmptyCantidad));
             }
         }

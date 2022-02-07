@@ -118,7 +118,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE usuarios " +
-                    "SET id_rol = " + newRole + " ,status = " + newStatus + ", usuario = '" + newUsername +"', id_empleado = "+ NewEmp +
+                    "SET id_rol = " + newRole + " ,status = " + newStatus + ", usuario = '" + newUsername + "', id_empleado = " + NewEmp +
                     " WHERE id = " + id + ";", cn);
                 cmd.ExecuteNonQuery();
 
@@ -407,17 +407,26 @@ namespace CifarInventario.ViewModels.Classes.Queries
             cn = DBConnection.MainConnection();
             try
             {
-                cmd = new OleDbCommand("UPDATE usuarios " +
-                    "SET password = '"+password+"',salt = '"+salt+"'" +
-                    "WHERE id = "+id+";"   , cn);
-                cmd.ExecuteNonQuery();
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE usuarios " +
+                    "set salt = @salt, [password] = @pass " +
+                    "where id = @id;";
 
 
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                        {
+                        new OleDbParameter("@salt",salt),
+                        new OleDbParameter("@pass",password),
+                        new OleDbParameter("@id",id)
+                        });
 
+                    cmd.ExecuteNonQuery();
 
+                    cn.Close();
 
-                
-                cn.Close();
+                }
+
 
             }
             catch (Exception ex)

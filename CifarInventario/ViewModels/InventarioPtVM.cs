@@ -120,8 +120,8 @@ namespace CifarInventario.ViewModels
                 NewProduct.Entrada = 0;
                 NewProduct.Salida = 0;
                 System.Windows.MessageBox.Show("Producto creado en el inventario.");
-                Limpiar();
                 InventarioPt.Add(NewProduct);
+                Limpiar();
             }
 
 

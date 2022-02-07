@@ -130,7 +130,7 @@ namespace CifarInventario.ViewModels
             set
             {
                 _selectedUser = value;
-                OnPropertyChanged("SelectedUser");
+                OnPropertyChanged(nameof(SelectedUser));
             }
         }
 
@@ -177,9 +177,11 @@ namespace CifarInventario.ViewModels
         public void UpdateUserPassword()
         {
             NewUser.salt = Hasher.generateSalt();
-            NewUser.Password = Hasher.Encrypt(NewUser.Password, NewUser.salt);
+            
+            string temp = Hasher.Encrypt(NewUser.Password, NewUser.salt);
 
-            UserQueries.SetNewUserPassword(NewUser.Password, NewUser.salt, SelectedUser.id);
+
+            UserQueries.SetNewUserPassword(temp, NewUser.salt, SelectedUser.id);
 
             
         }

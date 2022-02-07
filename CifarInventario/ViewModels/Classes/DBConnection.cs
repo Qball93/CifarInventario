@@ -13,9 +13,18 @@ namespace CifarInventario.ViewModels.Classes
 
         public static OleDbConnection MainConnection()
         {
-            cn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\mauri\OneDrive\Documents\CifarDb1.accdb;Persist Security Info=False;");
+            try
+            {
+                 cn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\mauri\OneDrive\Documents\CifarDb1.accdb;Persist Security Info=False;");
+                //cn = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\\DESKTOP-7K2PITT\TestShare\CifarDb1.accdb;Persist Security Info=False;");
 
-            cn.Open();
+                cn.Open();
+
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show("oops" + ex);
+            }
             return cn;
         }
 

@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace CifarInventario.ViewModels.Commands.FormulaCommands
+namespace CifarInventario.ViewModels.Commands.LoteSalCommands
 {
-    public class NewFormulaCommand: ICommand
+    public class DonateProductCommand : ICommand
     {
-        public FormulasVM VM { get; set; }
+        public LotesSalidaVM VM { get; set; }
 
 
         public event EventHandler CanExecuteChanged
@@ -18,7 +18,7 @@ namespace CifarInventario.ViewModels.Commands.FormulaCommands
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public NewFormulaCommand(FormulasVM vm)
+        public DonateProductCommand(LotesSalidaVM vm)
         {
             VM = vm;
         }
@@ -27,12 +27,12 @@ namespace CifarInventario.ViewModels.Commands.FormulaCommands
         public bool CanExecute(object parameter)
         {
             //return true;
-            return !VM.NewFormula.HasErrors && VM.NewFormula.CodCheck && VM.NewFormula.NombreCheck && VM.NewFormula.PrecaucionCheck;
+            return !VM.PlaceHolder.HasErrors && VM.PlaceHolder.WordCheck && VM.PlaceHolder.CantidadCheck;
         }
 
         public void Execute(object parameter)
         {
-            VM.createFormula();
+            VM.donateCantidadLoteSal();
         }
     }
 }

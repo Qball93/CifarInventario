@@ -143,6 +143,50 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return mp;
         }
 
+        public static List<formulaProduct> GetAllMpSimplifiedNoWater()
+        {
+            var mp = new List<formulaProduct>();
+
+
+            cn = DBConnection.MainConnection();
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT codigo,nombre_producto,unidad_metrica,conversion_unitaria,unidad_muestra from materia_prima" +
+                    " where codigo NOT LIKE 'ENV%' AND codigo NOT LIKE 'ETI%' AND codigo NOT LIKE 'TP%' and codigo <> 'MPAGPUR';", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    formulaProduct temp = new formulaProduct();
+
+                    temp.Codigo = dr["codigo"].ToString();
+                    temp.Nombre = dr["nombre_producto"].ToString();
+                    temp.Unidad = dr["unidad_metrica"].ToString();
+                    temp.ConversionValue = double.Parse(dr["conversion_unitaria"].ToString());
+                    temp.UnidadMuestra = dr["unidad_muestra"].ToString();
+
+
+
+                    mp.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al buscar materia prima para formulas. " + ex.ToString());
+            }
+
+            return mp;
+        }
         public static List<formulaProduct> GetAllContainersMP()
         {
             var mp = new List<formulaProduct>();
@@ -190,6 +234,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return mp;
         }
+
+
 
         public static List<formulaProduct> GetAllContainerMPFromAmount(int amount)
         {
@@ -352,7 +398,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     PtProduct temp = new PtProduct();
 
                     temp.Id = dr["id_producto_terminado"].ToString();
-                    temp.Nombre = dr["nombre_producto_terminado"].ToString();
+                    temp.Nombre = dr["nombre_producto"].ToString();
                     temp.Existencia = int.Parse(dr["existencia"].ToString());
                     temp.Entrada = int.Parse(dr["entrada"].ToString());
                     temp.Salida = int.Parse(dr["salida"].ToString());
@@ -383,7 +429,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
                 cmd = new OleDbCommand("UPDATE inventario_producto_terminado " +
-                    "SET id_producto_terminado = '" +pt.Id+"',nombre_producto_terminado = '" +pt.Nombre+"', precio = " + pt.Precio +
+                    "SET id_producto_terminado = '" +pt.Id+"',nombre_producto = '" +pt.Nombre+"', precio = " + pt.Precio +
                     " where id_producto_terminado = '" + oldId + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
@@ -497,31 +543,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
-
-       /* public static void updateProductAmount(string codMP, double amountChange)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET entrada = (entrada + " + amountChange + "), existencia = (existencia + " + amountChange + "), cantidad_exacta = (cantidad_exacta + (" + amountChange + " * conversion_unitaria) ) " +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
-            }
-        }*/
-
         public static void updateProductAmountAdd(string codMP, double amountChange)
         {
             cn = DBConnection.MainConnection();
@@ -618,30 +639,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
-       /* public static void updateProductAmountFromExact(string codMp, double amountChangeExact)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET salida = (salida - (" + amountChangeExact + " / conversion_unitaria )), existencia = (existencia + (" + amountChangeExact + " / conversion_unitaria )), cantidad_exacta = (cantidad_exacta + " + amountChangeExact + " ) " +
-                    "where codigo = '" + codMp + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
-            }
-        }*/
-
         public static void updateProductoTerminadoAmount(string codPT, int amountChanged, string idLote)
         {
             cn = DBConnection.MainConnection();
@@ -698,7 +695,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error al actualizar existed de lote de producto terminado  " + ex);
+                System.Windows.MessageBox.Show("Error al actualizar existencia de lote de producto terminado  " + ex);
             }
         }
 
@@ -815,7 +812,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO inventario_producto_terminado ([id_producto_terminado],[nombre_producto_terminado],[precio]) " +
+                    cmd.CommandText = @"INSERT INTO inventario_producto_terminado ([id_producto_terminado],[nombre_producto],[precio]) " +
                         "VALUES (@idProducto,@nombreProduct,@precio) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]

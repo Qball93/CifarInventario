@@ -54,5 +54,45 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return registros;
         }
+
+        public static List<Registro> getAllDonatons()
+        {
+            var registros = new List<Registro>();
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("SELECT * FROM registro_reempaque where tipo_evento = 'Donacion';", cn);
+                dr = cmd.ExecuteReader();
+
+
+                while (dr.Read())
+                {
+                    Registro temp = new Registro();
+
+
+                    temp.FechaEvento = DateTime.Parse(dr["fecha_evento"].ToString());
+                    temp.Accion = dr["accion_realizada"].ToString();
+                    temp.LoteRelevante = dr["lote_relevante"].ToString();
+                    temp.Cantidad = int.Parse(dr["cantidad_cambiada"].ToString());
+
+
+                    registros.Add(temp);
+
+
+                }
+
+                dr.Close();
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener registros  " + ex);
+            }
+
+
+            return registros;
+        }
     }
 }

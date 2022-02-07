@@ -7,6 +7,8 @@ using CifarInventario.Models;
 using System.ComponentModel;
 using CifarInventario.ViewModels.Classes;
 using System.Threading.Tasks;
+using CifarInventario.ViewModels.Classes.Queries;
+using CifarInventario.Views;
 
 namespace CifarInventario.ViewModels
 {
@@ -34,16 +36,16 @@ namespace CifarInventario.ViewModels
         public void MakeLogin()
         {
             User realUser = LoginHelper.GetLoginUser(LoginUser.UserName);
+            string testPassword = Hasher.Encrypt(LoginUser.Password,realUser.salt);
 
-            
-
-            string testPassword = Hasher.Encrypt(LoginUser.Password, realUser.salt);
-
-            System.Windows.MessageBox.Show("this is the password " + realUser.Password + " and this is the salt " + realUser.salt);
+           // System.Windows.MessageBox.Show(testPassword);
 
             if (testPassword == realUser.Password)
             {
-                System.Windows.MessageBox.Show("yayyy");
+                Globals.setId(realUser.UserRole.Id);
+                NavigationMenu newWindow = new NavigationMenu();
+                CloseWindow();
+                newWindow.Show();
             }
             else
             {

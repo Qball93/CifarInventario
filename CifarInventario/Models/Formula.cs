@@ -77,9 +77,9 @@ namespace CifarInventario.Models
             {
                 _nombreFormula = value;
                 NombreCheck = true;
-                ClearErrors("NombreFormula");
-                IsEmptyString(value,"NombreFormula");
-                OnPropertyChanged("NombreFormula");
+                ClearErrors(nameof(NombreFormula));
+                IsEmptyString(value,nameof(NombreFormula));
+                OnPropertyChanged(nameof(NombreFormula));
             }
         }
 
@@ -90,9 +90,9 @@ namespace CifarInventario.Models
             {
                 _precauciones = value;
                 PrecaucionCheck = true;
-                ClearErrors("Precauciones");
-                IsEmptyString(value, "Precauciones");
-                OnPropertyChanged("Precauciones");
+                ClearErrors(nameof(Precauciones));
+                IsEmptyString(value, nameof(Precauciones));
+                OnPropertyChanged(nameof(Precauciones));
             }
         }
 
@@ -102,7 +102,7 @@ namespace CifarInventario.Models
             set
             {
                 _formaFarm = value;
-                OnPropertyChanged("FormaFarm");
+                OnPropertyChanged(nameof(FormaFarm));
             }
         }
 
@@ -117,6 +117,16 @@ namespace CifarInventario.Models
                 isDecimal(value.ToString(), nameof(TransCantidad));
                 OnPropertyChanged(nameof(TransCantidad));
             }
+        }
+
+        public override string ToString()
+        {
+            return ("this is the data  Nombre: " + NombreFormula +
+                " Unidad:  " + Cantidad +
+                " Preacucion : " + Precauciones +
+                " Forma Farm:  " + FormaFarm +
+                " Codigo: " + CodFormula);
+
         }
 
 
@@ -236,8 +246,8 @@ namespace CifarInventario.Models
             set
             {
                 _step = value;
-                OnPropertyChanged("Step");
-                ClearErrors("Step");
+                OnPropertyChanged(nameof(Step));
+                ClearErrors(nameof(Step));
 
             }
         }
@@ -250,10 +260,10 @@ namespace CifarInventario.Models
             set {
                 InstructionCheck = true;
                 _instruction = value;
-                ClearErrors("Instruction");
-                IsEmptyString(value, "Instruction");
-                isAlphaNumeric(value, "Instruction");
-                OnPropertyChanged("Instruction");
+                ClearErrors(nameof(Instruction));
+                IsEmptyString(value, nameof(Instruction));
+                isAlphaNumeric(value, nameof(Instruction));
+                OnPropertyChanged(nameof(Instruction));
             }
         }
 

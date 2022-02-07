@@ -32,7 +32,7 @@ namespace CifarInventario.ViewModels
 
 
 
-        public event EventHandler OnRequestClose;
+        
         public bool UserCheck { get; set; }
         public bool PassOneCheck { get; set; }
         public bool passTwoCheck { get; set; }
@@ -110,6 +110,7 @@ namespace CifarInventario.ViewModels
             {
                 _userName = value;
                 UserCheck = true;
+                ClearErrors(nameof(UserName));
                 IsEmptyString(value, nameof(UserName));
                 isAlphaNumeric(value, nameof(UserName));
                 OnPropertyChanged(nameof(UserName));
@@ -144,7 +145,6 @@ namespace CifarInventario.ViewModels
             if(NewPregunta.Respuesta == OriginalPregunta.Respuesta)
             {
 
-                //System.Windows.MessageBox.Show(UserQueries.GetUserId(UserName).ToString());
                 Globals.setId(UserQueries.GetUserId(UserName));
                 NavigationMenu newWindow = new NavigationMenu();
                 CloseWindow();
@@ -163,7 +163,6 @@ namespace CifarInventario.ViewModels
             if(NewPasswordOne == NewPasswordTwo)
             {
                 var temp = Hasher.generateSalt();
-                //NewPasswordOne = Hasher.Encrypt(NewPasswordTwo, temp);
                 UserQueries.SetNewUserPassword(NewPasswordOne, temp, OriginalPregunta.UserId);
             }
         }
