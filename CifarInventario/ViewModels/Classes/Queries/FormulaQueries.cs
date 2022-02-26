@@ -39,6 +39,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     temp.NombreFormula = dr["nombre_formula"].ToString();
                     temp.Precauciones = dr["precauciones"].ToString();
                     temp.Cantidad = dr["cantidad_creada"].ToString();
+                    temp.Transformacion = dr["cod_transformacion"].ToString();
+
 
                     formulas.Add(temp);
 

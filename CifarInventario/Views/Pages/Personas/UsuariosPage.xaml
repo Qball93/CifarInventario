@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:local="clr-namespace:CifarInventario.Views"
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
@@ -29,9 +30,10 @@
         <TextBlock Margin="40,40,201,587" Text="Listado de Usuarios" FontSize="40" FontWeight="Bold" Foreground="Black">
             
         </TextBlock>
-        
-        
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Usuarios}" SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+
+
+        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Usuarios}"  
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"     SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
             <DataGrid.Resources>
                 <Style TargetType="DataGrid">
                     <Setter Property="RowHeaderWidth" Value="0" />

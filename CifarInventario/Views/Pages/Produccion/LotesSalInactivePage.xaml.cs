@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CifarInventario.Views.Pages
+namespace CifarInventario.Views.Pages.Produccion
 {
     /// <summary>
-    /// Interaction logic for LotesSalEmpaque.xaml
+    /// Interaction logic for LotesSalInactivePage.xaml
     /// </summary>
-    public partial class LotesSalEmpaque : Page
+    public partial class LotesSalInactivePage : Window
     {
-        public LotesSalEmpaque()
+        public LotesSalInactivePage()
         {
             InitializeComponent();
         }

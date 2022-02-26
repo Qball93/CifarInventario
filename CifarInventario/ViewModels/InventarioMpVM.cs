@@ -94,6 +94,11 @@ namespace CifarInventario.ViewModels
             NewModal.ShowDialog();
         }
 
+        public void OpenInfoModal(object parameter)
+        {
+
+        }
+
         public void UpdateMP()
         {
             if (ProductQueries.isRepeatedMpCode(NewProduct.Id) && NewProduct.Id != SelectedMP.Id)
@@ -103,15 +108,34 @@ namespace CifarInventario.ViewModels
             else
             {
 
-                if(NewProduct.Conversion != SelectedMP.Conversion)
-                {
-                    InventoryQueries.UpdateLoteConversion(SelectedMP.Id, NewProduct.Conversion);
+                if(NewProduct.Conversion != SelectedMP.Conversion) { 
+
+                    if(SelectedMP.Existencia != 0)
+                    {
+                        System.Windows.MessageBox.Show("No se puede cambiar la conversion al menos que el inventario de este producto este en zero.");
+                    }
+                    else
+                    {
+                        InventoryQueries.UpdateLoteConversion(SelectedMP.Id, NewProduct.Conversion);
+                        ProductQueries.updateMateriaPrimaInfo(NewProduct, SelectedMP.Id);
+
+                        updateCollectionInstance(NewProduct);
+                        NewModal.Close();
+                        System.Windows.MessageBox.Show("Informacion de MP actualizada.");
+
+                    }
+
+
                 }
-                ProductQueries.updateMateriaPrimaInfo(NewProduct, SelectedMP.Id);
-                
-                updateCollectionInstance(NewProduct);
-                System.Windows.MessageBox.Show("Informacion de MP actualizada.");
-                NewModal.Close();
+                else
+                {
+                    ProductQueries.updateMateriaPrimaInfo(NewProduct, SelectedMP.Id);
+
+                    updateCollectionInstance(NewProduct);
+                    NewModal.Close();
+
+                    System.Windows.MessageBox.Show("Informacion de MP actualizada.");
+                }
             }
 
 

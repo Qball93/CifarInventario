@@ -187,6 +187,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return mp;
         }
+
         public static List<formulaProduct> GetAllContainersMP()
         {
             var mp = new List<formulaProduct>();
@@ -246,8 +247,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT codigo,nombre_producto,unidad_metrica,conversion_unitaria,unidad_muestra,existencia from materia_prima" +
-                    " WHERE (codigo LIKE 'ENV%' OR codigo LIKE 'ETI%' OR codigo LIKE 'TP%') and existencia >= " + amount +"  ;", cn);
+                cmd = new OleDbCommand("SELECT codigo,nombre_producto,unidad_metrica,materia_prima.conversion_unitaria,unidad_muestra,cantidad_unidad_lote from materia_prima " +
+                    "INNER JOIN lote_entrada on materia_prima.codigo = lote_entrada.cod_mp " +
+                    " WHERE (codigo LIKE 'ENV%' OR codigo LIKE 'ETI%' OR codigo LIKE 'TP%') and cantidad_unidad_lote >= " + amount +"  ;", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -289,12 +291,14 @@ namespace CifarInventario.ViewModels.Classes.Queries
         {
             var mp = new List<MpProduct>();
 
-
+            
             cn = DBConnection.MainConnection();
 
             try
             {
-                cmd = new OleDbCommand("SELECT * FROM materia_prima;", cn);
+                cmd = new OleDbCommand("SELECT SUM(cantidad_unidad_lote) as Cantidad_Actual, SUM(cantidad_original) as Cantidad_Original, SUM(cantidad_unidad_formula) as Cantidad_Formula, lote_entrada.cod_mp, materia_prima.nombre_producto, materia_prima.conversion_unitaria, materia_prima.unidad_muestra, materia_prima.unidad_metrica " +
+                                       "FROM lote_entrada INNER JOIN materia_prima on materia_prima.codigo = lote_entrada.cod_mp " +
+                                        "GROUP BY cod_mp, materia_prima.nombre_producto, materia_prima.conversion_unitaria, materia_prima.unidad_muestra, materia_prima.unidad_metrica;", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -305,17 +309,16 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 {
                     MpProduct temp = new MpProduct();
 
-                    temp.Id = dr["codigo"].ToString();
-                    temp.Existencia = double.Parse(dr["existencia"].ToString());
+                    temp.Id = dr["cod_mp"].ToString();
                     temp.NombreProducto = dr["nombre_producto"].ToString();
                     //temp.Precio = float.Parse(dr["precio"].ToString());
                     temp.UnidadMetrica = dr["unidad_metrica"].ToString();
                     temp.UnidadMuestra = dr["unidad_muestra"].ToString();
-                    temp.Entrada = double.Parse(dr["entrada"].ToString());
-                    temp.Salida = double.Parse(dr["salida"].ToString());
                     temp.Conversion = double.Parse(dr["conversion_unitaria"].ToString());
-
-
+                    temp.Entrada = double.Parse(dr["Cantidad_Original"].ToString());
+                    temp.Existencia = double.Parse(dr["Cantidad_Actual"].ToString());
+                    temp.Salida = temp.Entrada - temp.Existencia;
+                    temp.CantidadExacta = double.Parse(dr["Cantidad_Formula"].ToString());
 
 
                     mp.Add(temp);
@@ -336,6 +339,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             return mp;
         }
+
+
+ 
 
         public static List<ProductoTeminadoParaLista> GetPTSimp()
         {
@@ -446,86 +452,297 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 System.Windows.MessageBox.Show("Error al actualizar informacion de PT  " + ex);
             }
         }
+        /*
 
-       /* public static void updateInvMpBaseUnit(string codMP, double conversion, string newBaseUunit)
-        {
+                public static void removeInventarioMpAfterLoteActive(string codMp, double existencia, double cantidadExacta)
+                {
 
-        }
-
-        public static void updateInvMpDisplayUnit(string codMp, double conversion, string newDisplayUnit)
-        {th
-
-        }*/
-
-
-        public static void removeFlatAmounts(string codMP, double formUnitAmount, double displayUnitAmountCurrent, double displayUnitAmountOriginal)
-        {
-            var salida = displayUnitAmountOriginal - displayUnitAmountCurrent;
-            cn = DBConnection.MainConnection();
-            try
-            {
+                    cn = DBConnection.MainConnection();
+                    try
+                    {
 
 
 
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET entrada = (entrada - " + displayUnitAmountOriginal + "), existencia = (existencia - " + displayUnitAmountCurrent + "), cantidad_exacta = (cantidad_exacta - "+formUnitAmount+" ), salida = (salida - " + salida + " )  " +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET  existencia = (existencia + " + existencia + "), cantidad_exacta = (cantidad_exacta + " + cantidadExacta + " ), salida = (salida - " + existencia + " )  " +
+                            "where codigo = '" + codMp + "'; ", cn);
+                        cmd.ExecuteNonQuery();
 
 
 
 
 
 
-                cn.Close();
+                        cn.Close();
 
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al borar existencia the MP  " + ex);
-            }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al borar existencia the MP  " + ex);
+                    }
 
-            System.Windows.MessageBox.Show(salida.ToString());
-        }
+                }
 
-        public static void reAddAmount(string codMP, double newEntrada, double newCurrent, double formAmount)
-        {
-            var test = newEntrada - newCurrent;
-            cn = DBConnection.MainConnection();
-            try
-            {
-
+                public static void removeFlatAmounts(string codMP, double formUnitAmount, double CurrentDisplayAmount, double displayUnitAmountOriginal)
+                {
+                    var salida = displayUnitAmountOriginal - CurrentDisplayAmount;
+                    cn = DBConnection.MainConnection();
+                    try
+                    {
 
 
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET entrada = (entrada + " + newEntrada + "), existencia = (existencia + " + newCurrent + "), cantidad_exacta = (cantidad_exacta + " + formAmount + "), salida = (salida + "+test  +  ")  "  +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
 
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET entrada = (entrada - " + displayUnitAmountOriginal + "), existencia = (existencia - " + CurrentDisplayAmount + "), cantidad_exacta = (cantidad_exacta - "+formUnitAmount+" ), salida = (salida - " + salida + " )  " +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
 
 
 
 
 
-                cn.Close();
 
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al reingresar existencia the MP  " + ex);
-            }
-        }       
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al borar existencia the MP  " + ex);
+                    }
+
+                }
+
+                public static void reAddAmount(string codMP, double newEntrada, double newCurrent, double formAmount)
+                {
+                    var test = newEntrada - newCurrent;
+                    cn = DBConnection.MainConnection();
+                    try
+                    {
+
+
+
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET entrada = (entrada + " + newEntrada + "), existencia = (existencia + " + newCurrent + "), cantidad_exacta = (cantidad_exacta + " + formAmount + "), salida = (salida + "+ test  +  ")  "  +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al reingresar existencia the MP  " + ex);
+                    }
+                }       
+
+                public static void exitAmounts(String codMP, double existencia, double cantidadExacta)
+                {
+                    cn = DBConnection.MainConnection();
+                    try
+                    {
+
+
+
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET  existencia = (existencia - " + existencia + "), cantidad_exacta = (cantidad_exacta - " + cantidadExacta + " ), salida = (salida + " + existencia + " )  " +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al eliminar existencia the MP  " + ex);
+                    }
+
+                    System.Windows.MessageBox.Show("Cantidad Actualizada en Inventario Materia Prima");
+                }
+
+
+
+                public static void updateProductAmountAdd(string codMP, double amountChange)
+                {
+                    cn = DBConnection.MainConnection();
+                    try
+                    {
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET entrada = (entrada + " + amountChange + "), existencia = (existencia + " + amountChange + "), cantidad_exacta = (cantidad_exacta + (" + amountChange + " * conversion_unitaria) ) " +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
+                    }
+                }
+
+                public static void updateProductAmountRemove(string codMP, double amountChange)
+                {
+                    cn = DBConnection.MainConnection();
+                    try
+                    {
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET salida = (salida + " + amountChange + "), existencia = (existencia + " + amountChange + "), cantidad_exacta = (cantidad_exacta + (" + amountChange + " * conversion_unitaria) ) " +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
+                    }
+                }
+
+                public static void updateProductAmountFromExactRemove(string codMP, double amountChangeExact)
+                {
+                    cn = DBConnection.MainConnection();
+
+                    double conversion = 0.00;
+
+
+                    try
+                    {
+                        cmd = new OleDbCommand("SELECT conversion_unitaria from materia_prima where codigo = '" + codMP + "' ; ", cn);
+                        dr = cmd.ExecuteReader();
+
+
+
+
+
+                        while (dr.Read())
+                        {
+                            conversion = double.Parse(dr["conversion_unitaria"].ToString());
+
+
+                        }
+
+                        dr.Close();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al obtener conversion  " + ex);
+                    }
+
+
+
+
+                    try
+                    {
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET salida = (salida + " + Math.Round((amountChangeExact / conversion), 2, MidpointRounding.AwayFromZero) + "), existencia = (existencia + " + Math.Round((amountChangeExact / conversion), 2, MidpointRounding.AwayFromZero) + "), cantidad_exacta = (cantidad_exacta + " + amountChangeExact + " ) " +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al actualizar existencia the MP Exact - " + ex);
+                    }
+                }
+
+                public static void updateProductAmountFromtExactAdd(string codMP, double amountChangeExact)
+                {
+                    cn = DBConnection.MainConnection();
+
+
+                    double conversion = 0.00;
+
+
+                    try
+                    {
+                        cmd = new OleDbCommand("SELECT conversion_unitaria from materia_prima where codigo = '" + codMP + "' ; ", cn);
+                        dr = cmd.ExecuteReader();
+
+
+
+
+
+                        while (dr.Read())
+                        {
+                            conversion = double.Parse(dr["conversion_unitaria"].ToString());
+
+
+                        }
+
+                        dr.Close();
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al obtener conversion  " + ex);
+                    }
+
+
+
+
+
+                    try
+                    {
+                        cmd = new OleDbCommand("UPDATE materia_prima " +
+                            "SET entrada = (entrada + " + Math.Round((amountChangeExact / conversion), 2, MidpointRounding.AwayFromZero) + "), existencia = (existencia + " + Math.Round((conversion / amountChangeExact), 2, MidpointRounding.AwayFromZero) + "), cantidad_exacta = (cantidad_exacta + " + amountChangeExact + " ) " +
+                            "where codigo = '" + codMP + "'; ", cn);
+                        cmd.ExecuteNonQuery();
+
+
+
+
+
+
+                        cn.Close();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Windows.MessageBox.Show("Error al actualizar existencia the MP exact + " + ex);
+                    }
+                }*/
 
         public static void updateMateriaPrimaInfo(MpProduct mp, string oldId)
         {
             cn = DBConnection.MainConnection();
             try
             {
-               
+
 
 
                 cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET codigo = '" + mp.Id + "', nombre_producto = '" + mp.NombreProducto + "', unidad_metrica = '" + mp.UnidadMetrica + "', conversion_unitaria = " + mp.Conversion + ", unidad_muestra = '" + mp.UnidadMuestra + "'  "  +
+                    "SET codigo = '" + mp.Id + "', nombre_producto = '" + mp.NombreProducto + "', unidad_metrica = '" + mp.UnidadMetrica + "', conversion_unitaria = " + mp.Conversion + ", unidad_muestra = '" + mp.UnidadMuestra + "'  " +
                     "where codigo = '" + oldId + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
@@ -540,102 +757,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("Error al actualizar informacion the MP  " + ex);
-            }
-        }
-
-        public static void updateProductAmountAdd(string codMP, double amountChange)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET entrada = (entrada + " + amountChange + "), existencia = (existencia + " + amountChange + "), cantidad_exacta = (cantidad_exacta + (" + amountChange + " * conversion_unitaria) ) " +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
-            }
-        }
-
-        public static void updateProductAmountRemove(string codMP, double amountChange)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET salida = (salida + " + amountChange + "), existencia = (existencia + " + amountChange + "), cantidad_exacta = (cantidad_exacta + (" + amountChange + " * conversion_unitaria) ) " +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP  " + ex);
-            }
-        }
-
-        public static void updateProductAmountFromExactRemove(string codMP, double amountChangeExact)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET salida = (salida + (" + amountChangeExact + " / conversion_unitaria )), existencia = (existencia + (" + amountChangeExact + " / conversion_unitaria )), cantidad_exacta = (cantidad_exacta + " + amountChangeExact + " ) " +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP Exact - " + ex);
-            }
-        }
-
-        public static void updateProductAmountFromtExactAdd(string codMP, double amountChangeExact)
-        {
-            cn = DBConnection.MainConnection();
-            try
-            {
-                cmd = new OleDbCommand("UPDATE materia_prima " +
-                    "SET entrada = (entrada + (" + amountChangeExact + " / conversion_unitaria )), existencia = (existencia + (" + amountChangeExact + " / conversion_unitaria )), cantidad_exacta = (cantidad_exacta + " + amountChangeExact + " ) " +
-                    "where codigo = '" + codMP + "'; ", cn);
-                cmd.ExecuteNonQuery();
-
-
-
-
-
-
-                cn.Close();
-
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show("Error al actualizar existencia the MP exact + " + ex);
             }
         }
 
@@ -1091,7 +1212,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
-        
 
         public static List<LotePTDetalle> getDetallesFromPTLote(string CodLote)
         {
@@ -1139,13 +1259,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return detalles;
         }
 
-
-
-
-        public static void DeleteLotePT(string CodLote, emptyObject placeHolder)
-        {
-
-        }
 
     }
 }

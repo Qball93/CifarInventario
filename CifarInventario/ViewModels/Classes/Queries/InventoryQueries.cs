@@ -27,11 +27,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
-                    "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
+                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.cantidad_unidad_formula, lote_entrada.codigo_lote,lote_entrada.cod_mp, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                    "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto,  materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
                     "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
-                    "WHERE fecha_vencimiento > Date() and estado = true " +
-                    "and lote_entrada.cantidad_unidad_lote > 0 and lote_entrada.cod_mp NOT LIKE 'ENV%'  AND lote_entrada.cod_mp NOT LIKE 'ETI%' AND lote_entrada.cod_mp NOT LIKE 'TP%';", cn) ;
+                    "WHERE estado = true " +
+                    "and lote_entrada.cod_mp NOT LIKE 'ENV%'  AND lote_entrada.cod_mp NOT LIKE 'ETI%' AND lote_entrada.cod_mp NOT LIKE 'TP%';", cn) ;
                 dr = cmd.ExecuteReader();
 
 
@@ -43,6 +43,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     LoteEntrada temp = new LoteEntrada();
 
                     temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.CodMP = dr["cod_mp"].ToString();
+                    temp.CantidadExacta = double.Parse(dr["cantidad_unidad_formula"].ToString());
                     temp.CodInterno = dr["codigo_lote_interno"].ToString();
                     temp.NombreFabricante = dr["fabricante"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
@@ -88,11 +90,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.cantidad_unidad_formula, lote_entrada.codigo_lote, lote_entrada.cod_mp , lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
                     "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
                     "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
-                    "WHERE (fecha_vencimiento <= Date() or estado = false) " +
-                    "and lote_entrada.cantidad_unidad_lote > 0 and lote_entrada.cod_mp NOT LIKE 'ENV%'  AND lote_entrada.cod_mp NOT LIKE 'ETI%' AND lote_entrada.cod_mp NOT LIKE 'TP%';", cn);
+                    "WHERE (estado = false) " +
+                    "and lote_entrada.cod_mp NOT LIKE 'ENV%'  AND lote_entrada.cod_mp NOT LIKE 'ETI%' AND lote_entrada.cod_mp NOT LIKE 'TP%';", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -104,7 +106,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     LoteEntrada temp = new LoteEntrada();
 
                     temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.CodMP = dr["cod_mp"].ToString();
                     temp.CodInterno = dr["codigo_lote_interno"].ToString();
+                    temp.CantidadExacta = double.Parse(dr["cantidad_unidad_formula"].ToString());
                     temp.NombreFabricante = dr["fabricante"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
                     temp.NombreProveedor = dr["Nombre_proveedor"].ToString();
@@ -149,7 +153,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
              
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.conversion_unitaria, lote_entrada.codigo_lote_interno, lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                cmd = new OleDbCommand("SELECT lote_entrada.conversion_unitaria, lote_entrada.cantidad_unidad_formula, lote_entrada.cod_mp ,lote_entrada.estado , lote_entrada.codigo_lote_interno, lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
                     "lote_entrada.fecha_vencimiento,materia_prima.codigo, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
                     "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor;", cn);
                 dr = cmd.ExecuteReader();
@@ -163,12 +167,15 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     LoteEntrada temp = new LoteEntrada();
 
                     temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.CodMP = dr["cod_mp"].ToString();
+                    temp.CantidadExacta = double.Parse(dr["cantidad_unidad_formula"].ToString());
                     temp.NombreFabricante = dr["fabricante"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
                     temp.CodMP = dr["codigo"].ToString();
                     temp.CodInterno = dr["codigo_lote_interno"].ToString();
                     temp.NombreProveedor = dr["Nombre_proveedor"].ToString();
                     temp.NombreMP = dr["nombre_producto"].ToString();
+                    temp.Estado = Boolean.Parse(dr["estado"].ToString());
                     temp.CantidadActual = double.Parse(dr["cantidad_unidad_lote"].ToString());
                     temp.CantidadOriginal = double.Parse(dr["cantidad_original"].ToString());
                     temp.FechaVencimiento = DateTime.Parse(dr["fecha_vencimiento"].ToString());
@@ -207,11 +214,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno,lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.cantidad_unidad_formula, lote_entrada.cod_mp ,lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
                     "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
                     "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
-                    "WHERE fecha_vencimiento > Date() and estado = true and  " +
-                    "lote_entrada.cantidad_unidad_lote > 0 AND (cod_mp LIKE 'ENV%' OR cod_mp LIKE 'ETI%' OR cod_mp LIKE 'TP%');", cn);
+                    "WHERE estado = true and  " +
+                    " (cod_mp LIKE 'ENV%' OR cod_mp LIKE 'ETI%' OR cod_mp LIKE 'TP%');", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -223,6 +230,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     LoteEntrada temp = new LoteEntrada();
 
                     temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.CantidadExacta = double.Parse(dr["cantidad_unidad_formula"].ToString());
+                    temp.CodMP = dr["cod_mp"].ToString();
                     temp.NombreFabricante = dr["fabricante"].ToString();
                     temp.CodInterno = dr["codigo_lote_interno"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
@@ -268,11 +277,11 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
             try
             {
-                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno,lote_entrada.codigo_lote, lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
+                cmd = new OleDbCommand("SELECT lote_entrada.codigo_lote_interno, lote_entrada.cantidad_unidad_formula,   lote_entrada.codigo_lote, lote_entrada.cod_mp , lote_entrada.fecha_entrada, lote_entrada.cantidad_unidad_lote, lote_entrada.fecha_creacion, lote_entrada.cantidad_original, lote_entrada.certificado_analysis, " +
                     "lote_entrada.fecha_vencimiento, materia_prima.nombre_producto, materia_prima.unidad_muestra, lote_entrada.procedencia, lote_entrada.fabricante, proveedor.nombre_commercial as nombre_proveedor, lote_entrada.cod_proveedor " +
                     "FROM (lote_entrada INNER JOIN materia_prima ON lote_entrada.cod_mp = materia_prima.codigo) INNER JOIN proveedor ON proveedor.id = lote_entrada.cod_proveedor " +
-                    "WHERE (fecha_vencimiento < Date() or estado = false ) and " +
-                    "lote_entrada.cantidad_unidad_lote > 0 AND (cod_mp LIKE 'ENV%' OR cod_mp LIKE 'ETI%' OR cod_mp LIKE 'TP%');", cn);
+                    "WHERE estado = false and " +
+                    "(cod_mp LIKE 'ENV%' OR cod_mp LIKE 'ETI%' OR cod_mp LIKE 'TP%');", cn);
                 dr = cmd.ExecuteReader();
 
 
@@ -284,7 +293,9 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     LoteEntrada temp = new LoteEntrada();
 
                     temp.CodLote = dr["codigo_lote"].ToString();
+                    temp.CantidadExacta = double.Parse(dr["cantidad_unidad_formula"].ToString());
                     temp.NombreFabricante = dr["fabricante"].ToString();
+                    temp.CodMP = dr["cod_mp"].ToString();
                     temp.CodInterno = dr["codigo_lote_interno"].ToString();
                     temp.CodProveedor = dr["cod_proveedor"].ToString();
                     temp.NombreProveedor = dr["Nombre_proveedor"].ToString();
@@ -472,7 +483,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 while (dr.Read())
                 {
                     test.Unidad = dr["cantidad_creada"].ToString();
-                    test.Cantidad = double.Parse(dr["cantidad_transformacion"].ToString()) * cantidad;
+                    test.Cantidad =  Math.Round( double.Parse(dr["cantidad_transformacion"].ToString()) * cantidad, 2, MidpointRounding.AwayFromZero);
                     temp.Transformacion = dr["cod_transformacion"].ToString();
                     test.NombreMP = dr["nombre_formula"].ToString();
                 }
@@ -559,7 +570,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 temp.Cantidad = (double.Parse(element.Quantity) * Cantidad);
                 temp.CodMP = element.IdMp;
 
-                temp.Cantidad = Math.Round(temp.Cantidad, 4, MidpointRounding.AwayFromZero);
+                temp.Cantidad = Math.Round(temp.Cantidad, 2, MidpointRounding.AwayFromZero);
 
 
 
@@ -917,7 +928,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 cn.Close();
 
-                ProductQueries.updateProductAmountAdd(lote.CodMP, lote.CantidadOriginal);
 
             }
             catch (Exception ex)
@@ -976,10 +986,43 @@ namespace CifarInventario.ViewModels.Classes.Queries
         public static void updateLoteEntradaAmount(string CodLote, double exactAmount, string CodMP)
         {
             cn = DBConnection.MainConnection();
+
+            double conversion = 0.00;
+
+
+            try
+            {
+                cmd = new OleDbCommand("SELECT conversion_unitaria from lote_entrada where codigo_lote_interno = '" + CodLote + "' ; ", cn);
+                dr = cmd.ExecuteReader();
+
+
+
+
+
+                while (dr.Read())
+                {
+                    conversion = double.Parse(dr["conversion_unitaria"].ToString());
+
+
+                }
+
+                dr.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al obtener conversion  " + ex);
+            }
+
+
+           
+
+
             try
             {
                 cmd = new OleDbCommand("UPDATE lote_entrada " +
-                    "SET cantidad_unidad_lote = (cantidad_unidad_lote + (" + exactAmount + " / conversion_unitaria )), cantidad_unidad_formula = (cantidad_unidad_formula + " + exactAmount + " ) " +
+                    "SET cantidad_unidad_lote = (cantidad_unidad_lote + " + Math.Round((exactAmount  / conversion), 2, MidpointRounding.AwayFromZero) + "), cantidad_unidad_formula = (cantidad_unidad_formula + " + exactAmount + " ) " +
                     "where codigo_lote_interno = '" + CodLote + "'; ", cn);
                 cmd.ExecuteNonQuery();
 
@@ -990,14 +1033,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                 cn.Close();
 
-                if(exactAmount > 0)
-                {
-                    ProductQueries.updateProductAmountFromtExactAdd(CodMP, exactAmount);
-                }
-                else
-                {
-                    ProductQueries.updateProductAmountFromExactRemove(CodMP, exactAmount);
-                }
                 
 
             }
@@ -1013,25 +1048,36 @@ namespace CifarInventario.ViewModels.Classes.Queries
             try
             {
 
+
+                lote.CantidadActual = lote.CantidadCreacion;
+
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
 
                     if(lote.OriginalLote == "None")
                     {
+
                         cmd.CommandText = @"INSERT INTO lote_salida ([codigo_lote],[fecha_creacion],[cantidad_actual],[unidad],[fecha_vencimiento],[cantidad_entrada],[codigo_formula]) " +
                         "VALUES (@codigo,@fechaCreate,@cantidadActual,@unidad,@fechaVent,@cantidadEntrada,@codigoFormula) ";
+
+                        cmd.Parameters.AddRange(new OleDbParameter[]
+                        {
+                        new OleDbParameter("@codigo",lote.CodLote),
+                        new OleDbParameter("@fechaCreate",lote.FechaCreacion.ToShortDateString()),
+                        new OleDbParameter("@cantidadActual",lote.CantidadCreacion),
+                        new OleDbParameter("@unidad",lote.Unidad),
+                        new OleDbParameter("@fechaVent",lote.FechaVencimiento.ToShortDateString()),
+                        new OleDbParameter("@cantidadEntrada",lote.CantidadActual),
+                        new OleDbParameter("@codigoFormula",lote.CodFormula),
+                        });
                     }
                     else
                     {
                         cmd.CommandText = @"INSERT INTO lote_salida ([codigo_lote],[fecha_creacion],[cantidad_actual],[unidad],[fecha_vencimiento],[cantidad_entrada],[codigo_formula],[lote_original] )" +
                         "VALUES (@codigo,@fechaCreate,@cantidadActual,@unidad,@fechaVent,@cantidadEntrada,@codigoFormula,@loteOriginal) ";
-                    }
 
-                    
-
-
-                    cmd.Parameters.AddRange(new OleDbParameter[]
-                    {
+                        cmd.Parameters.AddRange(new OleDbParameter[]
+                        {
                         new OleDbParameter("@codigo",lote.CodLote),
                         new OleDbParameter("@fechaCreate",lote.FechaCreacion.ToShortDateString()),
                         new OleDbParameter("@cantidadActual",lote.CantidadCreacion),
@@ -1040,8 +1086,10 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         new OleDbParameter("@cantidadEntrada",lote.CantidadCreacion),
                         new OleDbParameter("@codigoFormula",lote.CodFormula),
                         new OleDbParameter("@loteOriginal",lote.OriginalLote),
-                    });
+                        });
+                    }
 
+                    
 
                     cmd.ExecuteNonQuery();
 
@@ -1106,6 +1154,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
             {
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
+
+
                     cmd.CommandText = @"INSERT INTO lote_salida_detalles ([id_lote_salida],[id_lote_entrada],[cantidad]) " +
                         "VALUES (@codSalida,@codEntrada,@cantidad) ";
 
@@ -1176,6 +1226,87 @@ namespace CifarInventario.ViewModels.Classes.Queries
             }
         }
 
+        public static void SetLoteEntradaInactive(string codLote)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE lote_entrada " +
+                    "SET estado =  false  " +
+                    "where codigo_lote_interno = '" + codLote + "'; ", cn);
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al desactivar Lote  " + ex);
+            }
+        }
+
+        public static void SetLoteEntradaActive(string codLote)
+        {
+            cn = DBConnection.MainConnection();
+            try
+            {
+                cmd = new OleDbCommand("UPDATE lote_entrada " +
+                    "SET estado =  true  " +
+                    "where codigo_lote_interno = '" + codLote + "'; ", cn);
+                cmd.ExecuteNonQuery();
+
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al activar Lote  " + ex);
+            }
+        }
+
+        public static void emptyLoteInactivo(string codLote)
+        {
+            double FormUnitAmountCurrent = 0;
+            double DisplayUnitOriginalAmount = 0;
+            double CurrentDisplayAmount = 0;
+            string codMP = "";
+
+            cn = DBConnection.MainConnection();
+
+
+            try
+            {
+
+                cmd = new OleDbCommand("Select * from lote_entrada where codigo_lote_interno = '" + codLote + "' ;", cn);
+                dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    codMP = dr["cod_mp"].ToString();
+                    FormUnitAmountCurrent = double.Parse(dr["cantidad_unidad_formula"].ToString());
+                    DisplayUnitOriginalAmount = double.Parse(dr["cantidad_original"].ToString());
+                    CurrentDisplayAmount = double.Parse(dr["cantidad_unidad_lote"].ToString());
+                }
+
+
+                cmd = new OleDbCommand("UPDATE lote_entrada " +
+                    "set cantidad_unidad_lote = 0.00, cantidad_original = 0.00 , cantidad_unidad_formula = 0.00 " +
+                    "where codigo_lote_interno = '" + codLote + "' ;", cn);
+                cmd.ExecuteNonQuery();
+
+                dr.Close();
+                cn.Close();
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al vaciar Lote  " + ex);
+            }
+        }
+
         public static void emptyLote(string codLote)
         {
             double FormUnitAmountCurrent = 0;
@@ -1209,7 +1340,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 dr.Close();
                 cn.Close();
 
-                ProductQueries.removeFlatAmounts(codMP, FormUnitAmountCurrent, CurrentDisplayAmount, DisplayUnitOriginalAmount);
 
                 
 

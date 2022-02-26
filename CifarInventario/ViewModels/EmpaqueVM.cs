@@ -19,6 +19,7 @@ namespace CifarInventario.ViewModels
         {
 
             Registros = new ObservableCollection<Registro>(InfoQueries.getAllRecords());
+            Donaciones = new ObservableCollection<Registro>(InfoQueries.getAllDonatons());
 
             
         }
@@ -32,6 +33,18 @@ namespace CifarInventario.ViewModels
             {
                 _registros = value;
                 OnPropertyChanged(nameof(Registros));
+            }
+        }
+
+
+        private ObservableCollection<Registro> _donaciones;
+        public ObservableCollection<Registro> Donaciones
+        {
+            get { return _donaciones; }
+            set
+            {
+                _donaciones = value;
+                OnPropertyChanged(nameof(Donaciones));
             }
         }
 

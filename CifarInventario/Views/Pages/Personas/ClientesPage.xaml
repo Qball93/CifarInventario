@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:local="clr-namespace:CifarInventario.Views.Pages"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
@@ -30,7 +31,8 @@
         </TextBlock>
 
 
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Clientes}" SelectedItem="{Binding SelectedClient}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Clientes}" 
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"    SelectedItem="{Binding SelectedClient}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
             <DataGrid.Resources>
                 <Style TargetType="DataGrid">
                     <Setter Property="RowHeaderWidth" Value="0" />

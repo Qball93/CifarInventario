@@ -29,6 +29,9 @@ namespace CifarInventario.Models
         private DateTime _fechaEntrada;
         private double _conversionUnitaria;
         private string _codInterno;
+        private bool _estado;
+
+        
 
         public LoteEntrada()
         {
@@ -231,6 +234,16 @@ namespace CifarInventario.Models
             {
                 _codProveedor = value;
                 OnPropertyChanged(nameof(CodProveedor));
+            }
+        }
+
+        public bool Estado
+        {
+            get { return _estado; }
+            set
+            {
+                _estado = value;
+                OnPropertyChanged(nameof(Estado));
             }
         }
 

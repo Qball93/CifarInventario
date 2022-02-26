@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:CifarInventario.Views.Pages"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
@@ -86,11 +87,12 @@
 
                     </TextBlock>
 
-                    
+
 
 
 
                     <DataGrid   Margin="40,94,40,174"
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"
                                 Height="400"
                                 ItemsSource="{Binding Path=Lotes}"
                                 SelectedItem="{Binding SelectedLote}"
@@ -127,7 +129,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
-                                            <Button  Margin="0,0,0,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.InactiveLote}"  Style="{StaticResource removeButton}" ToolTip="Deshabilitar Lote">
+                                            <Button  Margin="0,0,0,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.setInactiveLote}"  Style="{StaticResource removeButton}" ToolTip="Deshabilitar Lote">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Times" Foreground="White"/>
                                                 </StackPanel>
@@ -167,7 +169,6 @@
                 </Grid>
 
             </TabItem>
-
 
             <TabItem>
                 <TabItem.Header>
@@ -219,7 +220,7 @@
                                                     <fa:IconBlock Icon="Info" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 32" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDesempaqueModal}"  Style="{StaticResource keyButton}" ToolTip="Paquetes Utilizados">
+                                            <Button  Margin="5,0,0,0" Height="30" Width=" 32" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDesempaqueModal}"  Style="{StaticResource keyButton}" ToolTip="Desempacar Paquete">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Tape" Foreground="White"/>
                                                 </StackPanel>
@@ -264,7 +265,6 @@
             </TabItem>
 
 
-
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -279,7 +279,13 @@
 
                     </TextBlock>
 
-                    <DataGrid   Margin="40,94,40,174" Height="400" ItemsSource="{Binding Path=LotesInactive}" SelectedItem="{Binding SelectedInactive}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16" Grid.ColumnSpan="3">
+                    <DataGrid   Margin="40,94,40,174" Height="400" 
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+                                ItemsSource="{Binding Path=LotesInactive}"
+                                SelectedItem="{Binding SelectedInactive}" 
+                                AutoGenerateColumns="False"
+                                CanUserAddRows="False" 
+                                FontSize="16" Grid.ColumnSpan="3">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -302,13 +308,13 @@
                             <DataGridTextColumn  Header=" Nombre Formula "  Binding="{Binding NombreFormula}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Cantidad "  Binding="{Binding CantidadActual}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Unidad "  Binding="{Binding Unidad}"></DataGridTextColumn>
-                            <DataGridTextColumn  Header=" Fecha Creado " Binding="{Binding FechaCreacion}"/>
-                            <DataGridTextColumn  Header=" Fecha Vencimiento  " Binding="{Binding FechaVencimiento}"/>
+                            <DataGridTextColumn  Header=" Fecha Creado " Binding="{Binding FechaCreacion , StringFormat=d}"/>
+                            <DataGridTextColumn  Header=" Fecha Vencimiento  " Binding="{Binding FechaVencimiento , StringFormat=d}"/>
                             <DataGridTemplateColumn  Header=" Acciones ">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
-                                            <Button  Margin="0,0,0,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.ActiveLote}"  Style="{StaticResource keyButton}" ToolTip="Habilitar Lote">
+                                            <Button  Margin="0,0,0,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.setActiveLote}"  Style="{StaticResource keyButton}" ToolTip="Habilitar Lote">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                                     <fa:IconBlock Icon="Times" Foreground="White"/>
                                                 </StackPanel>
@@ -324,6 +330,7 @@
                 </Grid>
 
             </TabItem>
+
         </TabControl>
 
 

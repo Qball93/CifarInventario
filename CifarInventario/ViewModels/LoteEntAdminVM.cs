@@ -65,10 +65,21 @@ namespace CifarInventario.ViewModels
             MessageBoxResult result = MessageBox.Show("Vaciar este lote?", "Vaciar Lote", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                SelectedLote.CantidadActual = 0;
-                SelectedLote.CantidadExacta = 0;
-                SelectedLote.CantidadOriginal = 0;
-                InventoryQueries.emptyLote(SelectedLote.CodInterno);
+
+                if(SelectedLote.Estado == false)
+                {
+                    SelectedLote.CantidadActual = 0;
+                    SelectedLote.CantidadExacta = 0;
+                    SelectedLote.CantidadOriginal = 0;
+                    InventoryQueries.emptyLoteInactivo(SelectedLote.CodInterno); 
+                }
+                else
+                {
+                    SelectedLote.CantidadActual = 0;
+                    SelectedLote.CantidadExacta = 0;
+                    SelectedLote.CantidadOriginal = 0;
+                    InventoryQueries.emptyLote(SelectedLote.CodInterno);
+                }
             }
         }
 
@@ -83,11 +94,16 @@ namespace CifarInventario.ViewModels
             {
 
                 //MessageBox.Show(SelectedLote.CodMP);
+                SelectedLote.CantidadActual = Math.Round(SelectedLote.CantidadActual, 2, MidpointRounding.AwayFromZero);
+                SelectedLote.CantidadOriginal = Math.Round(SelectedLote.CantidadOriginal, 2, MidpointRounding.AwayFromZero);
 
-                double formAmount = (SelectedLote.CantidadActual * SelectedLote.ConversionUnitaria);
+                double formAmount = Math.Round((SelectedLote.CantidadActual * SelectedLote.ConversionUnitaria),2,     MidpointRounding.AwayFromZero);
+
+                
+
+
                 InventoryQueries.reEntryLote(SelectedLote.CodInterno, SelectedLote.CantidadActual, SelectedLote.CantidadOriginal,formAmount);
-                ProductQueries.reAddAmount(SelectedLote.CodMP, SelectedLote.CantidadOriginal, SelectedLote.CantidadActual, formAmount);
-
+              
                 MessageBox.Show("Lote MP reingresado");
                 AdminModal.Close();
 

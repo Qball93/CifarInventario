@@ -146,15 +146,17 @@ namespace CifarInventario.ViewModels.Classes.Queries
             return entidades;
         }
 
-        public static void CreateEmpleado(Empleado newEmployee)
+        public static int CreateEmpleado(Empleado newEmployee)
         {
+
+            int ID = 0;
             cn = DBConnection.MainConnection();
             try
             {
 
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
-                    cmd.CommandText = @"INSERT INTO empleados ([nombre],[apellido],[telefono],[correo])" +
+                    cmd.CommandText = @"INSERT INTO empleados ([nombre],[apellido],[telefono],[correo]) " +
                         "VALUES (@name,@apelldio,@telefono,@correo)";
 
 
@@ -169,6 +171,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                     cmd.ExecuteNonQuery();
 
+                    cmd.CommandText = "Select @@Identity";
+                    ID = (int)cmd.ExecuteScalar();
 
 
                 }
@@ -186,6 +190,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
 
             System.Windows.MessageBox.Show("Empleado creado con exito.");
+
+            return ID;
         }
 
         public static int CreateEntidad(EntidadCommercial newEntity,string type)
@@ -285,7 +291,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
         {
             cn = DBConnection.MainConnection();
 
-
+            
             try
             {
                 using (OleDbCommand cmd = cn.CreateCommand())

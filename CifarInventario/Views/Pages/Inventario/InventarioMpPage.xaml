@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:local="clr-namespace:CifarInventario.Views.Pages"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
@@ -24,13 +25,14 @@
     </Page.DataContext>
 
     <Grid Background="{StaticResource GridBackgroundBrush}">
-        <TextBlock Margin="40,40,201,587" Text="Lotes De Materia Prima" FontSize="40" FontWeight="Bold" Foreground="Black">
+        <TextBlock Margin="40,40,201,587" Text="Inventario de Materia Prima" FontSize="40" FontWeight="Bold" Foreground="Black">
 
         </TextBlock>
 
         <DataGrid Margin="40,100,40,140"
                   Height="400"
                   ItemsSource="{Binding Path=InventarioMP}"
+                  dgx:DataGridFilter.IsAutoFilterEnabled="True"
                   SelectedItem="{Binding SelectedMP}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="false"
@@ -56,9 +58,9 @@
                 <DataGridTextColumn Header="  Codigo Mp  " Width="Auto" Binding="{Binding Id}"/>
                 <DataGridTextColumn Header="  Nombre  " Width="Auto" Binding="{Binding NombreProducto}"/>
                 <DataGridTextColumn Header="  Unidad  " Width="Auto"  Binding="{Binding UnidadMuestra}"/>
-                <DataGridTextColumn Header="  Existencia   " Width="Auto" Binding="{Binding Existencia}"/>
-                <DataGridTextColumn Header="  Entrada  " Width="Auto" Binding="{Binding Entrada}"/>
-                <DataGridTextColumn Header="  Salida  " Width="Auto" Binding="{Binding Salida}"/>
+                <DataGridTextColumn Header="  Existencia   " Width="Auto" Binding="{Binding Existencia ,StringFormat=N2}"/>
+                <DataGridTextColumn Header="  Entrada  " Width="Auto" Binding="{Binding Entrada,StringFormat=N2}"/>
+                <DataGridTextColumn Header="  Salida  " Width="Auto" Binding="{Binding Salida ,StringFormat=N2}"/>
                 <DataGridTextColumn Header="  Conversion  " Width="Auto" Binding="{Binding Conversion}"/>
                 <DataGridTemplateColumn Header=" Acciones  " Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>

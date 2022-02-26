@@ -61,7 +61,7 @@ namespace CifarInventario.ViewModels
         {
             get
             {
-                return MenuQueries.getMenus(1);
+                return MenuQueries.getMenus(Globals.getId());
             }
         }
 

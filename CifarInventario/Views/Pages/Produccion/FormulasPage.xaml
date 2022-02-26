@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:CifarInventario.Views.Pages"
       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       mc:Ignorable="d" 
@@ -91,6 +92,7 @@
                                 Height="400"
                                 ItemsSource="{Binding Path=Formulas}"
                                 SelectedItem="{Binding SelectedFormula}"
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True" 
                                 AutoGenerateColumns="False"
                                 CanUserAddRows="False"
                                 FontSize="16"
@@ -296,7 +298,8 @@
 
                     </TextBlock>
 
-                    <DataGrid   Margin="40,94,40,174" Height="400" ItemsSource="{Binding Path=InactiveFormulas}" SelectedItem="{Binding SelectedInactive}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16" Grid.ColumnSpan="3">
+                    <DataGrid   Margin="40,94,40,174" Height="400"    
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"  ItemsSource="{Binding Path=InactiveFormulas}" SelectedItem="{Binding SelectedInactive}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16" Grid.ColumnSpan="3">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">

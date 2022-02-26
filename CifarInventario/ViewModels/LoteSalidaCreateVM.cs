@@ -132,12 +132,14 @@ namespace CifarInventario.ViewModels
 
             if(!(String.IsNullOrEmpty(SelectedFormula.Transformacion)))
             {
+               
                 SalidaDetalles = new ObservableCollection<LoteSalidaDetalle>(InventoryQueries.getFormulaProductionDetalles(SelectedFormula.NombreFormula, NuevoLote.CantidadCreacion, SelectedFormula.CodFormula));
 
                 SalidaDetalles.Insert(0, InventoryQueries.getTransformacionDetalle(SelectedFormula.CodFormula, NuevoLote.CantidadCreacion));
             }
             else
             {
+                
                 SalidaDetalles = new ObservableCollection<LoteSalidaDetalle>(InventoryQueries.getFormulaProductionDetalles(SelectedFormula.NombreFormula, NuevoLote.CantidadCreacion, SelectedFormula.CodFormula));
             }
 
@@ -154,21 +156,37 @@ namespace CifarInventario.ViewModels
             NuevoLote.CodFormula = SelectedFormula.CodFormula;
             //NuevoLote.OriginalLote = SalidaDetalles[0].CodLoteEntrada;
 
+           /* System.Windows.MessageBox.Show(SelectedFormula.Transformacion);
 
-            NuevoLote.OriginalLote = SelectedFormula.Transformacion == "" ? "None" : SalidaDetalles[0].CodLoteEntrada;
+            NuevoLote.OriginalLote = (SelectedFormula.Transformacion == "" ? "None" : SalidaDetalles[0].CodLoteEntrada);*/
+
+            
 
 
-            SalidaDetalles.RemoveAt(0);
+            
 
-            InventoryQueries.createLoteSalida(NuevoLote);
+            if (SelectedFormula.Transformacion == null)
+            {
+                NuevoLote.OriginalLote = "None";
+                InventoryQueries.createLoteSalida(NuevoLote);
+            }
+            else
+            {
+                NuevoLote.OriginalLote = SalidaDetalles[0].CodLoteEntrada;
+                InventoryQueries.createLoteSalida(NuevoLote);
+                System.Windows.MessageBox.Show((-SalidaDetalles[0].Cantidad).ToString());
+                InventoryQueries.updateLoteSalidaAmount(-SalidaDetalles[0].Cantidad, SalidaDetalles[0].CodLoteEntrada);
+                SalidaDetalles.RemoveAt(0);
+            }
 
-            foreach(var element in SalidaDetalles)
+            foreach (var element in SalidaDetalles)
             {
                 InventoryQueries.createLoteSalidaDetalle(element, NuevoLote.CodLote);
             }
 
 
             System.Windows.MessageBox.Show("Lote Salida Creado");
+            CreateCheck = false;
 
             salidaModal.Close();
 

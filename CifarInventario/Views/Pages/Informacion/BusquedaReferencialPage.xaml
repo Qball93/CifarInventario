@@ -8,6 +8,7 @@
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       mc:Ignorable="d" 
       Height="700" Width="1000"
       Title="Busqueda Referencial">
@@ -88,6 +89,7 @@
                                 Height="400"
                                 ItemsSource="{Binding Path=FacturaResults}"
                                 AutoGenerateColumns="False"
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True" 
                                 CanUserAddRows="False"
                                 FontSize="16">
 
@@ -182,6 +184,7 @@
                     <DataGrid   Margin="92,93,472,175"
                                 Height="400"
                                 ItemsSource="{Binding Path=LotesSalida}"
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True" 
                                 AutoGenerateColumns="False"
                                 CanUserAddRows="False"
                                 FontSize="16" SelectionChanged="DataGrid_SelectionChanged">

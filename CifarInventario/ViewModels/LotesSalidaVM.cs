@@ -271,6 +271,8 @@ namespace CifarInventario.ViewModels
        // public ICommand vaciarLote => new DelegateCommand(VaciarLote);
         public ICommand openInfoPaqueteModal => new DelegateCommand(OpenInfoPaquetesModal);
         public ICommand openDonateModal => new DelegateCommand(OpenDonateModal);
+        public ICommand setInactiveLote => new DelegateCommand(setLoteInactive);
+        public ICommand setActiveLote => new DelegateCommand(setLoteActive);
 
         public DonateProductCommand donarProductoCommand { get; set; }
         public ProcesarCantidadAmountCommand procesarCantidadAmountCommand { get; set; }
@@ -576,6 +578,33 @@ namespace CifarInventario.ViewModels
             }
         }
 
+        public void setLoteInactive(object parameter)
+        {
+            MessageBoxResult result = MessageBox.Show("Cambiar Estado a Inactivo?", "Cambiar Estado", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                InventoryQueries.SetLoteSalidaInactive(SelectedLote.CodLote);
+
+                LotesInactive.Add(SelectedLote);
+                Lotes.Remove(SelectedLote);
+            }
+
+        }
+
+
+        public void setLoteActive(object parameter)
+        {
+
+
+            MessageBoxResult result = MessageBox.Show("Cambiar Estado a Activo?", "Cambiar Estado", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                InventoryQueries.SetLoteSalidaActive(SelectedInactive.CodLote);
+
+                Lotes.Add(SelectedInactive);
+                LotesInactive.Remove(SelectedInactive);
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

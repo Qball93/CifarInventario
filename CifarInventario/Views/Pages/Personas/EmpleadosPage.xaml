@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:local="clr-namespace:CifarInventario.Views.Pages"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
@@ -29,7 +30,8 @@
 
         </TextBlock>
 
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Empleados}" SelectedItem="{Binding SelectedEmpleado}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+        <DataGrid Margin="40,0,40,80" Height="400"  
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"     ItemsSource="{Binding Path=Empleados}" SelectedItem="{Binding SelectedEmpleado}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
             <DataGrid.Resources>
                 
                 <Style TargetType="DataGrid">

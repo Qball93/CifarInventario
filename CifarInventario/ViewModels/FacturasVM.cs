@@ -37,7 +37,6 @@ namespace CifarInventario.ViewModels
 
             Zonas = new ObservableCollection<string> { "Norte", "Sur", "Este", "Oeste" };
 
-            Globals.setId(1);
             editModal = new EditFacturaModal(this);
 
             ProductPairs = new List<IdName>();

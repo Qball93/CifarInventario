@@ -70,14 +70,14 @@ namespace CifarInventario.ViewModels
 
         public void AgregarEmpleado()
         {
-            PersonaQueries.CreateEmpleado(NewEmpleado);
+            NewEmpleado.Id =   PersonaQueries.CreateEmpleado(NewEmpleado);
             Empleados.Add(NewEmpleado);
             limpiar(1);
         }
 
         public void EditarEmpleado()
         {
-            PersonaQueries.updateEmpleado(SelectedEmpleado);
+            PersonaQueries.updateEmpleado(NewEmpleado);
             
             UpdateCollectionInstance();
             System.Windows.MessageBox.Show("Empleado Actualizado");

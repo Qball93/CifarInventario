@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:CifarInventario.Views.Pages.Informacion"
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
+      xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
       Height="700" Width="1000"
@@ -23,67 +24,152 @@
         <vm:EmpaqueVM/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource GridBackgroundBrush}"   >
+    <Grid  >
 
-        <TextBlock Margin="40,40,201,587" Text="Registro de Desempaque" FontSize="40" FontWeight="Bold" Foreground="Black">
-
-        </TextBlock>
-
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Registros}" SelectedItem="{Binding SelectedRegistro}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
-            <DataGrid.Resources>
-
-                <Style TargetType="DataGrid">
-                    <Setter Property="RowHeaderWidth" Value="0" />
-                    <Setter Property="BorderBrush" Value="black"/>
-                    <Setter Property="AlternationCount" Value="2"/>
-                    <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+        <TabControl Margin="-2,-1.9999999,0,0">
+            <TabControl.Resources>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Background" Value="DarkGray"/>
                 </Style>
-                <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                    <Setter Property="BorderBrush" Value="black"/>
-                </Style>
-            </DataGrid.Resources>
+            </TabControl.Resources>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header=" Fecha Evento " Width="30" Binding="{Binding FechaEvento,StringFormat=d}"/>
-                <DataGridTextColumn Header=" Lote Relevante " Width="*" Binding="{Binding LoteRelevante}"/>
-                <DataGridTextColumn Header=" Cantidad Cambiada " Width="*" Binding="{Binding Cantidad}"/>
+            <TabItem>
+                
+                
+                
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="  Lotes Reampacado " />
+                    </StackPanel>
+                </TabItem.Header>
 
-                <DataGridTemplateColumn Header=" Acciones" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
-                                <Button  Margin="0,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDesempaqueModal}" Style="{StaticResource infoButton}" ToolTip="Editar Empleado">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconBlock Icon="Info" Foreground="White"/>
+                <Grid Background="{StaticResource GridBackgroundBrush}">
+
+
+                    <TextBlock Margin="40,40,201,587" Text="Registro de Desempaque" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+                </TextBlock>
+
+                    <DataGrid Margin="40,0,40,80" Height="400" 
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"    ItemsSource="{Binding Path=Registros}" SelectedItem="{Binding SelectedRegistro}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+                    <DataGrid.Resources>
+
+                        <Style TargetType="DataGrid">
+                            <Setter Property="RowHeaderWidth" Value="0" />
+                            <Setter Property="BorderBrush" Value="black"/>
+                            <Setter Property="AlternationCount" Value="2"/>
+                            <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                        </Style>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                            <Setter Property="BorderBrush" Value="black"/>
+                        </Style>
+                    </DataGrid.Resources>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header=" Fecha Evento " Width="*" Binding="{Binding FechaEvento,StringFormat=d}"/>
+                        <DataGridTextColumn Header=" Lote Relevante " Width="*" Binding="{Binding LoteRelevante}"/>
+                        <DataGridTemplateColumn Header=" Acciones" Width="*">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+                                        <Button  Margin="0,0,0,0"   Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDesempaqueModal}" Style="{StaticResource infoButton}" ToolTip="Editar Empleado">
+                                            <StackPanel Orientation="Horizontal"  >
+                                                <fa:IconBlock Icon="Info"  Margin="5,0,0,0"  Foreground="White"/>
+                                            </StackPanel>
+                                        </Button>
                                     </StackPanel>
-                                </Button>
-                            </StackPanel>
 
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-            </DataGrid.Columns>
+                    </DataGrid.Columns>
 
-        </DataGrid>
+                </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Agregar Empleado"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+                <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                        <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                    </StackPanel>
+                    </Button>
+                </Grid>
+            </TabItem>
 
+            <TabItem>
+
+
+
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="  Lotes Donados " />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <Grid Background="{StaticResource GridBackgroundBrush}">
+
+
+                    <TextBlock Margin="40,40,201,587" Text="Registro de Donacion" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+                    </TextBlock>
+
+                    <DataGrid Margin="40,0,40,80" Height="400" 
+                              dgx:DataGridFilter.IsAutoFilterEnabled="True"  ItemsSource="{Binding Path=Donaciones}" SelectedItem="{Binding SelectedRegistro}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+                        <DataGrid.Resources>
+
+                            <Style TargetType="DataGrid">
+                                <Setter Property="RowHeaderWidth" Value="0" />
+                                <Setter Property="BorderBrush" Value="black"/>
+                                <Setter Property="AlternationCount" Value="2"/>
+                                <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                            </Style>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                                <Setter Property="BorderBrush" Value="black"/>
+                            </Style>
+                        </DataGrid.Resources>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header=" Fecha Evento " Width="*" Binding="{Binding FechaEvento,StringFormat=d}"/>
+                            <DataGridTextColumn Header=" Cantidad Donada " Width="*" Binding="{Binding Cantidad}"/>
+                            <DataGridTextColumn Header=" Lote Relevante " Width="*" Binding="{Binding LoteRelevante}"/>
+                            <DataGridTemplateColumn Header=" Acciones" Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+                                            <Button  Margin="0,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openDesempaqueModal}" Style="{StaticResource infoButton}" ToolTip="Editar Empleado">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <fa:IconBlock Icon="Info"  Margin="5,0,0,0" Foreground="White"/>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                    
+                    
+                    <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 
 </Page>

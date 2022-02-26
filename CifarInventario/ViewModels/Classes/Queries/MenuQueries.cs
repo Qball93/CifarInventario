@@ -237,8 +237,6 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
         public static void cambiarEstadoPermiso(int rolId, int submenuId, bool Estado)
         {
-
-            System.Windows.MessageBox.Show(" " + Estado + "" + rolId + submenuId);
             cn = DBConnection.MainConnection();
             try
             {
@@ -253,6 +251,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
 
                 cn.Close();
+
+                System.Windows.MessageBox.Show("Permiso de Menu Actualizado");
 
             }
             catch (Exception ex)

@@ -11,6 +11,7 @@ using CifarInventario.ViewModels.Commands.LoteEntCommands;
 using System.Collections.ObjectModel;
 using CifarInventario.Views.Modals.LotesEntModals;
 using System.Windows.Input;
+using System.Windows;
 
 namespace CifarInventario.ViewModels
 {
@@ -143,6 +144,8 @@ namespace CifarInventario.ViewModels
         }
 
         public DisplayProveedor SelectedProveedor { get; set; }
+        public EditLotePaqueteEntradaModal editModalPaquete { get; set; }
+        public EditLoteEntradaModal editModalLote { get; set; }
 
 
 
@@ -150,10 +153,19 @@ namespace CifarInventario.ViewModels
 
 
         public ICommand newLoteModal => new DelegateCommand(NewLoteModal);
-
         public ICommand resetLoteModal => new DelegateCommand(reset);
-
         public ICommand newLotePaqueteModal => new DelegateCommand(NewPaqueteModal);
+        public ICommand editLotePaqueteModal => new DelegateCommand(EditLotePaqueteModal);
+        public ICommand editLoteModal => new DelegateCommand(EditLoteModal);
+
+
+
+
+        public ICommand setPaqueteActivo => new DelegateCommand(SetPaqueteActivo);
+        public ICommand setPaqueteInactivo => new DelegateCommand(SetPaqueteInactivo);
+        public ICommand setLoteActivo => new DelegateCommand(SetLoteActivo);
+        public ICommand setLoteInactivo => new DelegateCommand(SetLoteInactivo);
+
 
         public NewLoteEntCommand newLoteCommand { get; set; }
 
@@ -175,7 +187,77 @@ namespace CifarInventario.ViewModels
         }
 
 
+        public void EditLotePaqueteModal(object parameter)
+        {
+            NewLote = new LoteEntrada(SelectedLoteActivo);
+            editModalPaquete = new EditLotePaqueteEntradaModal(this);
+            editModalPaquete.ShowDialog();
 
+        }
+
+        public void EditLoteModal(object parameter)
+        {
+            NewLote = new LoteEntrada(SelectedLoteActivo);
+            editModalLote = new EditLoteEntradaModal(this);
+            editModalLote.ShowDialog();
+
+        }
+
+        public void SetLoteActivo(object parameter)
+        {
+            MessageBoxResult result = MessageBox.Show("Cambiar Estado a Activo?   (Un lote activo aparecera como invalido si ya paso su fecha vencimiento)  ", "Cambiar Estado", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                InventoryQueries.SetLoteEntradaActive(SelectedLoteActivo.CodInterno);
+
+                if (SelectedLoteActivo.FechaVencimiento > DateTime.Now)
+                {
+                    
+                    LotesActivos.Add(SelectedLoteActivo);
+                    LotesInactivos.Remove(SelectedLoteActivo);
+
+                }
+            }
+        }
+
+        public void SetLoteInactivo(object parameter)
+        {
+            MessageBoxResult result = MessageBox.Show("Cambiar Estado a Inactivo?", "Cambiar Estado", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                InventoryQueries.SetLoteEntradaInactive(SelectedLoteActivo.CodInterno);
+                LotesInactivos.Add(SelectedLoteActivo);
+                LotesActivos.Remove(SelectedLoteActivo);
+            }
+        }
+
+        public void SetPaqueteActivo(object parameter)
+        {
+            MessageBoxResult result = MessageBox.Show("Cambiar Estado a Activo?   (Un lote activo aparecera como invalido si ya paso su fecha vencimiento)  ", "Cambiar Estado", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                InventoryQueries.SetLoteEntradaActive(SelectedLoteActivo.CodInterno);
+
+                if(SelectedLoteActivo.FechaVencimiento > DateTime.Now)
+                {
+                    LotesPaquetes.Add(SelectedLoteActivo);
+                    LotesPaquetesInactivos.Remove(SelectedLoteActivo);
+
+                }
+
+            }
+        }
+
+        public void SetPaqueteInactivo(object parameter)
+        {
+            MessageBoxResult result = MessageBox.Show("Cambiar Estado a Inactivo?", "Cambiar Estado", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                InventoryQueries.SetLoteEntradaInactive(SelectedLoteActivo.CodInterno);
+                LotesPaquetesInactivos.Add(SelectedLoteActivo);
+                LotesPaquetes.Remove(SelectedLoteActivo);
+            }
+        }
 
         public void CreateLotePaquete()
         {
@@ -195,6 +277,10 @@ namespace CifarInventario.ViewModels
             System.Windows.MessageBox.Show("Nuevo Lote Paquete Creado");
         }
 
+        public void EditLotePaquete()
+        {
+
+        }
 
         public void NewLoteModal(object parameter)
         {
@@ -222,7 +308,7 @@ namespace CifarInventario.ViewModels
             NewLote.ConversionUnitaria = SelectedMateriaPrima.ConversionValue;
             NewLote.CodMP = SelectedMateriaPrima.Codigo;
             NewLote.CantidadActual = NewLote.CantidadOriginal;
-            NewLote.CantidadExacta = NewLote.CantidadOriginal * SelectedMateriaPrima.ConversionValue;
+            NewLote.CantidadExacta = Math.Round(NewLote.CantidadOriginal * SelectedMateriaPrima.ConversionValue,2, MidpointRounding.AwayFromZero);
             NewLote.NombreMP = SelectedMateriaPrima.Nombre;
             NewLote.NombreProveedor = SelectedProveedor.NombreProveedor;
 
@@ -234,6 +320,11 @@ namespace CifarInventario.ViewModels
             reset(1);
 
             System.Windows.MessageBox.Show("Nuevo Lote Creado");
+        }
+
+        public void EditLote()
+        {
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
