@@ -10,18 +10,40 @@ namespace CifarInventario.ViewModels.Classes
     static class Globals
     {
 
-        public static int userID;
+        private static int roleId;
+        private static int userId;
+        private static int empleadoId;
+
+
+        public static int getEmpleadoId()
+        {
+            return empleadoId;
+        }
+
+        public static void setEmpladoId(int id)
+        {
+            empleadoId = id;
+        }
 
         public static void setId(int id)
         {
-            userID = id;
+            roleId = id;
         }
 
         public static int getId()
         {
-            return userID;
+            return roleId;
         }
 
+        public static int getUserId()
+        {
+            return userId;
+        }
+
+        public static void setUserId(int id)
+        {
+            userId = id;
+        }
         
     }
 

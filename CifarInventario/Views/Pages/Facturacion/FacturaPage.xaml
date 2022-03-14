@@ -10,7 +10,7 @@
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="FacturaPage">
 
 
@@ -33,9 +33,24 @@
     </Page.DataContext>
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
-        <TextBlock Margin="40,40,201,587" Text="Facturas" FontSize="40" FontWeight="Bold" Foreground="Black">
 
-        </TextBlock>
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+
+            <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Facturas" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+            </TextBlock>
+
+        </StackPanel>
 
         <!--DataGrid Margin="40,0,40,80"
                   Height="400"
@@ -98,9 +113,11 @@
         </DataGrid-->
 
         <control:FilterDataGrid
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
             x:Name="dtPrime"
-            Margin="40,0,40,80"
-            Height="400"
+            Margin="40,10,40,10"
             AutoGenerateColumns="True"
             AutoGeneratingColumn="dataGrid1_AutoGeneratingColumn"
             FilterLanguage="English"
@@ -138,18 +155,44 @@
 
 
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNewFacturaModal}" Click="ButtonExport"   VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text=" Nueva Factura "/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+        <StackPanel
+            Grid.Row="2">
+
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"   >
+                    <Button HorizontalAlignment="Left" Margin="0,0,0,0" Command="{Binding openNewFacturaModal}" Click="ButtonExport"   VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="UserPlus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text=" Nueva Factura "/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Grid.Column="1">
+
+                    <Button HorizontalAlignment="Left" Margin="0,0,40,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+
+            </Grid>
+
+        </StackPanel>
+
+
 
     </Grid>
 </Page>

@@ -410,8 +410,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     }
                     else
                     {
-                        cmd.CommandText = @"INSERT INTO formulas ([id],[nombre_formula],[forma_farm],[precauciones],[cantidad_creada],[cod_transformacion])" +
-                        "VALUES (@id,@name,@form,@precaucion,@quantity,@cod_transformacion)";
+                        cmd.CommandText = @"INSERT INTO formulas ([id],[nombre_formula],[forma_farm],[precauciones],[cantidad_creada],[cod_transformacion],[cantidad_transformacion])" +
+                        "VALUES (@id,@name,@form,@precaucion,@quantity,@cod_transformacion,@cantidad_transformacion)";
                     }
                     
 
@@ -424,6 +424,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         new OleDbParameter("@precaucion",newFormula.Precauciones),
                         new OleDbParameter("@quantity",newFormula.Cantidad),
                         new OleDbParameter("@cod_transformacion",newFormula.Transformacion),
+                        new OleDbParameter("@cantidad_transformacion",newFormula.TransCantidad),
                         //new OleDbParameter("@status",temp)
                     }) ;
 

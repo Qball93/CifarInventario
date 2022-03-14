@@ -9,7 +9,7 @@
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="LotesCreacion">
 
     <Page.Resources>
@@ -24,27 +24,47 @@
         <vm:LoteSalidaCreateVM/>
     </Page.DataContext>
 
-    <Grid Background="{StaticResource GridBackgroundBrush}"   >
+    <Grid Background="{StaticResource GridBackgroundBrush}">
 
-        <DockPanel  Margin="40,40,101,587">
-            <TextBlock Text="Orden de Produccion" FontSize="40" FontWeight="Bold" Foreground="Black" DockPanel.Dock="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
+
+
+
+        <DockPanel  
+            Grid.Row="0"
+            Margin="40,0,40,0"
+            >
+            <TextBlock Text="Orden de Produccion" FontSize="40" FontWeight="Bold" Foreground="Black" DockPanel.Dock="Left" Height="733" Width="373">
 
             </TextBlock>
 
-            <Button Margin="150,20,150,20" Content="new lote Info" Command="{Binding openInfoModal}">
-                
+            <Button  Command="{Binding openInfoModal}" Height="56" Width="184" RenderTransformOrigin="0.554,0.507"  Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}"  DockPanel.Dock="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Foreground="white" Text=" Seleccion de Formula a Crear"/>
+                </StackPanel>
             </Button>
 
-            
+
         </DockPanel>
 
 
-        <DataGrid Margin="40,113,40,187" Height="400" ItemsSource="{Binding Path=SalidaDetalles}" 
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"
-                  SelectedItem="{Binding SelectedDetalle}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="false"
-                  FontSize="16">
+
+
+        <DataGrid 
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
+            Margin="40,10,40,10"
+            ItemsSource="{Binding Path=SalidaDetalles}" 
+            SelectedItem="{Binding SelectedDetalle}"
+            AutoGenerateColumns="False"
+            dgx:DataGridFilter.IsAutoFilterEnabled="True"  
+            CanUserAddRows="false"
+            FontSize="16" SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Resources>
 
                 <Style TargetType="DataGrid">
@@ -82,15 +102,17 @@
 
 
 
+        <StackPanel
+            Grid.Row="2">
+            <Button HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding openCreateLoteModal}"  VerticalAlignment="Top" Height="40" Width="105" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa:IconBlock Icon="Plus" Foreground="White"/>
+                    <TextBlock Foreground="white" Text="  Crear Lote"/>
+                </StackPanel>
+                </Button>
+        </StackPanel>
 
 
-
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openCreateLoteModal}"  VerticalAlignment="Top" Height="40" Width="105" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="Plus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Crear Lote"/>
-            </StackPanel>
-        </Button>
-
+   
     </Grid>
 </Page>

@@ -10,7 +10,7 @@
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="LotesSalida">
 
     <Page.Resources>
@@ -77,29 +77,39 @@
                 </TabItem.Header>
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="199*"/>
-                        <ColumnDefinition Width="32*"/>
-                        <ColumnDefinition Width="765*"/>
-                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Margin="40,28,200,580" Text="Listado  Lotes Salida" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.ColumnSpan="3">
-
-                    </TextBlock>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
 
 
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
+
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Listado  Lotes Salida" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+                        </TextBlock>
 
 
-                    <DataGrid   Margin="40,94,40,174"
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"
-                                Height="400"
-                                ItemsSource="{Binding Path=Lotes}"
-                                SelectedItem="{Binding SelectedLote}"
-                                AutoGenerateColumns="False"
-                                CanUserAddRows="False"
-                                FontSize="16"
-                                Grid.ColumnSpan="3">
+                    </StackPanel>
+
+
+                    <DataGrid   
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        x:Name="dtPrime"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True"
+                        ItemsSource="{Binding Path=Lotes}"
+                        SelectedItem="{Binding SelectedLote}"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        FontSize="16">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -124,6 +134,7 @@
                             <DataGridTextColumn  Header=" Cantidad Original "  Binding="{Binding CantidadCreacion}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Unidad "  Binding="{Binding Unidad}"></DataGridTextColumn>
                             <DataGridTextColumn  Header=" Fecha Creado " Binding="{Binding FechaCreacion, StringFormat=d}"/>
+                            <DataGridTextColumn  Header=" Lote Original " Binding="{Binding OriginalLote}"/>
                             <DataGridTextColumn  Header=" Fecha Vencimiento  " Binding="{Binding FechaVencimiento, StringFormat=d}"/>
                             <DataGridTemplateColumn  Header=" Acciones ">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -152,19 +163,19 @@
                     </DataGrid>
 
 
-                    <!--Button HorizontalAlignment="Left" Margin="569,580,0,0" Command="{Binding newFormulaModal}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="2" >
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconBlock Icon="plus" Foreground="White"/>
-                            <TextBlock Foreground="white" Text="  Agregar Formula"/>
-                        </StackPanel>
-                    </-->
+                    <StackPanel
+                        Grid.Row="2">
+                        <Button HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Click="Button_Click"    Height="40" Width="114" Style="{StaticResource listButton}" >
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+
+
                     
-                    <Button HorizontalAlignment="Left" Margin="419,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Grid.Column="2" >
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-                        </StackPanel>
-                    </Button>
 
                 </Grid>
 
@@ -184,11 +195,37 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
-                    <TextBlock Margin="40,28,201,587"  FontSize="40" FontWeight="Bold" Foreground="Black">
-                        <Run Text="{Binding SelectedLote.CodLote}"/>
-                    </TextBlock>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    <DataGrid   Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=LotesPT}" SelectedItem="{Binding SelectedLotePT}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16">
+
+
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
+
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top"  FontSize="40" FontWeight="Bold" Foreground="Black"><Run Text="{Binding SelectedLote.CodLote}"/>
+                        </TextBlock>
+
+
+                    </StackPanel>
+
+
+
+                    <DataGrid  
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        x:Name="dtPrimeFin"
+                        ItemsSource="{Binding Path=LotesPT}"
+                        SelectedItem="{Binding SelectedLotePT}" 
+                        AutoGenerateColumns="False" 
+                        CanUserAddRows="False"
+                        FontSize="16">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -237,33 +274,23 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <StackPanel Margin="40,530,40,50" Orientation="Horizontal">
-                        <!--Label FontSize="16" Height="35" Content="Materia Prima"></>
-                        <ComboBox VerticalAlignment="Center" ItemsSource="{Binding NewFormulaProducts}"  SelectedValue="{Binding NewFormulaSelectedProduct}" Width="200"
-                          SelectedIndex="1" DisplayMemberPath="nombre"  Margin="20,0,0,0" FontSize="16"  ToolTip="Elija MP para formula">
 
-                        </ComboBox>
-
-                        <Label 
-                            Margin="60,0,30,0"
-                            FontSize="16" Height="35" Content="Cantidad"></Label>
-                        <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                     Text="{Binding NewFormulaNewDetalle.Quantity, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Height="30" Width="150"></TextBox-->
-
-                        <Button Foreground="White"
-                        Background="{StaticResource MainThemeBrush}"
-                        Command="{Binding newDetalleCommand}"
-                        Width="100"
-                        FontSize="16"
-                        Height="30"
-                        Margin="130,0,0,0"
-                        Content="Agregar"></Button>
+                    <StackPanel
+                        Grid.Row="2">
+                        <Button HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Click="Button_Click"    Height="40" Width="114" Style="{StaticResource listButton}" >
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
+
+                 
+                    
 
                 </Grid>
 
             </TabItem>
-
 
             <TabItem>
                 <TabItem.Header>
@@ -275,17 +302,39 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
-                    <TextBlock Margin="40,28,200,580" Text="Lotes Inactivos" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    </TextBlock>
 
-                    <DataGrid   Margin="40,94,40,174" Height="400" 
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True" 
-                                ItemsSource="{Binding Path=LotesInactive}"
-                                SelectedItem="{Binding SelectedInactive}" 
-                                AutoGenerateColumns="False"
-                                CanUserAddRows="False" 
-                                FontSize="16" Grid.ColumnSpan="3">
+
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
+
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Lotes Inactivos" FontSize="40" FontWeight="Bold" Foreground="Black" >
+
+                        </TextBlock>
+
+
+                    </StackPanel>
+
+
+
+                    <DataGrid   
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+                        x:Name="dtPrimeInactive"
+                        ItemsSource="{Binding Path=LotesInactive}"
+                        SelectedItem="{Binding SelectedInactive}" 
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False" 
+                        FontSize="16">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -325,6 +374,20 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+
+
+                    <StackPanel
+                        Grid.Row="2">
+                        <Button HorizontalAlignment="Left" Margin="0,0,40,0" VerticalAlignment="Top" Height="40" Width="114"   Click="Button_Click_Inactive" Style="{StaticResource listButton}" >
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+
+                    
 
 
                 </Grid>

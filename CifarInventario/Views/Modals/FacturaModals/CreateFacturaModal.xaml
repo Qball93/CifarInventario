@@ -358,6 +358,7 @@
                     ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
                     RelativeSource={x:Static RelativeSource.Self}}" 
                     Text="{Binding NewFactura.Descuento,
+                      StringFormat=N2,
                     Mode=TwoWay,ValidatesOnDataErrors=True,
                     UpdateSourceTrigger=PropertyChanged}">
             </TextBox>

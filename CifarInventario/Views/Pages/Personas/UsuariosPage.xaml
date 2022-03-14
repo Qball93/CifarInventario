@@ -8,7 +8,8 @@
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
-      mc:Ignorable="d" Height="700" Width="1000"
+      Height="Auto"
+      Width="Auto"
       
       Title="UserPage">
 
@@ -26,70 +27,98 @@
 
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
+        
 
-        <TextBlock Margin="40,40,201,587" Text="Listado de Usuarios" FontSize="40" FontWeight="Bold" Foreground="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
+
+
+
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+
+            <TextBlock  HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Listado de Usuarios" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+            </TextBlock>
+
+
+        </StackPanel>
+
+
             
-        </TextBlock>
+
+            <DataGrid  
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalScrollBarVisibility="Auto"
+                Margin="40,10,40,10"
+                dgx:DataGridFilter.IsAutoFilterEnabled="True"
+                x:Name="dtPrime"  
+                SelectedItem="{Binding SelectedUser}" 
+                ItemsSource="{Binding Path=Usuarios}"  
+                AutoGenerateColumns="False" 
+                CanUserAddRows="false"
+                FontSize="16">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGrid">
+                        <Setter Property="RowHeaderWidth" Value="0" />
+                        <Setter Property="BorderBrush" Value="black"/>
+                        <Setter Property="AlternationCount" Value="2"/>
+                        <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                    </Style>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        <Setter Property="BorderBrush" Value="black"/>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Width="30"  Binding="{Binding id}"/>
+                    <DataGridTextColumn Header="Nombre Usuario" Width="*" Binding="{Binding UserName}"/>
+                    <DataGridTextColumn Header="Role Usuario"  Width="*" Binding="{Binding UserRole.RoleName}"/>
+                    <DataGridTextColumn Header="Estado" Width="*" Binding="{Binding Status, Converter={StaticResource boolToActive}}"/>
+                    <DataGridTemplateColumn Header="Acciones" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
+                                    <Button  Margin="5,0,5,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.NewPass}" Style="{StaticResource keyButton}" ToolTip="Cambiar Contraseña">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconBlock Icon="key" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button  Margin="5,0,5,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditUser}" Style="{StaticResource editButton}" ToolTip="Editar Usuario">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconBlock Icon="Edit" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+            </DataGrid>
 
 
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Usuarios}"  
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"     SelectedItem="{Binding SelectedUser}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
-            <DataGrid.Resources>
-                <Style TargetType="DataGrid">
-                    <Setter Property="RowHeaderWidth" Value="0" />
-                    <Setter Property="BorderBrush" Value="black"/>
-                    <Setter Property="AlternationCount" Value="2"/>
-                    <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
-                </Style>
-                <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                    <Setter Property="BorderBrush" Value="black"/>
-                </Style>
-            </DataGrid.Resources>
+        <StackPanel
+            Grid.Row="2">
+            <Button HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding CreateNew}"  VerticalAlignment="Bottom" Height="40" Width="201" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa:IconBlock Icon="UserPlus" Foreground="White"/>
+                    <TextBlock Foreground="white" Text="  Agregar Usuario"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Width="30"  Binding="{Binding id}"/>
-                <DataGridTextColumn Header="Nombre Usuario" Width="*" Binding="{Binding UserName}"/>
-                <DataGridTextColumn Header="Role Usuario"  Width="*" Binding="{Binding UserRole.RoleName}"/>
-                <DataGridTextColumn Header="Estado" Width="*" Binding="{Binding Status, Converter={StaticResource boolToActive}}"/>
-                <DataGridTemplateColumn Header="Acciones" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
-                                <Button  Margin="5,0,5,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.NewPass}" Style="{StaticResource keyButton}" ToolTip="Cambiar Contraseña">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconBlock Icon="key" Foreground="White"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button  Margin="5,0,5,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditUser}" Style="{StaticResource editButton}" ToolTip="Editar Usuario">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconBlock Icon="Edit" Foreground="White"/>
-                                    </StackPanel>
-                                </Button>
-                                
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-
-        </DataGrid>
-
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding CreateNew}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Agregar Usuario"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+        
 
     </Grid>
 </Page>

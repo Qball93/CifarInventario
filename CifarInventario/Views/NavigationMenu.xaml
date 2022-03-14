@@ -6,12 +6,11 @@
         xmlns:local="clr-namespace:CifarInventario.Views"
         xmlns:customcontrol="clr-namespace:CifarInventario.Views.CustomControl"
         mc:Ignorable="d"
-        ResizeMode="NoResize"
-        Title="NavigationMenu" Height="700" Width="1200">
+        Title="NavigationMenu" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="1000"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <customcontrol:MenuControl/>

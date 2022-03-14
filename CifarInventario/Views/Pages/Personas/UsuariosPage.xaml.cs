@@ -23,12 +23,9 @@ namespace CifarInventario.Views
         public UsuariosPage()
         {
             InitializeComponent();
-            
+
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
+       
     }
 }

@@ -211,7 +211,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
                     if (dr.Read())
                     {
-                        temp = int.Parse(dr["id_rol"].ToString());
+                        temp = int.Parse(dr["id"].ToString());
                     }
 
                     dr.Close();
@@ -226,6 +226,100 @@ namespace CifarInventario.ViewModels.Classes.Queries
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("Error al conseguir id de usuario.  " + ex);
+            }
+
+
+
+
+            return temp;
+        }
+
+        public static int GetRoleId(string userName)
+        {
+            int temp = 0;
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+
+
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"select * from usuarios " +
+                    "WHERE usuario = @UserName";
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@UserName",userName)
+                    });
+
+                    dr = cmd.ExecuteReader();
+
+
+                    if (dr.Read())
+                    {
+                        temp = int.Parse(dr["id_rol"].ToString());
+                    }
+
+                    dr.Close();
+                    cn.Close();
+
+                }
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al conseguir id de rol de usuario.  " + ex);
+            }
+
+
+
+
+            return temp;
+        }
+
+        public static int GetEmpleadoId(string userName)
+        {
+            int temp = 0;
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+
+
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = @"select * from usuarios " +
+                    "WHERE usuario = @UserName";
+
+                    cmd.Parameters.AddRange(new OleDbParameter[]
+                    {
+                        new OleDbParameter("@UserName",userName)
+                    });
+
+                    dr = cmd.ExecuteReader();
+
+
+                    if (dr.Read())
+                    {
+                        temp = int.Parse(dr["id_empleado"].ToString());
+                    }
+
+                    dr.Close();
+                    cn.Close();
+
+                }
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al conseguir id de empleado.  " + ex);
             }
 
 

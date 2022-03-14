@@ -8,8 +8,9 @@
       xmlns:local="clr-namespace:CifarInventario.Views.Pages"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
+      Height="Auto"
+      Width="Auto"
       mc:Ignorable="d" 
-      Height="700" Width="1000"
       Title="EmpleadosPage">
 
     <Page.Resources>
@@ -26,67 +27,118 @@
 
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
-        <TextBlock Margin="40,40,201,587" Text="Listado de Empleados" FontSize="40" FontWeight="Bold" Foreground="Black">
 
-        </TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="50"/>
+        </Grid.RowDefinitions>
 
-        <DataGrid Margin="40,0,40,80" Height="400"  
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"     ItemsSource="{Binding Path=Empleados}" SelectedItem="{Binding SelectedEmpleado}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
-            <DataGrid.Resources>
-                
-                <Style TargetType="DataGrid">
-                    <Setter Property="RowHeaderWidth" Value="0" />
-                    <Setter Property="BorderBrush" Value="black"/>
-                    <Setter Property="AlternationCount" Value="2"/>
-                    <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
-                </Style>
-                <Style TargetType="{x:Type DataGridColumnHeader}">
-                    <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
-                    <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                    <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                    <Setter Property="BorderBrush" Value="black"/>
-                </Style>
-            </DataGrid.Resources>
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+            <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Listado de Empleados" FontSize="40" FontWeight="Bold" Foreground="Black"> </TextBlock>
+        </StackPanel>
 
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Width="30" Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="Nombre" Width="*" Binding="{Binding Nombre}"/>
-                <DataGridTextColumn Header="Apellido" Width="*" Binding="{Binding Apellido}"/>
-                <DataGridTextColumn Header="Telefono" Width="*" Binding="{Binding Telefono}"/>
-                <DataGridTextColumn Header="Correo Contacto" Width="*" Binding="{Binding Correo}"/>
-                
-                <DataGridTemplateColumn Header=" Acciones" Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
-                                <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openEdit}" Style="{StaticResource editButton}" ToolTip="Editar Empleado">
-                                    <StackPanel Orientation="Horizontal">
-                                        <fa:IconBlock Icon="Edit" Foreground="White"/>
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                            
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                
-            </DataGrid.Columns>
 
-        </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Agregar Empleado"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+            <DataGrid 
+            Grid.Row="1"
+            Margin="40,10,40,10" 
+                x:Name="dtPrime"
+                HorizontalAlignment="Stretch"
+                VerticalScrollBarVisibility="Auto"
+                ItemsSource="{Binding Path=Empleados}"
+                  SelectedItem="{Binding SelectedEmpleado}" 
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="false"
+                  FontSize="16">
+                <DataGrid.Resources>
+
+                    <Style TargetType="DataGrid">
+                        <Setter Property="RowHeaderWidth" Value="0" />
+                        <Setter Property="BorderBrush" Value="black"/>
+                        <Setter Property="AlternationCount" Value="2"/>
+                        <Setter Property="AlternatingRowBackground" Value="{StaticResource AlternatingRowBrush}"/>
+                    </Style>
+                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Background" Value="{StaticResource MainThemeBrush}"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                        <Setter Property="BorderBrush" Value="black"/>
+                    </Style>
+                </DataGrid.Resources>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Width="30" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Nombre" Width="*" Binding="{Binding Nombre}"/>
+                    <DataGridTextColumn Header="Apellido" Width="*" Binding="{Binding Apellido}"/>
+                    <DataGridTextColumn Header="Telefono" Width="*" Binding="{Binding Telefono}"/>
+                    <DataGridTextColumn Header="Correo Contacto" Width="*" Binding="{Binding Correo}"/>
+
+                    <DataGridTemplateColumn Header=" Acciones" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" >
+                                    <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.openEdit}" Style="{StaticResource editButton}" ToolTip="Editar Empleado">
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:IconBlock Icon="Edit" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+
+
+        <StackPanel
+            Grid.Row="2">
+
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"   >
+                    <Button HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    
+
+                </StackPanel>
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Grid.Column="1"
+                    >
+
+                    <Button HorizontalAlignment="Left" Margin="0,0,40,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="145" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="UserPlus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Agregar Empleado"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+
+
+            </Grid>
+            
+        
+        </StackPanel>
 
     </Grid>
 

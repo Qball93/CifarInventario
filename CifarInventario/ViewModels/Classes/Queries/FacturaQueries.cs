@@ -90,7 +90,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                 using (OleDbCommand cmd = cn.CreateCommand())
                 {
                     cmd.CommandText = @"INSERT INTO factura ([ID],[id_cliente],[id_empleado],[total],[subtotal],[impuesto],[fechaEmision],[abonado],[pendiente],[descuento],[vendedor],[zona]) " +
-                        "VALUES (@idFact,@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente,@vendedor,@zona,@descuento) ";
+                        "VALUES (@idFact,@idClient,@idEmp,@total,@subtotal,@imp,@fechaEmission,@abonado,@pendiente,@descuento,@vendedor,@zona) ";
 
                     cmd.Parameters.AddRange(new OleDbParameter[]
                     {
@@ -104,8 +104,8 @@ namespace CifarInventario.ViewModels.Classes.Queries
                         new OleDbParameter("@abonado",OleDbType.Boolean) { Value = factura.EsAbonado },
                         new OleDbParameter("@pendiente",factura.Pendiente),
                         new OleDbParameter("@descuento",factura.Descuento),
-                        new OleDbParameter("@zona",factura.Zona),
-                        new OleDbParameter("@vendedor",factura.Vendedor)
+                        new OleDbParameter("@vendedor",factura.Vendedor),
+                        new OleDbParameter("@zona",factura.Zona)
 
                        
 

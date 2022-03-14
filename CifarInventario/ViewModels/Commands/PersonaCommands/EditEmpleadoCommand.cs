@@ -26,7 +26,7 @@ namespace CifarInventario.ViewModels.Commands.PersonaCommands
         public bool CanExecute(object parameter)
         {
             //return true;
-            return !VM.SelectedEmpleado.HasErrors && VM.SelectedEmpleado.nombreCheck && VM.SelectedEmpleado.apellidoCheck && VM.SelectedEmpleado.telefonoCheck && VM.SelectedEmpleado.correoCheck;
+            return !VM.NewEmpleado.HasErrors && VM.NewEmpleado.nombreCheck && VM.NewEmpleado.apellidoCheck && VM.NewEmpleado.telefonoCheck && VM.NewEmpleado.correoCheck;
         }
 
         public void Execute(object parameter)

@@ -8,7 +8,7 @@
       xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
-      mc:Ignorable="d" Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       
       Title="UserPage">
 
@@ -27,13 +27,42 @@
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
 
-        <TextBlock Margin="40,40,201,587" Text="Listado de Roles" FontSize="40" FontWeight="Bold" Foreground="Black">
 
-        </TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
 
 
-        <DataGrid Margin="40,0,40,80" Height="400"  
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"    ItemsSource="{Binding Path=Roles}" SelectedItem="{Binding SelectedRole}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+
+            <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Listado de Roles" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+            </TextBlock>
+
+
+        </StackPanel   >
+
+
+        
+
+
+        <DataGrid 
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
+            Margin="40,10,40,10"
+            x:Name="dtPrime" 
+            dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+            ItemsSource="{Binding Path=Roles}" 
+            SelectedItem="{Binding SelectedRole}" 
+            AutoGenerateColumns="False" 
+            CanUserAddRows="false" 
+            FontSize="16">
             <DataGrid.Resources>
                 <Style TargetType="DataGrid">
                     <Setter Property="RowHeaderWidth" Value="0" />
@@ -70,18 +99,21 @@
 
         </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Agregar Role"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+
+
+
+        <StackPanel
+            Grid.Row="2"
+            >
+            <Button HorizontalAlignment="Right" Margin="0,0,40,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                <StackPanel Orientation="Horizontal">
+                    <fa:IconBlock Icon="UserPlus" Foreground="White"/>
+                    <TextBlock Foreground="white" Text="  Agregar Role"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        
 
     </Grid>
 </Page>

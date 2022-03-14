@@ -145,7 +145,8 @@ namespace CifarInventario.ViewModels
             if(NewPregunta.Respuesta == OriginalPregunta.Respuesta)
             {
 
-                Globals.setId(UserQueries.GetUserId(UserName));
+                Globals.setId(UserQueries.GetRoleId(UserName));
+                Globals.setEmpladoId(UserQueries.GetEmpleadoId(UserName));
                 NavigationMenu newWindow = new NavigationMenu();
                 CloseWindow();
                 newWindow.Show();

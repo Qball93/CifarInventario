@@ -170,6 +170,8 @@ namespace CifarInventario.Models
         public int id { get; set; }
         public string salt { get; set; }
         public Role UserRole { get; set; }
+
+
         
 
         public User(User old)

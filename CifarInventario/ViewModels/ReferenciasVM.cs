@@ -27,6 +27,7 @@ namespace CifarInventario.ViewModels
             Productos = new ObservableCollection<formulaProduct>(ProductQueries.GetAllMpSimplified());
             Lotes = new ObservableCollection<LoteEntrada>();
             IsEnabledLotes = false;
+            IsEnabledMP = true;
 
             PlaceHolder.EmptyCantidad = 12;
             PlaceHolder.EmptyAmount = 12.21;
@@ -71,6 +72,18 @@ namespace CifarInventario.ViewModels
             {
                 _isEnabledLotes = value;
                 OnPropertyChanged(nameof(IsEnabledLotes));
+            }
+        }
+
+
+        private bool _isEnabledMP;
+        public bool IsEnabledMP
+        {
+            get { return _isEnabledMP; }
+            set
+            {
+                _isEnabledMP = value;
+                OnPropertyChanged(nameof(IsEnabledMP));
             }
         }
 
@@ -152,6 +165,7 @@ namespace CifarInventario.ViewModels
         public GetLotesSalCommand getLotesSalCommand { get; set; }
 
         public ICommand generarLotes => new DelegateCommand(GenerarLotes);
+        public ICommand reset => new DelegateCommand(Reset);
         
 
 
@@ -171,9 +185,10 @@ namespace CifarInventario.ViewModels
         }
 
 
-        public void reset()
+        public void Reset(object parameter)
         {
             IsEnabledLotes = false;
+            IsEnabledMP = true;
         }
 
 
@@ -182,12 +197,16 @@ namespace CifarInventario.ViewModels
             IsEnabledLotes = true;
             Lotes = new ObservableCollection<LoteEntrada>(InventoryQueries.getLotesForMP(SelectedProduct.Codigo, 0));
 
-            System.Windows.MessageBox.Show("Busqueda Terminada");
+            System.Windows.MessageBox.Show("Lotes Generads");
         }
 
         public void buscarLoteSalPorMp()
         {
             LotesSalida = new ObservableCollection<LotePTDetalle>(InventoryQueries.getLoteSalFromMpLote(SelectedLote.CodInterno));
+
+            IsEnabledLotes = false;
+            IsEnabledMP = false;
+
 
             System.Windows.MessageBox.Show("Busqueda Terminada");
         }

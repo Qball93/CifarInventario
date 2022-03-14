@@ -43,6 +43,7 @@ namespace CifarInventario.ViewModels
             if (testPassword == realUser.Password)
             {
                 Globals.setId(realUser.UserRole.Id);
+                Globals.setEmpladoId(int.Parse(realUser.Empleado.ID));
                 NavigationMenu newWindow = new NavigationMenu();
                 CloseWindow();
                 newWindow.Show();

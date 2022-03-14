@@ -398,6 +398,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
                     temp.FechaVencimiento = DateTime.Parse(dr["fecha_vencimiento"].ToString());
                     temp.CantidadCreacion = double.Parse(dr["cantidad_entrada"].ToString());
                     temp.NombreFormula = dr["nombre_formula"].ToString();
+                    temp.OriginalLote = dr["lote_original"].ToString();
 
 
                     lotes.Add(temp);

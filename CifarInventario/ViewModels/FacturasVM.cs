@@ -532,7 +532,7 @@ namespace CifarInventario.ViewModels
                 if (!FacturaQueries.isRepeatedFactura(NewFactura.IdFactura))
                 {
 
-                    NewFactura.Empleado.ID = Globals.getId().ToString();
+                    NewFactura.Empleado.ID = Globals.getEmpleadoId().ToString();
 
                    /* foreach (var element in NewFacturaDetalles)
                     {
@@ -541,14 +541,14 @@ namespace CifarInventario.ViewModels
 
                     NewFactura.Total = NewFactura.Sub;
 
+                    NewFactura.Total -= NewFactura.Descuento;
+
 
                     if (NewFactura.EsAbonado == true)
                     {
                         NewFactura.Pendiente = NewFactura.Total;
                     }
 
-
-                    NewFactura.Total -= NewFactura.Descuento;
 
                     //System.Windows.MessageBox.Show(NewFactura.IdFactura + " " + NewFactura.Empleado.ID + " " + NewFactura.Cliente.ID + " " + NewFactura.Sub + " " + NewFactura.Total + " " + NewFactura.EsAbonado.ToString() + " " + NewFactura.Pendiente + " " + NewFactura.Emission.ToShortDateString());
 
@@ -566,9 +566,13 @@ namespace CifarInventario.ViewModels
                         ProductQueries.InventarioPTSellAmount(element.Producto.ID, element.Cantidad);
                     }
 
-                    System.Windows.MessageBox.Show("Factura Creada");
 
+                    var temp = PersonaQueries.GetCliente(int.Parse(NewFactura.Cliente.ID));
+                    NewFactura.Direccion = temp.Direccion;
+                    NewFactura.RTN = temp.NombreCommercial;
                     Facturas.Add(NewFactura);
+
+                    System.Windows.MessageBox.Show("Factura Creada");
                 }
                 else
                 {
@@ -584,6 +588,9 @@ namespace CifarInventario.ViewModels
             NewFacturaNewDetalle = new DetalleFactura();
             NewFacturaDetalles = new ObservableCollection<DetalleFactura>();
             SelectedProduct = new ProductoTeminadoParaLista();
+            NewFactura.Zona = Zonas[0];
+            NewFactura.Cliente = Clientes[0];
+            NewFactura.Vendedor = Vendedores[0];
 
             var temp = new CreateFacturaModal(this);
 

@@ -42,7 +42,7 @@ namespace CifarInventario.Models
             set
             {
                 _codTrans = value;
-                OnPropertyChanged("Transformacion");
+                OnPropertyChanged(nameof(Transformacion));
             }
         }
 

@@ -9,7 +9,7 @@
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="Clientes">
     
     <Page.Resources>
@@ -26,13 +26,38 @@
 
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
-        <TextBlock Margin="40,40,201,587" Text="Listado de Clientes" FontSize="40" FontWeight="Bold" Foreground="Black">
-
-        </TextBlock>
 
 
-        <DataGrid Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Clientes}" 
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"    SelectedItem="{Binding SelectedClient}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="50"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+
+            <TextBlock Margin="0,0,0,0" Text="Listado de Clientes" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+            </TextBlock>
+
+        </StackPanel>
+
+
+        <DataGrid 
+            Grid.Row="1"
+            Margin="40,10,40,10" 
+            ItemsSource="{Binding Path=Clientes}" 
+            x:Name="dtPrime"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
+            dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+            SelectedItem="{Binding SelectedClient}"
+            AutoGenerateColumns="False" 
+            CanUserAddRows="false" 
+            FontSize="16">
             <DataGrid.Resources>
                 <Style TargetType="DataGrid">
                     <Setter Property="RowHeaderWidth" Value="0" />
@@ -74,18 +99,51 @@
 
         </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="800,580,0,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="UserPlus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Agregar Cliente"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+
+        <StackPanel
+            Grid.Row="2">
+
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"   >
+
+
+
+                    <Button HorizontalAlignment="Left" Margin="0,0,0,0" Command="{Binding openNew}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="UserPlus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Agregar Cliente"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Grid.Column="1"
+                    >
+                    <Button HorizontalAlignment="Left" Margin="0,0,40,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Click="Button_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+
+
+            </Grid>
+
+
+        </StackPanel>
+
+        
+        
 
     </Grid>
 

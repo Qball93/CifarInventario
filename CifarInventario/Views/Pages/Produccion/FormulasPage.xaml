@@ -10,7 +10,7 @@
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="Formulas">
 
 
@@ -78,25 +78,41 @@
                 </TabItem.Header>
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="199*"/>
-                        <ColumnDefinition Width="32*"/>
-                        <ColumnDefinition Width="765*"/>
-                    </Grid.ColumnDefinitions>
 
-                    <TextBlock Margin="40,28,200,580" Text="Listado de Formulas" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    </TextBlock>
 
-                    <DataGrid   Margin="40,94,40,174"
-                                Height="400"
-                                ItemsSource="{Binding Path=Formulas}"
-                                SelectedItem="{Binding SelectedFormula}"
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True" 
-                                AutoGenerateColumns="False"
-                                CanUserAddRows="False"
-                                FontSize="16"
-                                Grid.ColumnSpan="3">
+
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
+
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top"  Text="Listado de Formulas" FontSize="40" FontWeight="Bold" Foreground="Black" >
+
+                        </TextBlock>
+
+
+
+                    </StackPanel>
+
+
+
+                    <DataGrid  
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        x:Name="dtPrime"
+                        ItemsSource="{Binding Path=Formulas}"
+                        SelectedItem="{Binding SelectedFormula}"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        FontSize="16">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -121,25 +137,6 @@
                             <DataGridTextColumn  Header=" Cantidad Creada "  Binding="{Binding Cantidad}"></DataGridTextColumn>
                             <DataGridTemplateColumn  Header=" Acciones ">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <!--DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
-                                            <Button  Margin="0,0,0,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.InactiveFormula}"  Style="{StaticResource removeButton}" ToolTip="Deshabilitar Formula">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <fa:IconBlock Icon="Times" Foreground="White"/>
-                                                </StackPanel>
-                                            </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.deleteDetalle}"  Style="{StaticResource editButton}" ToolTip="Editar Formula">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <fa:IconBlock Icon="Edit" Foreground="White"/>
-                                                </StackPanel>
-                                            </Button>
-                                            <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.deleteDetalle}"  Style="{StaticResource }" ToolTip="Editar Instrucciones">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <fa:IconBlock Icon="Edit" Foreground="White"/>
-                                                </StackPanel>
-                                            </Button>
-                                        </StackPanel>
-                                        </-->
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="Auto">
                                             <Button  Margin="0,0,0,0"  Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.InactiveFormula}"  Style="{StaticResource removeButton}" ToolTip="Deshabilitar Formula">
@@ -154,7 +151,7 @@
                                             </Button>
                                             <Button  Margin="5,0,0,0" Height="30" Width=" 30" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.formulaProcedimientoModal}"  Style="{StaticResource keyButton}" ToolTip="Editar Instrucciones">
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                    <fa:IconBlock Icon="Edit" Foreground="White"/>
+                                                    <fa:IconBlock Icon="Hammer" Foreground="White"/>
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
@@ -165,23 +162,45 @@
                     </DataGrid>
 
 
-                    <Button HorizontalAlignment="Left" Margin="569,580,0,0" Command="{Binding newFormulaModal}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="2" >
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconBlock Icon="plus" Foreground="White"/>
-                            <TextBlock Foreground="white" Text="  Agregar Formula"/>
-                        </StackPanel>
-                    </Button>
-                    <Button HorizontalAlignment="Left" Margin="419,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Grid.Column="2" >
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-                        </StackPanel>
-                    </Button>
+                    <StackPanel
+                        Grid.Row="2">
+
+                        <Grid Background="{StaticResource GridBackgroundBrush}" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition  Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel
+                                Grid.Column="0"
+                                HorizontalAlignment="Right"   >
+                                <Button HorizontalAlignment="Left" Margin="0,0,0,0" Command="{Binding newFormulaModal}"  VerticalAlignment="Top" Height="40" Width="138" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="2" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconBlock Icon="plus" Foreground="White"/>
+                                        <TextBlock Foreground="white" Text="  Agregar Formula"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+                            <StackPanel
+                                HorizontalAlignment="Right"
+                                Grid.Column="1">
+                                <Button HorizontalAlignment="Left" Margin="0,0,40,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" Grid.Column="2" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                                        <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+
+
+                        </Grid>
+
+                    </StackPanel>
 
                 </Grid>
 
             </TabItem>
-
 
             <TabItem>
                 <TabItem.Header>
@@ -197,11 +216,39 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
-                    <TextBlock Margin="40,28,201,587"  FontSize="40" FontWeight="Bold" Foreground="Black">
-                        <Run Text="{Binding SelectedFormula.NombreFormula}"/>
-                    </TextBlock>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    <DataGrid   Margin="40,0,40,80" Height="400" ItemsSource="{Binding Path=Detalles}" SelectedItem="{Binding SelectedDetalle}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16">
+
+
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
+
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top"  FontSize="40" FontWeight="Bold" Foreground="Black">
+                        <Run Text="{Binding SelectedFormula.NombreFormula}"/>
+                        </TextBlock>
+
+
+
+                    </StackPanel>
+
+
+
+                    <DataGrid  
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+                        Margin="40,10,40,10"
+                        ItemsSource="{Binding Path=Detalles}" 
+                        SelectedItem="{Binding SelectedDetalle}"
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False"
+                        FontSize="16">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">
@@ -245,24 +292,22 @@
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <StackPanel Margin="40,530,40,50" Orientation="Horizontal">
+                    <DockPanel Grid.Row="2" Margin="40,0,40,0">
                         <Label FontSize="16" Height="35" Content="Materia Prima"></Label>
                         <ComboBox VerticalAlignment="Center"
                                   ItemsSource="{Binding NewFormulaProducts}"
                                   SelectedValue="{Binding NewFormulaSelectedProduct}"
                                   Width="200"
                                   DisplayMemberPath="Nombre"
-                                  Margin="20,0,0,0"
                                   FontSize="16"
                                   ToolTip="Elija MP para formula">
 
                         </ComboBox>
 
                         <Label 
-                            Margin="60,0,30,0"
                             FontSize="16" Height="35" Content="Cantidad"></Label>
                         <TextBox FontSize="16" ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
-                     Text="{Binding NewFormulaNewDetalle.Quantity,
+                        Text="{Binding NewFormulaNewDetalle.Quantity,
                             Mode=TwoWay,ValidatesOnDataErrors=True,
                             UpdateSourceTrigger=PropertyChanged}"
                                  Height="30"
@@ -274,14 +319,12 @@
                         Width="100"
                         FontSize="16"
                         Height="30"
-                        Margin="130,0,0,0"
                         Content="Agregar"></Button>
-                    </StackPanel>
+                    </DockPanel>
                     
                 </Grid>
 
             </TabItem>
-
 
 
             <TabItem>
@@ -294,12 +337,39 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
-                    <TextBlock Margin="40,28,200,580" Text="Formulas Inactivas" FontSize="40" FontWeight="Bold" Foreground="Black" Grid.ColumnSpan="3">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    </TextBlock>
 
-                    <DataGrid   Margin="40,94,40,174" Height="400"    
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"  ItemsSource="{Binding Path=InactiveFormulas}" SelectedItem="{Binding SelectedInactive}"  AutoGenerateColumns="False" CanUserAddRows="False" FontSize="16" Grid.ColumnSpan="3">
+
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
+
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Formulas Inactivas" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+                        </TextBlock>
+
+
+
+                    </StackPanel>
+
+
+
+                    <DataGrid 
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+                        ItemsSource="{Binding Path=InactiveFormulas}"
+                        SelectedItem="{Binding SelectedInactive}" 
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="False" 
+                        FontSize="16" Grid.ColumnSpan="3">
 
                         <DataGrid.Resources>
                             <Style TargetType="DataGrid">

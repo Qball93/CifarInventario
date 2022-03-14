@@ -9,7 +9,7 @@
       xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="Empaques">
 
     <Page.Resources>
@@ -45,13 +45,32 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    <TextBlock Margin="40,40,201,587" Text="Registro de Desempaque" FontSize="40" FontWeight="Bold" Foreground="Black">
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
 
-                </TextBlock>
+                        <TextBlock  HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Registro de Desempaque" FontSize="40" FontWeight="Bold" Foreground="Black"></TextBlock>
 
-                    <DataGrid Margin="40,0,40,80" Height="400" 
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"    ItemsSource="{Binding Path=Registros}" SelectedItem="{Binding SelectedRegistro}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+                    </StackPanel>
+
+
+                    <DataGrid 
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True" 
+                        ItemsSource="{Binding Path=Registros}" 
+                        SelectedItem="{Binding SelectedRegistro}" 
+                        AutoGenerateColumns="False"
+                        CanUserAddRows="false" 
+                        FontSize="16">
                     <DataGrid.Resources>
 
                         <Style TargetType="DataGrid">
@@ -91,12 +110,18 @@
 
                 </DataGrid>
 
-                <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
-                    <StackPanel Orientation="Horizontal">
-                        <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                        <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+
+                    <StackPanel
+                        Grid.Row="2">
+                        <Button HorizontalAlignment="Right" Margin="0,0,40,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
-                    </Button>
+
+                    
                 </Grid>
             </TabItem>
 
@@ -112,13 +137,35 @@
 
                 <Grid Background="{StaticResource GridBackgroundBrush}">
 
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"  />
+                        <RowDefinition Height="*"/>
+                        <RowDefinition  Height="60"/>
+                    </Grid.RowDefinitions>
 
-                    <TextBlock Margin="40,40,201,587" Text="Registro de Donacion" FontSize="40" FontWeight="Bold" Foreground="Black">
+                    <StackPanel
+                        Margin="40,20,0,0"
+                        Grid.Row="0">
 
-                    </TextBlock>
+                        <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Registro de Donacion" FontSize="40" FontWeight="Bold" Foreground="Black">
 
-                    <DataGrid Margin="40,0,40,80" Height="400" 
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"  ItemsSource="{Binding Path=Donaciones}" SelectedItem="{Binding SelectedRegistro}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+                        </TextBlock>
+                    </StackPanel>
+
+
+
+
+                    <DataGrid 
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Margin="40,10,40,10"
+                        dgx:DataGridFilter.IsAutoFilterEnabled="True"
+                        ItemsSource="{Binding Path=Donaciones}"
+                        SelectedItem="{Binding SelectedRegistro}" 
+                        AutoGenerateColumns="False" 
+                        CanUserAddRows="false"
+                        FontSize="16">
                         <DataGrid.Resources>
 
                             <Style TargetType="DataGrid">
@@ -158,14 +205,18 @@
                         </DataGrid.Columns>
 
                     </DataGrid>
+
+                    <StackPanel
+                         Grid.Row="2">
+                        <Button HorizontalAlignment="Right" Margin="0,0,40,0"  VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
                     
-                    
-                    <Button HorizontalAlignment="Left" Margin="650,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}" >
-                        <StackPanel Orientation="Horizontal">
-                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-                        </StackPanel>
-                    </Button>
                 </Grid>
             </TabItem>
 

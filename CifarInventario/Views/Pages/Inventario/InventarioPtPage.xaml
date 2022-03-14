@@ -9,7 +9,7 @@
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="InventarioPt">
 
     <Page.Resources>
@@ -25,18 +25,38 @@
     </Page.DataContext>
 
     <Grid Background="{StaticResource GridBackgroundBrush}">
-        <TextBlock Margin="40,40,201,587" Text="Inventario Producto Terminado" FontSize="40" FontWeight="Bold" Foreground="Black">
 
-        </TextBlock>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
 
-        <DataGrid Margin="40,100,40,140"
-                  Height="400"
-                  dgx:DataGridFilter.IsAutoFilterEnabled="True"
-                  ItemsSource="{Binding Path=InventarioPt}"
-                  SelectedItem="{Binding SelectedProduct}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="false"
-                  FontSize="16">
+
+
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+
+            <TextBlock HorizontalAlignment="Left"  VerticalAlignment="Top" Text="Inventario Producto Terminado" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+            </TextBlock>
+
+
+        </StackPanel   >
+
+        <DataGrid 
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
+            Margin="40,10,40,10"
+            dgx:DataGridFilter.IsAutoFilterEnabled="True"
+            x:Name="dtPrime"
+            ItemsSource="{Binding Path=InventarioPt}"
+            SelectedItem="{Binding SelectedProduct}"
+            AutoGenerateColumns="False"
+            CanUserAddRows="false"
+            FontSize="16">
             <DataGrid.Resources>
 
                 <Style TargetType="DataGrid">
@@ -79,18 +99,43 @@
 
         </DataGrid>
 
-        <Button HorizontalAlignment="Left" Margin="775,580,0,0" Command="{Binding openNewModal}"  VerticalAlignment="Top" Height="40" Width="150" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="1" >
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="Plus" Foreground="White"/>
-                <TextBlock Foreground="white" Text="  Ingresar Nuevo PT"/>
-            </StackPanel>
-        </Button>
-        <Button HorizontalAlignment="Left" Margin="625,580,0,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}"  Grid.Column="1">
-            <StackPanel Orientation="Horizontal">
-                <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
-                <TextBlock Foreground="Black" Text="  Exportar PDF"/>
-            </StackPanel>
-        </Button>
+
+        <StackPanel
+            Grid.Row="2">
+
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"   >
+                    <Button HorizontalAlignment="Left" Margin="0,0,0,0" Command="{Binding openNewModal}"  VerticalAlignment="Top" Height="40" Width="150" Background="{StaticResource BlueButtonBrush}" Style="{StaticResource blueButton}" Grid.Column="1" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="Plus" Foreground="White"/>
+                            <TextBlock Foreground="white" Text="  Ingresar Nuevo PT"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Grid.Column="1">
+
+                    <Button HorizontalAlignment="Left" Margin="0,0,40,0" VerticalAlignment="Top" Height="40" Width="114" Style="{StaticResource listButton}"  Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconBlock Icon="FilePdf" Foreground="Black"/>
+                            <TextBlock Foreground="Black" Text="  Exportar PDF"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+
+            </Grid>
+
+        </StackPanel>
 
     </Grid>
 </Page>

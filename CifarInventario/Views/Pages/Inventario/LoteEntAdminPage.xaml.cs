@@ -34,7 +34,7 @@ namespace CifarInventario.Views.Pages.Inventario
                 // sizing of the element.
                 dtPrime.Measure(pageSize);
                 dtPrime.Arrange(new Rect(5, 5, pageSize.Width, pageSize.Height));
-                Printdlg.PrintVisual(dtPrime, "Listado de Facturas");
+                Printdlg.PrintVisual(dtPrime, "Listado de Lotes Entrada Admin");
             }
         }
 

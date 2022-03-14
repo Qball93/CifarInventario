@@ -28,7 +28,9 @@
 
         <DockPanel Grid.Row="1" >
             <Label Content="Nombre Role" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16"/>
-            <TextBox FontSize="16" Text="{Binding NewRole.RoleName, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox FontSize="16"  
+                                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent,
+                                 RelativeSource={x:Static RelativeSource.Self}}"    Text="{Binding NewRole.RoleName, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                      Margin="0,0,20,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right" />
         </DockPanel>
 

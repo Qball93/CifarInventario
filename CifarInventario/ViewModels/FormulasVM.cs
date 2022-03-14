@@ -143,7 +143,7 @@ namespace CifarInventario.ViewModels
             set
             {
                 _selectedInactive = value;
-                OnPropertyChanged("SelectedInactive");
+                OnPropertyChanged(nameof(SelectedInactive));
             }
         }
 
@@ -301,8 +301,6 @@ namespace CifarInventario.ViewModels
         public void UpdateDetallesList(object parameter)
         {
 
-
-            
             Detalles = new ObservableCollection<DetalleFormula>(FormulaQueries.GetDetalles(SelectedFormula.CodFormula));
         }
 
@@ -312,6 +310,8 @@ namespace CifarInventario.ViewModels
 
             InactiveFormulas.Add(SelectedFormula);
             Formulas.Remove(SelectedFormula);
+
+            SelectedFormula = Formulas[0];
         }
 
         public void EditDetalleModal(object parameter)

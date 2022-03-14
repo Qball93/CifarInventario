@@ -9,7 +9,7 @@
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
       mc:Ignorable="d" 
-      Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       Title="LotesCreacion">
 
     <Page.Resources>
@@ -26,31 +26,84 @@
 
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
-        <DockPanel  Margin="40,40,101,587">
-            <TextBlock Text="Permisos para Rol" FontSize="40" FontWeight="Bold" Foreground="Black" DockPanel.Dock="Left">
 
-            </TextBlock>
 
-           
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="60"/>
+        </Grid.RowDefinitions>
 
-            <Label Content="Rol Usuario" VerticalAlignment="Center" Margin="50,0,0,0" FontSize="16"/>
-            <ComboBox ItemsSource="{Binding Roles}" 
+
+
+        <StackPanel
+            Margin="40,20,0,0"
+            Grid.Row="0">
+
+            <Grid Background="{StaticResource GridBackgroundBrush}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition  Width="*"/>
+                    <ColumnDefinition  Width="*"/>
+                    <ColumnDefinition  Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel
+                    Grid.Column="0">
+                    <TextBlock Text="Permisos para Rol" FontSize="40" FontWeight="Bold" Foreground="Black" DockPanel.Dock="Left"></TextBlock>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="1">
+                    <Label Content="Rol Usuario" HorizontalAlignment="Left" Margin="0,20,0,0" FontSize="16"/>
+
+                    
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="2"
+                    >
+                    <ComboBox ItemsSource="{Binding Roles}" 
                       IsSynchronizedWithCurrentItem="True"
                       SelectedValue="{Binding SelectedRol.Id}"
+                      dgx:DataGridFilter.IsAutoFilterEnabled="True" 
                       SelectedValuePath="Id"
                       DisplayMemberPath="RoleName"
-                      FontSize="16" Margin="0,0,20,0" VerticalAlignment="Center" Width="200" HorizontalAlignment="Right">
-            </ComboBox>
+                      FontSize="16"
+                      Margin="0,20,0,0"
+                      Width="150"
+                      HorizontalAlignment="Right">
+                    </ComboBox>
+                </StackPanel>
 
-            <Button Margin="0,20,0,20" Width="100" Content="Actualizar Rol" Command="{Binding getSubs}">
+                <StackPanel
+                    Grid.Column="3"
+                    >
+                    <Button Margin="0,10,40,0" Width="100" Content="Actualizar Rol" HorizontalAlignment="Right"  Command="{Binding getSubs}"  Style="{StaticResource listButton}">
 
-            </Button>
+                    </Button>
+                </StackPanel>
 
-        </DockPanel>
 
 
-        <DataGrid Margin="40,113,40,187" Height="400" ItemsSource="{Binding Path=Permissions}" 
-                              dgx:DataGridFilter.IsAutoFilterEnabled="True"     SelectedItem="{Binding SelectedPermission}" AutoGenerateColumns="False" CanUserAddRows="false" FontSize="16">
+
+
+            </Grid>
+
+        </StackPanel>
+
+
+
+        <DataGrid 
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalScrollBarVisibility="Auto"
+            Margin="40,10,40,10"
+            ItemsSource="{Binding Path=Permissions}" 
+            x:Name="dtPrime"
+            SelectedItem="{Binding SelectedPermission}" 
+            AutoGenerateColumns="False"
+            CanUserAddRows="false"
+            FontSize="16">
             <DataGrid.Resources>
 
                 <Style TargetType="DataGrid">

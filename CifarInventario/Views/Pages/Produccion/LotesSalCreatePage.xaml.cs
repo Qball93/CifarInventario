@@ -29,5 +29,10 @@ namespace CifarInventario.Views.Pages
         {
 
         }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

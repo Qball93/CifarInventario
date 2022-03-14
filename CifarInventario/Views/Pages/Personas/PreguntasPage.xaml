@@ -8,7 +8,7 @@
       xmlns:dgx="urn:tom-englert.de/DataGridExtensions"
       xmlns:converters="clr-namespace:CifarInventario.ViewModels.Converters"
       xmlns:vm="clr-namespace:CifarInventario.ViewModels" 
-      mc:Ignorable="d" Height="700" Width="1000"
+      Height="Auto" Width="Auto"
       
       Title="PreguntasPage">
     <Page.DataContext>
@@ -16,45 +16,68 @@
     </Page.DataContext>
     <Grid Background="{StaticResource GridBackgroundBrush}"   >
 
-        
 
-        <TextBlock Margin="40,40,40,521" TextWrapping="Wrap" Text="Configuracion de Pregunta de Recuperacion" FontSize="40" FontWeight="Bold" Foreground="Black">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"  />
+            <RowDefinition Height="*"/>
+            <RowDefinition  Height="*"/>
+            <RowDefinition  Height="*"/>
+            <RowDefinition  Height="*"/>
+        </Grid.RowDefinitions>
+
+
+       
+
+        <TextBlock  Grid.Row="0" Margin="40,20,40,20" TextWrapping="Wrap" Text="Configuracion de Pregunta de Recuperacion" FontSize="40" FontWeight="Bold" Foreground="Black">
 
         </TextBlock>
 
-        <Label
-            Margin="40,200,200,450"
+        <DockPanel
+            Grid.Row="1"
+            Margin="40,20,40,20"
+                    VerticalAlignment="Top"
+                    HorizontalAlignment="Left">
+            
+            <Label 
             FontSize="18"
+                Width="150"
             Content="Pregunta:"
             >
 
-        </Label>
+            </Label>
 
-        <Label
-            Margin="200,200,200,450"
+            <Label
             FontSize="18"
             Content="{Binding SingleQuestion}">
-           
-        </Label>
 
-        <DockPanel Margin="40,300,40,340"
-                    VerticalAlignment="Center"
+            </Label>
+        </DockPanel>
+
+        
+        
+
+        <DockPanel 
+            Grid.Row="2"
+            Margin="40,20,40,20"
+                    VerticalAlignment="Top"
                     HorizontalAlignment="Left">
             <Label
                 Width="150"
                 Content="Nueva Pregunta">
-                
+
             </Label>
             <TextBox
                 Text="{Binding RecoveryQuestion.Pregunta, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
                 Width="700">
-                
+
             </TextBox>
         </DockPanel>
 
-        <DockPanel Margin="40,400,40,240"
-                    VerticalAlignment="Center"
+        <DockPanel Margin="40,20,40,20"
+            Grid.Row="3"
+                    VerticalAlignment="Top"
                     HorizontalAlignment="Left">
             <Label
                 Width="150"
@@ -63,6 +86,7 @@
 
             </Label>
             <TextBox
+                
                 Text="{Binding RecoveryQuestion.Respuesta, Mode=TwoWay,ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}"
                 ToolTip="{Binding Path=(Validation.Errors)[0].ErrorContent, RelativeSource={x:Static RelativeSource.Self}}"
                 Width="700">
@@ -71,12 +95,20 @@
         </DockPanel>
 
 
-        <Button
-            Content="Actualizar Pregunta y Respuesta"
-            Foreground="White"
-            Command="{Binding updatePregunta}"
-            Background="{StaticResource MainThemeBrush}"
-            Margin="650,550,110,100"
+        <StackPanel
+            Grid.Row="4"
+            >
+            <Button
+                Content="Actualizar Pregunta y Respuesta"
+                Foreground="White"
+                    HorizontalAlignment="Right"
+                    Width="200"
+                Command="{Binding updatePregunta}"
+                Style="{StaticResource listButton }"
+                Background="{StaticResource MainThemeBrush}"
+                Margin="0,20,40,20"
             />
+        </StackPanel>
+        
     </Grid>
 </Page>

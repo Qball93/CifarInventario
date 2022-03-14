@@ -287,6 +287,7 @@ namespace CifarInventario.ViewModels.Classes.Queries
             System.Windows.MessageBox.Show(" " + type + " actualizado con exito.");
         }
 
+
         public static void updateEmpleado(Empleado newEmployee)
         {
             cn = DBConnection.MainConnection();
@@ -353,6 +354,51 @@ namespace CifarInventario.ViewModels.Classes.Queries
 
 
             return entidades;
+        }
+
+
+        public static EntidadCommercial GetCliente(int Cod)
+        {
+            EntidadCommercial temp = new EntidadCommercial();
+
+            cn = DBConnection.MainConnection();
+            try
+            {
+
+
+                using (OleDbCommand cmd = cn.CreateCommand())
+                {
+                    cmd.CommandText = "select * " +
+                    "From clientes " +
+                    "WHERE id = " + Cod + ";";
+
+                    dr = cmd.ExecuteReader();
+
+
+                    if (dr.Read())
+                    {
+                        temp.NombreCommercial = dr["nombre_commercial"].ToString();
+                        temp.RTN = dr["RTN"].ToString();
+                    }
+
+                    dr.Close();
+                    cn.Close();
+
+                }
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error al conseguir pregunta recuperacion.  " + ex);
+            }
+
+
+
+
+            return temp;
         }
 
 
